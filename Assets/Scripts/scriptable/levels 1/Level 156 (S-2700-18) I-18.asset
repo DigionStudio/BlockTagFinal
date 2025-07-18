@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 156 (S-2700-18) I-18
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.41
+    isScoreTarget: 1
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData: []
+    bgTileData:
+    - positionIndex: 39
+      tileType: 8
+    - positionIndex: 49
+      tileType: 8
+    - positionIndex: 38
+      tileType: 8
+    - positionIndex: 48
+      tileType: 8
+    - positionIndex: 58
+      tileType: 8
+    - positionIndex: 37
+      tileType: 8
+    - positionIndex: 47
+      tileType: 8
+    - positionIndex: 57
+      tileType: 8
+    - positionIndex: 67
+      tileType: 8
+    - positionIndex: 5
+      tileType: 8
+    - positionIndex: 15
+      tileType: 8
+    - positionIndex: 25
+      tileType: 8
+    - positionIndex: 35
+      tileType: 8
+    - positionIndex: 14
+      tileType: 8
+    - positionIndex: 24
+      tileType: 8
+    - positionIndex: 34
+      tileType: 8
+    - positionIndex: 23
+      tileType: 8
+    - positionIndex: 33
+      tileType: 8
+    gemTileData: []
+    moveCount: 18
+    totalStarValue: 2700
+    reFreshCount: 0
+    ability1Value: 5
+    ability2Value: 4
+    levelNumber: 155

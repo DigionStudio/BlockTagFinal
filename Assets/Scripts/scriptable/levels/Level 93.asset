@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 93
+  m_EditorClassIdentifier: 
+  levelData:
+    isScoreTarget: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData: []
+    bgTileData:
+    - positionIndex: 28
+      tileType: 6
+    - positionIndex: 30
+      tileType: 6
+    - positionIndex: 32
+      tileType: 6
+    - positionIndex: 34
+      tileType: 6
+    - positionIndex: 36
+      tileType: 6
+    - positionIndex: 37
+      tileType: 6
+    - positionIndex: 38
+      tileType: 6
+    - positionIndex: 39
+      tileType: 6
+    - positionIndex: 40
+      tileType: 6
+    - positionIndex: 41
+      tileType: 6
+    - positionIndex: 42
+      tileType: 6
+    - positionIndex: 43
+      tileType: 6
+    - positionIndex: 44
+      tileType: 6
+    - positionIndex: 45
+      tileType: 6
+    - positionIndex: 46
+      tileType: 6
+    - positionIndex: 47
+      tileType: 6
+    - positionIndex: 48
+      tileType: 6
+    - positionIndex: 49
+      tileType: 6
+    - positionIndex: 50
+      tileType: 6
+    - positionIndex: 51
+      tileType: 6
+    - positionIndex: 52
+      tileType: 6
+    - positionIndex: 53
+      tileType: 6
+    - positionIndex: 55
+      tileType: 6
+    - positionIndex: 57
+      tileType: 6
+    - positionIndex: 59
+      tileType: 6
+    - positionIndex: 61
+      tileType: 6
+    gemTileData: []
+    moveCount: 0
+    totalStarValue: 0
+    reFreshCount: 0
+    ability1Value: 0
+    ability2Value: 0
+    levelNumber: 92

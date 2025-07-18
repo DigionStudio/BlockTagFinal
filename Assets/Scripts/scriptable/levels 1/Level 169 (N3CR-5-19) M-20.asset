@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 169 (N3CR-5-19) M-20
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.49
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 2
+      blockType: 5
+      gemType: 0
+      count: 5
+    bgTileData:
+    - positionIndex: 27
+      tileType: 11
+    - positionIndex: 19
+      tileType: 11
+    - positionIndex: 11
+      tileType: 11
+    - positionIndex: 28
+      tileType: 11
+    - positionIndex: 20
+      tileType: 11
+    - positionIndex: 12
+      tileType: 11
+    - positionIndex: 36
+      tileType: 11
+    - positionIndex: 37
+      tileType: 11
+    - positionIndex: 21
+      tileType: 11
+    - positionIndex: 29
+      tileType: 11
+    - positionIndex: 32
+      tileType: 11
+    - positionIndex: 42
+      tileType: 11
+    - positionIndex: 52
+      tileType: 11
+    - positionIndex: 62
+      tileType: 11
+    - positionIndex: 53
+      tileType: 11
+    - positionIndex: 43
+      tileType: 11
+    - positionIndex: 33
+      tileType: 11
+    - positionIndex: 41
+      tileType: 11
+    - positionIndex: 51
+      tileType: 11
+    - positionIndex: 61
+      tileType: 11
+    gemTileData: []
+    moveCount: 19
+    totalStarValue: 3500
+    reFreshCount: 0
+    ability1Value: 4
+    ability2Value: 5
+    levelNumber: 168

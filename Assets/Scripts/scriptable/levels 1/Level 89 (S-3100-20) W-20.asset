@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 89 (S-3100-20) W-20
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.47
+    isScoreTarget: 1
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData: []
+    bgTileData:
+    - positionIndex: 4
+      tileType: 7
+    - positionIndex: 12
+      tileType: 7
+    - positionIndex: 13
+      tileType: 7
+    - positionIndex: 14
+      tileType: 7
+    - positionIndex: 20
+      tileType: 7
+    - positionIndex: 21
+      tileType: 7
+    - positionIndex: 23
+      tileType: 7
+    - positionIndex: 24
+      tileType: 7
+    - positionIndex: 30
+      tileType: 7
+    - positionIndex: 31
+      tileType: 7
+    - positionIndex: 32
+      tileType: 7
+    - positionIndex: 40
+      tileType: 7
+    - positionIndex: 10
+      tileType: 7
+    - positionIndex: 19
+      tileType: 7
+    - positionIndex: 28
+      tileType: 7
+    - positionIndex: 18
+      tileType: 7
+    - positionIndex: 25
+      tileType: 7
+    - positionIndex: 16
+      tileType: 7
+    - positionIndex: 34
+      tileType: 7
+    - positionIndex: 26
+      tileType: 7
+    gemTileData: []
+    moveCount: 20
+    totalStarValue: 3100
+    reFreshCount: 0
+    ability1Value: 4
+    ability2Value: 4
+    levelNumber: 88

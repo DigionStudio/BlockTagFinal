@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 236 ((N5-25)(N3-25)-18) M-17
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.42
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 4
+      blockType: 0
+      gemType: 0
+      count: 22
+    - normalBlockType: 2
+      blockType: 0
+      gemType: 0
+      count: 20
+    bgTileData:
+    - positionIndex: 0
+      tileType: 11
+    - positionIndex: 1
+      tileType: 11
+    - positionIndex: 11
+      tileType: 11
+    - positionIndex: 21
+      tileType: 11
+    - positionIndex: 31
+      tileType: 11
+    - positionIndex: 23
+      tileType: 11
+    - positionIndex: 15
+      tileType: 11
+    - positionIndex: 7
+      tileType: 11
+    - positionIndex: 8
+      tileType: 11
+    - positionIndex: 16
+      tileType: 11
+    - positionIndex: 24
+      tileType: 11
+    - positionIndex: 32
+      tileType: 11
+    - positionIndex: 40
+      tileType: 11
+    - positionIndex: 30
+      tileType: 11
+    - positionIndex: 20
+      tileType: 11
+    - positionIndex: 10
+      tileType: 11
+    - positionIndex: 22
+      tileType: 11
+    gemTileData: []
+    moveCount: 18
+    totalStarValue: 2700
+    reFreshCount: 0
+    ability1Value: 4
+    ability2Value: 3
+    levelNumber: 235

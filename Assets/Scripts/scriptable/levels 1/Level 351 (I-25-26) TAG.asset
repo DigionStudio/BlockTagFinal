@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 351 (I-25-26) TAG
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.3
+    isScoreTarget: 0
+    isBombAbility: 1
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 8
+      blockType: 6
+      gemType: 0
+      count: 25
+    bgTileData:
+    - positionIndex: 22
+      tileType: 8
+    - positionIndex: 30
+      tileType: 8
+    - positionIndex: 31
+      tileType: 8
+    - positionIndex: 32
+      tileType: 8
+    - positionIndex: 38
+      tileType: 8
+    - positionIndex: 39
+      tileType: 8
+    - positionIndex: 41
+      tileType: 8
+    - positionIndex: 42
+      tileType: 8
+    - positionIndex: 47
+      tileType: 8
+    - positionIndex: 48
+      tileType: 8
+    - positionIndex: 50
+      tileType: 8
+    - positionIndex: 51
+      tileType: 8
+    - positionIndex: 57
+      tileType: 8
+    - positionIndex: 58
+      tileType: 8
+    - positionIndex: 59
+      tileType: 8
+    - positionIndex: 67
+      tileType: 8
+    - positionIndex: 40
+      tileType: 8
+    - positionIndex: 49
+      tileType: 8
+    - positionIndex: 56
+      tileType: 8
+    - positionIndex: 60
+      tileType: 8
+    - positionIndex: 66
+      tileType: 8
+    - positionIndex: 68
+      tileType: 8
+    - positionIndex: 76
+      tileType: 8
+    - positionIndex: 46
+      tileType: 8
+    - positionIndex: 52
+      tileType: 8
+    gemTileData: []
+    moveCount: 26
+    totalStarValue: 5000
+    reFreshCount: 0
+    ability1Value: 5
+    ability2Value: 5
+    levelNumber: 350

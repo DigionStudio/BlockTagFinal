@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 385 ((RK-13)(W-13)-24)
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.3
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 9
+      blockType: 6
+      gemType: 0
+      count: 13
+    - normalBlockType: 7
+      blockType: 6
+      gemType: 0
+      count: 13
+    bgTileData:
+    - positionIndex: 47
+      tileType: 7
+    - positionIndex: 39
+      tileType: 7
+    - positionIndex: 31
+      tileType: 9
+    - positionIndex: 23
+      tileType: 9
+    - positionIndex: 15
+      tileType: 9
+    - positionIndex: 51
+      tileType: 9
+    - positionIndex: 43
+      tileType: 9
+    - positionIndex: 35
+      tileType: 9
+    - positionIndex: 56
+      tileType: 7
+    - positionIndex: 66
+      tileType: 7
+    - positionIndex: 57
+      tileType: 7
+    - positionIndex: 49
+      tileType: 7
+    - positionIndex: 41
+      tileType: 9
+    - positionIndex: 48
+      tileType: 7
+    - positionIndex: 58
+      tileType: 7
+    - positionIndex: 32
+      tileType: 9
+    - positionIndex: 24
+      tileType: 9
+    - positionIndex: 25
+      tileType: 9
+    - positionIndex: 34
+      tileType: 9
+    - positionIndex: 33
+      tileType: 9
+    - positionIndex: 42
+      tileType: 9
+    - positionIndex: 46
+      tileType: 7
+    - positionIndex: 38
+      tileType: 7
+    - positionIndex: 30
+      tileType: 7
+    - positionIndex: 40
+      tileType: 7
+    - positionIndex: 50
+      tileType: 7
+    gemTileData: []
+    moveCount: 24
+    totalStarValue: 5000
+    reFreshCount: 0
+    ability1Value: 7
+    ability2Value: 5
+    levelNumber: 384

@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 424 ((CR-11)(N2-25)-25) IN-16
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.3
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 5
+      blockType: 5
+      gemType: 0
+      count: 11
+    - normalBlockType: 1
+      blockType: 0
+      gemType: 0
+      count: 25
+    bgTileData:
+    - positionIndex: 23
+      tileType: 6
+    - positionIndex: 39
+      tileType: 6
+    - positionIndex: 49
+      tileType: 6
+    - positionIndex: 33
+      tileType: 6
+    - positionIndex: 13
+      tileType: 6
+    - positionIndex: 29
+      tileType: 6
+    - positionIndex: 38
+      tileType: 6
+    - positionIndex: 48
+      tileType: 6
+    - positionIndex: 24
+      tileType: 6
+    - positionIndex: 14
+      tileType: 6
+    - positionIndex: 5
+      tileType: 6
+    - positionIndex: 15
+      tileType: 6
+    - positionIndex: 25
+      tileType: 6
+    - positionIndex: 37
+      tileType: 6
+    - positionIndex: 47
+      tileType: 6
+    - positionIndex: 57
+      tileType: 6
+    gemTileData: []
+    moveCount: 25
+    totalStarValue: 8000
+    reFreshCount: 0
+    ability1Value: 5
+    ability2Value: 7
+    levelNumber: 423

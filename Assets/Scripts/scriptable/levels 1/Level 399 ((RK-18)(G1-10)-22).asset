@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 399 ((RK-18)(G1-10)-22)
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.3
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 9
+      blockType: 6
+      gemType: 0
+      count: 18
+    - normalBlockType: 5
+      blockType: 6
+      gemType: 1
+      count: 10
+    bgTileData:
+    - positionIndex: 6
+      tileType: 9
+    - positionIndex: 16
+      tileType: 9
+    - positionIndex: 26
+      tileType: 9
+    - positionIndex: 5
+      tileType: 9
+    - positionIndex: 15
+      tileType: 9
+    - positionIndex: 25
+      tileType: 9
+    - positionIndex: 14
+      tileType: 9
+    - positionIndex: 3
+      tileType: 9
+    - positionIndex: 11
+      tileType: 9
+    - positionIndex: 19
+      tileType: 9
+    - positionIndex: 18
+      tileType: 9
+    - positionIndex: 10
+      tileType: 9
+    - positionIndex: 2
+      tileType: 9
+    - positionIndex: 28
+      tileType: 9
+    - positionIndex: 20
+      tileType: 9
+    - positionIndex: 12
+      tileType: 9
+    - positionIndex: 34
+      tileType: 9
+    - positionIndex: 24
+      tileType: 9
+    gemTileData:
+    - gemType: 1
+      spawnpercentmin: 0
+      spawnpercentmax: 25
+    moveCount: 22
+    totalStarValue: 5000
+    reFreshCount: 0
+    ability1Value: 7
+    ability2Value: 5
+    levelNumber: 398

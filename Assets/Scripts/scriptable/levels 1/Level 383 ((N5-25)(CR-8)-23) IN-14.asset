@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 383 ((N5-25)(CR-8)-23) IN-14
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.3
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 4
+      blockType: 0
+      gemType: 0
+      count: 25
+    - normalBlockType: 5
+      blockType: 5
+      gemType: 0
+      count: 8
+    bgTileData:
+    - positionIndex: 27
+      tileType: 6
+    - positionIndex: 19
+      tileType: 6
+    - positionIndex: 11
+      tileType: 6
+    - positionIndex: 3
+      tileType: 6
+    - positionIndex: 35
+      tileType: 6
+    - positionIndex: 25
+      tileType: 6
+    - positionIndex: 15
+      tileType: 6
+    - positionIndex: 5
+      tileType: 6
+    - positionIndex: 14
+      tileType: 6
+    - positionIndex: 24
+      tileType: 6
+    - positionIndex: 34
+      tileType: 6
+    - positionIndex: 12
+      tileType: 6
+    - positionIndex: 20
+      tileType: 6
+    - positionIndex: 28
+      tileType: 6
+    gemTileData: []
+    moveCount: 23
+    totalStarValue: 5000
+    reFreshCount: 0
+    ability1Value: 7
+    ability2Value: 5
+    levelNumber: 382

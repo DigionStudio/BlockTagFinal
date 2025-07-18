@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 180 (N1R-6-19) RK-15
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.5
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 0
+      blockType: 1
+      gemType: 0
+      count: 6
+    bgTileData:
+    - positionIndex: 28
+      tileType: 9
+    - positionIndex: 38
+      tileType: 9
+    - positionIndex: 48
+      tileType: 9
+    - positionIndex: 58
+      tileType: 9
+    - positionIndex: 9
+      tileType: 9
+    - positionIndex: 19
+      tileType: 9
+    - positionIndex: 29
+      tileType: 9
+    - positionIndex: 39
+      tileType: 9
+    - positionIndex: 18
+      tileType: 9
+    - positionIndex: 0
+      tileType: 9
+    - positionIndex: 10
+      tileType: 9
+    - positionIndex: 20
+      tileType: 9
+    - positionIndex: 30
+      tileType: 9
+    - positionIndex: 40
+      tileType: 9
+    - positionIndex: 49
+      tileType: 9
+    gemTileData: []
+    moveCount: 19
+    totalStarValue: 2500
+    reFreshCount: 0
+    ability1Value: 5
+    ability2Value: 3
+    levelNumber: 179

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 166 (S-2600-16) I-15
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.47
+    isScoreTarget: 1
+    isBombAbility: 0
+    isTagAbility: 0
+    shapeCodes: []
+    targetData: []
+    bgTileData:
+    - positionIndex: 29
+      tileType: 8
+    - positionIndex: 21
+      tileType: 8
+    - positionIndex: 13
+      tileType: 8
+    - positionIndex: 38
+      tileType: 8
+    - positionIndex: 30
+      tileType: 8
+    - positionIndex: 22
+      tileType: 8
+    - positionIndex: 55
+      tileType: 8
+    - positionIndex: 47
+      tileType: 8
+    - positionIndex: 39
+      tileType: 8
+    - positionIndex: 37
+      tileType: 8
+    - positionIndex: 46
+      tileType: 8
+    - positionIndex: 31
+      tileType: 8
+    - positionIndex: 23
+      tileType: 8
+    - positionIndex: 14
+      tileType: 8
+    - positionIndex: 5
+      tileType: 8
+    gemTileData: []
+    moveCount: 16
+    totalStarValue: 2600
+    reFreshCount: 0
+    ability1Value: 4
+    ability2Value: 5
+    levelNumber: 165
