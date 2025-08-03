@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Reflection;
-using UnityEditor;
 using UnityEngine;
+
+
+[Serializable]
+public class PlayerGlobalData
+{
+    public int Rank;
+    public string Name;
+    public double scoreValue;
+}
 
 [Serializable]
 public class Ability_Status_Data
@@ -82,6 +88,8 @@ public class GameDataManager : MonoBehaviour
     public bool HasDisableAds { get { return levelDataHolder.isNoAds; } }
     public bool HasNewDay { get { return levelDataHolder.isNewDay; } }
 
+
+    private PlayerGlobalData playerGlobalData;
     private string savePathJson;
     private int gameTypeCode = 0;
     private int totalCoin;
@@ -114,6 +122,7 @@ public class GameDataManager : MonoBehaviour
         //PlayerPrefs.SetInt(TutorialPref, 0);
         //PlayerPrefs.SetInt(DailyGoalsPref, 0);
         //PlayerPrefs.SetInt(LevelPosY, 0);
+        playerGlobalData = new PlayerGlobalData();
         rePlayCount = 0;
         isMenuOpened = true;
         LoadPlayerData();
@@ -517,6 +526,7 @@ public class GameDataManager : MonoBehaviour
             }
         }
         GetGiftData(true);
+        isGifted= false;
         SavePlayerData();
     }
     public void SetResourcesValues(VariableTypeCode indexCode, int values)
@@ -803,5 +813,20 @@ public class GameDataManager : MonoBehaviour
             }
         }
         return data;
+    }
+
+    public PlayerGlobalData GetPlayerGlobalData()
+    {
+        if (string.IsNullOrEmpty(playerGlobalData.Name))
+        {
+            return null;
+        }
+        return playerGlobalData;
+    }
+    public void SetPlayerGlobalData(int rank, string name, double score)
+    {
+        playerGlobalData.Rank = rank;
+        playerGlobalData.Name = name;
+        playerGlobalData.scoreValue = score;
     }
 }

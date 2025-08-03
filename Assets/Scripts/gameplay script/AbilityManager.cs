@@ -21,14 +21,14 @@ public class AbilityData
 public enum VariableTypeCode
 {
     None, //0
-    Freeze,
-    Bomb,
-    Hammer,
-    Thunder,
-    Ability_1,
-    Magic_Wand,
-    Coin,
-    Life,
+    Freeze, //1
+    Bomb,   //2
+    Hammer, //3
+    Thunder,//4
+    Ability_1,//5
+    Magic_Wand,//6
+    Coin,       //7
+    Life,       //8
     Lucky_Wheel
 }
 

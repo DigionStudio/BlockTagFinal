@@ -218,11 +218,6 @@ public class BuyPanel : MonoBehaviour
         adDetail.gameObject.SetActive(isAds);
     }
 
-    private void CheckAdStatus()
-    {
-        bool status = CheckAdsShowButtonStatus(lifeCode);
-        adButtton.interactable = status;
-    }
 
     private void BuyCross()
     {

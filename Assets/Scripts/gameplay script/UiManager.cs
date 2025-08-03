@@ -1,11 +1,19 @@
 using DG.Tweening;
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+[Serializable]
+public class RankShow
+{
+    public RectTransform rankRect;
+    public LeaderboardShow leaderboardShow;
+}
 
 [Serializable]
 public class StarObject
@@ -27,6 +35,7 @@ public class GiftContent
 {
     public GameObject holder;
     public Image image;
+    public GameObject deniedImage;
     public Text valueText;
     public Text nameText;
 }
@@ -50,6 +59,7 @@ public class PanelTween
 
 public class UiManager : MonoBehaviour
 {
+    [SerializeField] private Image startFadeImage;
     [SerializeField] private Button refreshButton;
     [SerializeField] private Button resetButton;
     [SerializeField] private Button pauseButton;
@@ -100,6 +110,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private GameObject newHighScore;
     [SerializeField] private GameObject newHighHit;
     [SerializeField] private PanelTween[] gameOverPanelTween;
+    [SerializeField] private PanelTween gameOverButtonPanelTween;
     [SerializeField] private GameOverPoints[] overPoints;
     [SerializeField] private Sprite[] gameOverTextStatus;
     [SerializeField] private Sprite[] gameOverSpriteStatus;
@@ -151,6 +162,7 @@ public class UiManager : MonoBehaviour
 
     [SerializeField] private GameObject confetiEffect;
     [SerializeField] private GameObject confetiEffectNewHigh;
+    [SerializeField] private GameObject pointEffect;
     [SerializeField] private GiftContent[] giftContent;
     private GiftData[] giftData;
 
@@ -165,6 +177,12 @@ public class UiManager : MonoBehaviour
     [SerializeField] private Image freezeImage;
     [SerializeField] private GameObject bgFill;
     [SerializeField] private Image fillImage;
+    [SerializeField] private GameObject rankShowObj;
+    [SerializeField] private GameObject giftShowObj;
+    [SerializeField] private RankShow[] rankShow;
+    [SerializeField] private Text rankStatusText;
+    private PlayerGlobalData rankDataCurrent;
+    public static UnityEvent PlayerRankdataUpdate = new();
 
 
     private BoardManager boardManager;
@@ -176,6 +194,8 @@ public class UiManager : MonoBehaviour
     private bool isUsergameEnd;
     void Start()
     {
+        startFadeImage.DOFade(1, 0f);
+        startFadeImage.DOFade(0, 1f);
         currentHitPoint = 0;
         isUsergameEnd = false;
         gameManager = FindObjectOfType<GameManager>();
@@ -186,6 +206,11 @@ public class UiManager : MonoBehaviour
         gameDataManager = boardManager.gameDataManager;
         currentLevel = gameDataManager.currentLevel;
         isNoAds = gameDataManager.HasDisableAds;
+        if (gameDataManager.currentLevel < 5)
+        {
+            isNoAds = true;
+        }
+        PlayerRankdataUpdate.AddListener(PlayerRankUpdate);
 
         audioStatusInt = gameDataManager.GetSaveValues(7); 
         sfxStatusInt = gameDataManager.GetSaveValues(11); 
@@ -341,7 +366,8 @@ public class UiManager : MonoBehaviour
 
     private void RestartGame()
     {
-        RestartActive();
+        DisableSettings();
+        Invoke(nameof(Restart), 0.3f);
         isUsergameEnd = true;
         //if (!isNoAds)
         //{
@@ -354,21 +380,24 @@ public class UiManager : MonoBehaviour
         //}
     }
 
-    public void RestartActive()
-    {
-        Invoke(nameof(Restart), 0.2f);
-    }
-
     private void Restart()
     {
-        if(!isUsergameEnd)
+        if(!isUsergameEnd && GameTypeCode == 1)
             gameDataManager.rePlayCount++;
         SceneManager.LoadScene(1);
     }
 
     private void MainMenu()
     {
+        clickaudioSource.Play();
+        ChangePanelPos(false, gameOverPanelTween, false, 0.5f);
+        TweenPanel(false, gameOverButtonPanelTween, 0.5f);
         gameManager.GameEndValues();
+        Invoke(nameof(ToMainMenu), 0.5f);
+    }
+
+    private void ToMainMenu()
+    {
         if (GameTypeCode == 1)
             SceneManager.LoadScene(0);
         else
@@ -397,6 +426,7 @@ public class UiManager : MonoBehaviour
         newHighHit.SetActive(false);
         ChangePanelPos(false, panelTween, true);
         ChangePanelPos(false, gameOverPanelTween, false);
+        TweenPanel(false, gameOverButtonPanelTween, 0);
     }
     float WorldToAnchoredPosition(Vector3 worldPosition, RectTransform rectTransform)
     {
@@ -422,12 +452,13 @@ public class UiManager : MonoBehaviour
     {
         clickaudioSource.Play();
         ChangePanelPos(false, gameOverPanelTween,false, 0.5f);
-        Invoke(nameof(PlayAgain), 0.5f);
+        TweenPanel(false, gameOverButtonPanelTween, 0.5f);
+        if(GameTypeCode == 1)
+        {
+            AdsLeaderboardManager.Instance.CheckAnalyticsEvent(6, currentLevel);
+        }
+        Invoke(nameof(Restart), 0.5f);
 
-    }
-    private void PlayAgain()
-    {
-        Restart();
     }
 
     public void StartGame(int upperUIIndex, LevelData lvData)
@@ -611,6 +642,15 @@ public class UiManager : MonoBehaviour
         newHighHit.SetActive(false);
         GameEndObjectSetup(4, 0);
         gameStatus = gamestatus;
+        if(GameTypeCode == 1)
+        {
+            if(gamestatus == 0)
+                LoseGiftSetUp();
+        }
+        else
+        {
+            SetUpRankData();
+        }
 
         //gameOverPanelImage.DOFade(1, 0.5f);
 
@@ -699,7 +739,6 @@ public class UiManager : MonoBehaviour
             foreach (var item in gameOverHolder)
                 item.SetActive(true);
             Invoke(nameof(GameOverSetup), 4f);
-
         }
         else
         {
@@ -768,7 +807,16 @@ public class UiManager : MonoBehaviour
         overPoints[0].SetUp(currentScoreInt);
         overPoints[1].SetUp(highScoreInt, num);
         overPoints[2].SetUp(currentHitPoint);
+        AdsLeaderboardManager.Instance.CheckAnalyticsEvent(4);
 
+        if (gameDataManager.GameTypeCode == 0)
+        {
+            GetNewPlayerData();
+        }
+        else
+        {
+            TweenPanel(true, gameOverButtonPanelTween, 0.5f);
+        }
     }
 
     private void ChangePanelPos(bool isfinalpos, PanelTween[] tweenPanel,bool isGame, float duration = 0)
@@ -996,7 +1044,99 @@ public class UiManager : MonoBehaviour
 
     private void TryAgain()
     {
-        //gameManager.InsializeAds();
+        gameManager.CheckGameConnectivity();
+    }
+    private void GetNewPlayerData()
+    {
+        AdsLeaderboardManager.Instance.GetCurrentPlayerTopScoreData();
+    }
+    private void PlayerRankUpdate()
+    {
+        PlayerGlobalData data = gameDataManager.GetPlayerGlobalData();
+        rankShowObj.gameObject.SetActive(true);
+        if (data != null && !string.IsNullOrEmpty(data.Name))
+        {
+            StartCoroutine(RankShowCO(data));
+            
+        }
+        else
+        {
+            DisplayDefaultRank();
+        }
+    }
+
+    IEnumerator RankShowCO(PlayerGlobalData data)
+    {
+        yield return new WaitForSeconds(0.5f);
+        int diff = rankDataCurrent.Rank - data.Rank;
+        rankStatusText.gameObject.SetActive(true);
+        if (diff > 0)
+        {
+            
+            rankStatusText.text = "+" + diff + " Rank Up";
+            rankShow[1].leaderboardShow.SetUp(data, 1, true, 1);
+            yield return new WaitForSeconds(0.5f);
+            rankShow[1].rankRect.gameObject.SetActive(true);
+            rankShow[0].rankRect.DOAnchorPosY(-170f, 0.5f);
+            rankShow[0].leaderboardShow.UIElementVisibility(0, 0.5f);
+            rankShow[1].rankRect.DOAnchorPosY(0f, 0.5f);
+            rankShow[1].leaderboardShow.UIElementVisibility(1, 0.5f);
+            yield return new WaitForSeconds(1f);
+            rankShow[0].rankRect.gameObject.SetActive(false);
+            TweenPanel(true, gameOverButtonPanelTween, 0.5f);
+            yield return new WaitForSeconds(2f);
+            rankStatusText.gameObject.SetActive(false);
+            rankShow[1].leaderboardShow.ResetBgColor();
+        }
+        else
+        {
+            rankStatusText.text = "Kept The Rank";
+            rankShow[0].rankRect.gameObject.SetActive(true);
+            rankShow[0].leaderboardShow.SetUp(data, 1, true);
+            TweenPanel(true, gameOverButtonPanelTween, 0.5f);
+            yield return new WaitForSeconds(2f);
+            rankStatusText.gameObject.SetActive(false);
+        }
+        
+    }
+
+    private void SetUpRankData()
+    {
+        rankShowObj.gameObject.SetActive(true);
+        PlayerGlobalData dta = gameDataManager.GetPlayerGlobalData();
+        if (dta != null && !string.IsNullOrEmpty(dta.Name))
+        {
+            PlayerGlobalData dt = new PlayerGlobalData()
+            {
+                Rank = dta.Rank,
+                Name = dta.Name,
+                scoreValue = dta.scoreValue
+            };
+            rankDataCurrent = dt;
+            rankStatusText.gameObject.SetActive(false);
+            rankShow[0].rankRect.gameObject.SetActive(true);
+            rankShow[0].leaderboardShow.SetUp(rankDataCurrent, 1, true);
+            rankShow[0].leaderboardShow.UIElementVisibility(1, 0.5f);
+        }
+        else
+        {
+            DisplayDefaultRank();
+        }
+    }
+    private void DisplayDefaultRank()
+    {
+        rankStatusText.gameObject.SetActive(true);
+        rankStatusText.text = "Data Not Available";
+        PlayerGlobalData data = new PlayerGlobalData()
+        {
+            Rank = 999,
+            Name = "......",
+            scoreValue = 0000
+        };
+        rankShow[0].rankRect.gameObject.SetActive(true);
+        rankShow[0].leaderboardShow.SetUp(data, 1, true);
+        rankShow[0].leaderboardShow.UIElementVisibility(1, 0.5f);
+        TweenPanel(true, gameOverButtonPanelTween, 0.5f);
     }
 
     private void Resetgift()
@@ -1004,11 +1144,26 @@ public class UiManager : MonoBehaviour
         foreach (var item in giftContent)
         {
             item.holder.SetActive(false);
+            item.deniedImage.SetActive(false);
+            item.valueText.color = Color.green;
         }
+        pointEffect.SetActive(false);
+        giftShowObj.gameObject.SetActive(false);
+        rankShowObj.gameObject.SetActive(false);
+        rankStatusText.gameObject.SetActive(false);
+        for (int i = 0; i < rankShow.Length; i++)
+        {
+            int posy = i * 170;
+            rankShow[i].rankRect.DOAnchorPosY((float)posy, 0f);
+            rankShow[i].rankRect.gameObject.SetActive(false);
+            rankShow[i].leaderboardShow.UIElementVisibility(0, 0);
+        }
+
     }
 
     public void GiftAbilityPanel(List<GiftData> data)
     {
+        giftShowObj.gameObject.SetActive(true);
         int count = data.Count;
         giftData = new GiftData[count];
         for (int i = 0; i < count; i++)
@@ -1020,6 +1175,8 @@ public class UiManager : MonoBehaviour
             };
 
             if (i < giftContent.Length) {
+                giftContent[i].deniedImage.SetActive(false);
+
                 if (i > 0)
                 {
                     int index = (int)data[i].indexCode - 1;
@@ -1040,10 +1197,40 @@ public class UiManager : MonoBehaviour
             }
             giftData[i] = dt;
         }
+        pointEffect.SetActive(true);
         GiftPanelOK();
     }
 
-    
+    private void LoseGiftSetUp()
+    {
+        giftShowObj.gameObject.SetActive(true);
+        for (int i = 0; i < giftContent.Length; i++)
+        {
+            giftContent[i].deniedImage.SetActive(true);
+            giftContent[i].holder.SetActive(true);
+            giftContent[i].valueText.color = Color.red;
+            if (i == 0)
+            {
+                giftContent[i].valueText.text = "+50";
+            }
+            else if(i == 1)
+            {
+                AbilityData abData = abilityManager.abilityData[8];
+                int rand = UnityEngine.Random.Range(1, 5);
+                giftContent[i].image.sprite = abData.iconSprite;
+                giftContent[i].valueText.text = "+" + rand.ToString();
+                giftContent[i].nameText.text = abData.name;
+            }
+            else
+            {
+                int rand = UnityEngine.Random.Range(0, 4);
+                AbilityData abData = abilityManager.abilityData[rand];
+                giftContent[i].image.sprite = abData.iconSprite;
+                giftContent[i].valueText.text = "+1";
+                giftContent[i].nameText.text = abData.name;
+            }
+        }
+    }
     
     private void GiftPanelOK()
     {
@@ -1091,5 +1278,10 @@ public class UiManager : MonoBehaviour
         freezeImage.gameObject.SetActive(false);
         fillImage.fillAmount = 1;
         bgFill.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        PlayerRankdataUpdate.AddListener(PlayerRankUpdate);
     }
 }

@@ -25,13 +25,12 @@ public class LeaderBoardManager : MonoBehaviour
 {
     public static LeaderBoardManager Instance;
     public GameObject[] holders;
-    public IconsReference rankIcons;
-    public IconsReference scoreIcons;
     public LeaderboardButtons[] leaderBoardButtons;
     public Color SelectedColor;
     public Color DisableColor;
     private LeaderboardButtons currentButton;
 
+    public ScrollRect currentScrollRect;
     public RectTransform boardContainerRect;
     public LeaderboardShow leaderboardShowPrefab;
     public List<LeaderboardShow> leaderboardShows = new List<LeaderboardShow>();
@@ -66,6 +65,12 @@ public class LeaderBoardManager : MonoBehaviour
         leaderBoardButtons[0].useButton.onClick.AddListener(WeeklyButton);
         leaderBoardButtons[1].useButton.onClick.AddListener(GlobalButton);
         leaderBoardButtons[2].useButton.onClick.AddListener(MapButton);
+        bool status = false;
+        if (Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            status = true;
+        }
+        ApplicationStatus(status);
     }
 
     public void SetUpPlayerID(string ID)
@@ -150,6 +155,7 @@ public class LeaderBoardManager : MonoBehaviour
     {
         if (index >= 0 && index != currentIndex)
         {
+            currentScrollRect.verticalNormalizedPosition = 1f;
             SelectButton(index);
             ResetLeaderBoard();
             currentIndex = index;
@@ -190,13 +196,13 @@ public class LeaderBoardManager : MonoBehaviour
 
     private void ShowLeaderboardItem(LeaderboardShow show, LeaderboardEntry player, int index)
     {
-        Sprite rankIcon = rankIcons.iconSprite[0];
-        int rank = player.Rank;
-        if (rank <= 2)
-        {
-            rankIcon = rankIcons.iconSprite[rank];
-        }
-        show.SetUp(player, scoreIcons.iconSprite[index], rankIcon, CheckCurrentPlayer(player.PlayerId));
+        PlayerGlobalData data = new PlayerGlobalData() {
+            Rank = player.Rank,
+            Name = player.PlayerName,
+            scoreValue = player.Score,
+
+        };
+        show.SetUp(data, index, CheckCurrentPlayer(player.PlayerId));
     }
 
     private bool CheckCurrentPlayer(string id)

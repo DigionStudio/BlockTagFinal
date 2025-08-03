@@ -40,6 +40,7 @@ public class DailyGoalShow : MonoBehaviour
         goalIndex = goalindex;
         goalAchived.SetActive(false);
         goalachiveButton.interactable = false;
+        goalAbilityIconImage.enabled = false;
         if (blockManager == null)
         {
             blockManager = BlockManager.Instance;
@@ -60,14 +61,10 @@ public class DailyGoalShow : MonoBehaviour
                 icon = blockManager.ObstacleSprite(val + 1);
             }
         }
-        goalIconImage.sprite = icon;
 
-        if (goalData.abilityType == BlockType.None)
+        if (goalData.abilityType != BlockType.Normal_Block && goalData.abilityType != BlockType.None)
         {
-            goalAbilityIconImage.enabled = false;
-        }
-        else
-        {
+            goalAbilityIconImage.enabled = true;
             int abilityIndex = (int)goalData.abilityType;
             Sprite abilityicon = blockManager.ColorAbilitySprite();
             if (abilityIndex > 0 && abilityIndex < 5)
@@ -76,6 +73,15 @@ public class DailyGoalShow : MonoBehaviour
             }
             goalAbilityIconImage.sprite = abilityicon;
         }
+        else
+        {
+            if(iconIndex == 5 && goalData.abilityType == BlockType.Normal_Block)
+            {
+                icon = blockManager.IconSprite(6);
+            }
+        }
+        goalIconImage.sprite = icon;
+
         goalCountText.text = "x" + (goalData.totalCount.ToString());
 
 

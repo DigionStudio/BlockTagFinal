@@ -105,9 +105,12 @@ public class MenuTutorialManager : MonoBehaviour
     void Start()
     {
         //PlayerPrefs.SetInt(GameDataManager.TutorialPref, 0);
-        blockManager = BlockManager.Instance;
-        menuManager = MenuManager.Instance;
-        gameDataManager = blockManager.gameDataManager;
+        if(blockManager  == null)
+            blockManager = BlockManager.Instance;
+        if(menuManager == null)
+            menuManager = MenuManager.Instance;
+        if(gameDataManager == null)
+            gameDataManager = blockManager.gameDataManager;
 
         audioStatusInt = gameDataManager.GetSaveValues(7);
         sfxStatusInt = gameDataManager.GetSaveValues(11);
@@ -136,24 +139,56 @@ public class MenuTutorialManager : MonoBehaviour
             isFirstPlayLevel = true;
         }
 
-        for (int i = 0; i < itemShow.Length; i++)
+        if (showRects.Count == 0)
         {
-            showRects.Add(itemShow[i].GetComponent<RectTransform>());
+            for (int i = 0; i < itemShow.Length; i++)
+            {
+                showRects.Add(itemShow[i].GetComponent<RectTransform>());
+            }
         }
         levelTuteCanvas.SetActive(false);
+        if(gameDataManager.isMenuOpened)
+            menuManager.Loading();
+    }
+
+    public void GameStart()
+    {
+        if (blockManager == null)
+            blockManager = BlockManager.Instance;
+        if (menuManager == null)
+            menuManager = MenuManager.Instance;
+        if (gameDataManager == null)
+            gameDataManager = blockManager.gameDataManager;
+
+        AdsLeaderboardManager.Instance.CheckAnalyticsEvent(1);
+        if (showRects.Count == 0)
+        {
+            for (int i = 0; i < itemShow.Length; i++)
+            {
+                showRects.Add(itemShow[i].GetComponent<RectTransform>());
+            }
+        }
+        int value = PlayerPrefs.GetInt(FirstPlayLevel);
+        if (value == 0 && gameDataManager.currentLevel >= 4)
+        {
+            isFirstPlayLevel = true;
+        }
+
+
         int num = PlayerPrefs.GetInt(gameDataManager.TutorialPref);
         if (num == 0)
         {
-            menuManager.GameInitialize(1f, 0f, true);
+            menuManager.GameInitialize(2f, true);
             ChangeScene();
             menuManager.isTutorialActive = true;
             gameDataManager.isplayerNameSelect = true;
+            AdsLeaderboardManager.Instance.CheckAnalyticsEvent(2);
         }
         else
         {
             menuManager.isTutorialActive = false;
             Inisialize();
-            Invoke(nameof(SetUp), 0.3f);
+            SetUp();
             menuManager.SetUpManager(gameDataManager.isMenuOpened);
             DailyGoalsManager.Instance.Initialize();
         }
@@ -162,7 +197,7 @@ public class MenuTutorialManager : MonoBehaviour
     {
         bool coins = false;
         int coin = gameDataManager.GetSaveValues(0);
-        if (coin >= 1000)
+        if (coin >= 5000)
         {
             coins = true;
         }
@@ -329,7 +364,7 @@ public class MenuTutorialManager : MonoBehaviour
         Inisialize();
 
     }
-    private void CloseDetails()
+    public void CloseDetails()
     {
         if (currentDetailsShow)
             currentDetailsShow.DOAnchorPosX(-initialValue, 0.5f).SetEase(Ease.OutQuad);
@@ -372,6 +407,7 @@ public class MenuTutorialManager : MonoBehaviour
         string name = blockManager.tileDetailsData[random].name;
         string des = blockManager.tileDetailsData[random].working;
         itemShow[0].SetUpItemDataForStartUp(icon, 0, name, des, random, false, false);
+        
 
         currentDetailsShow = showRects[0];
         if (isAbility)
@@ -399,7 +435,6 @@ public class MenuTutorialManager : MonoBehaviour
             currentDetailsShow.DOAnchorPosX(0, 0.5f).SetEase(Ease.OutQuad).OnComplete(() =>
             {
                 currentRectIndex = random;
-                Invoke(nameof(CloseDetails), 4f);
             });
         }
     }

@@ -306,7 +306,7 @@ public class TutorialManager : MonoBehaviour
                     tutorialCutoffMain.SetActive(true);
                     isTutorial = false;
                     prefNum = 10;
-                    PlayerPrefs.SetInt(gameDataManager.TutorialPref, prefNum);
+                    TutorialEnded();
                     boardManager.GameStatus(true);
                     lastStepCount = 5;
                     Invoke(nameof(ChangeToMain), 0.5f);
@@ -322,6 +322,11 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
+    }
+    private void TutorialEnded()
+    {
+        PlayerPrefs.SetInt(gameDataManager.TutorialPref, 10);
+        AdsLeaderboardManager.Instance.CheckAnalyticsEvent(3);
     }
     private void ChangedCrushTile()
     {
@@ -380,7 +385,7 @@ public class TutorialManager : MonoBehaviour
             checkCount++;
         if(checkCount > 2)
         {
-            PlayerPrefs.SetInt(gameDataManager.TutorialPref, 10);
+            TutorialEnded();
             boardManager.GameStatus(true);
             lastStepCount = 5;
             Invoke(nameof(ChangeToMain), 0.5f);

@@ -24,18 +24,22 @@ public class GameAdsManager : MonoBehaviour
         adsLeaderboardManager = AdsLeaderboardManager.Instance;
         adsLeaderboardManager.CacheInterstitial();
         isAdsDisable = gameDataManager.HasDisableAds;
+        if(gameDataManager.currentLevel < 5)
+        {
+            isAdsDisable = true;
+        }
         adsLeaderboardManager.AdsShowClose_Failed.AddListener(CodeCheck);
         adsLeaderboardManager.GratifyRewards.AddListener(Reward);
     }
     public bool CkeckInterAds()
     {
-        bool isAdsReady = adsLeaderboardManager.IsAdReady;
+        bool isAdsReady = adsLeaderboardManager.HasInterReady();
         return isAdsReady;
     }
 
     public bool CheckRewardAds()
     {
-        bool isAdsReady = adsLeaderboardManager.IsRVReady;
+        bool isAdsReady = adsLeaderboardManager.HasRVReady();
         return isAdsReady;
     }
     public void Show_Inter_Ads(int id)
@@ -43,7 +47,7 @@ public class GameAdsManager : MonoBehaviour
         code = id;
         if (!isAdsDisable)
         {
-            if (adsLeaderboardManager.IsAdReady)
+            if (adsLeaderboardManager.HasInterReady())
             {
                 uiManager.AdsGameSountSetup(true);
                 adsLeaderboardManager.ShowInterstitial();
@@ -63,7 +67,7 @@ public class GameAdsManager : MonoBehaviour
     {
         if (!isAdsDisable)
         {
-            if (adsLeaderboardManager.IsRVReady)
+            if (adsLeaderboardManager.HasRVReady())
             {
                 code = 0;
                 uiManager.AdsGameSountSetup(true);

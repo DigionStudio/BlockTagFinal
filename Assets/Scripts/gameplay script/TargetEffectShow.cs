@@ -58,27 +58,29 @@ public class TargetEffectShow : MonoBehaviour
                 int num = blocktype - 7;
                 iconSprite = blockManager.ObstacleTargetEffectShowSprite(num);
             }
-            icon.sprite = iconSprite;
-
+            int abilitytype = (int)abilityType;
+            Sprite abilitySprite;
             if (abilityType != BlockType.Normal_Block && abilityType != BlockType.None)
             {
                 abilityicon.enabled = true;
-
-            }
-            int abilitytype = (int)abilityType;
-            Sprite abilitySprite = null;
-            if (abilitytype > 0 && abilitytype <= 4)
-            {
-                abilitySprite = blockManager.AbilitySprite(abilitytype - 1);
-            }
-            else
-            {
-                if (abilitytype == 5)
+                if (abilitytype > 0 && abilitytype <= 4)
+                {
+                    abilitySprite = blockManager.AbilitySprite(abilitytype - 1);
+                }
+                else
                 {
                     abilitySprite = blockManager.ColorAbilitySprite();
                 }
+                abilityicon.sprite = abilitySprite;
             }
-            abilityicon.sprite = abilitySprite;
+            else
+            {
+                if (blocktype == 5 && abilityType == BlockType.Normal_Block)
+                {
+                    iconSprite = blockManager.IconSprite(6);
+                }
+            }
+            icon.sprite = iconSprite;
         }
         else
         {

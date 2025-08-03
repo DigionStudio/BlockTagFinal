@@ -389,15 +389,9 @@ public class MenuManager : MonoBehaviour
         isMenuPlay = ismenuopen;
         if (isMenuPlay)
         {
-            float time = 4f;
-            if (Application.internetReachability == NetworkReachability.NotReachable)
-            {
-                time = 1f;
-            }
-
             if (!isTutorialActive)
             {
-                GameInitialize(2f, time, false);
+                GameInitialize(3f, false);
             }
         }
         else
@@ -410,21 +404,26 @@ public class MenuManager : MonoBehaviour
         OnVariableUpdate -= SetLevelPanelValueText;
 
     }
+    public void Loading()
+    {
+        loadingBar.fillAmount = 0;
+        loadingHolder.SetActive(true);
+        loadPanel.SetActive(true);
+        if (loadTween == null)
+            loadTween = loadingBar.DOFillAmount(0.8f, 5f);
+    }
 
-    public void GameInitialize(float time1,float time2, bool isTute)
+    public void GameInitialize(float time2, bool isTute)
     {
         LevelButtonShowAnim(false);
         isMenuOpen = false;
-        loadingHolder.SetActive(true);
-        loadPanel.SetActive(true);
-        loadingBar.DOFillAmount(0, 0);
-        loadTween = loadingBar.DOFillAmount(0.7f, time1).OnComplete(() =>
-        {
+        if(loadTween != null)
+            loadTween.Kill();
+        loadTween = loadingBar.DOFillAmount(1f, time2).OnComplete(() =>
+        { 
             if (!isTute)
             {
-                loadingBar.DOFillAmount(1, time2);
-                Invoke(nameof(GameLoadingComplete), time2);
-                loadTween.Kill();
+                Invoke(nameof(GameLoadingComplete), 0.5f);
             }
 
         });
@@ -434,28 +433,30 @@ public class MenuManager : MonoBehaviour
     {
         if (!isTutorialActive)
         {
-            loadTween.Kill();
-            loadingBar.DOFillAmount(1, 1f);
+            if (loadTween != null)
+                loadTween.Kill();
+            loadTween = loadingBar.DOFillAmount(1, 1f);
             Invoke(nameof(GameLoadingComplete), 1f);
         }
     }
 
     private void GameLoadingComplete()
     {
-        loadPanel.SetActive(false);
-        loadingHolder.SetActive(false);
         if (!isMenuOpen)
         {
             isMenuOpen = true;
-            LevelDisable();
+            menuTutorialManager.CloseDetails();
+            Invoke(nameof(GameInitializeComplete), 1f);
         }
 
     }
 
-    public void GameReInitialize()
+    private void GameInitializeComplete()
     {
-        loadingHolder.SetActive(true);
         loadPanel.SetActive(false);
+        loadingHolder.SetActive(false);
+        LevelDisable();
+
     }
     private void QuitGame()
     {
@@ -495,12 +496,20 @@ public class MenuManager : MonoBehaviour
         goalsManager.isNewLevel = true;
         gameDataManager.isBombAiAsist = false;
         ChangePanelPos(false, menuTween, 0.2f);
+        if (gameDataManager.isGifted)
+        {
+            gameDataManager.GiftValueClaim();
+        }
         Invoke(nameof(GameLoad), 0.1f);
     }
 
     private void LevelShow()
     {
-        if(gameDataManager == null)
+        loadPanel.SetActive(false);
+        loadingHolder.SetActive(false);
+
+
+        if (gameDataManager == null)
             gameDataManager = BlockManager.Instance.gameDataManager;
         if (goalsManager == null)
             goalsManager = DailyGoalsManager.Instance;
@@ -690,6 +699,7 @@ public class MenuManager : MonoBehaviour
         else
             SetWandStatus(isWandActive);
 
+        AdsLeaderboardManager.Instance.CheckAnalyticsEvent(5, gameDataManager.currentLevel);
         goalsManager.isNewLevel = CheckForNewlevel(levelData.levelNumber);
         Invoke(nameof(GameLoad), 0.3f);
     }

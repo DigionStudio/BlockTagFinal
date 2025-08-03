@@ -21,7 +21,7 @@ public class PointShow : MonoBehaviour
         if(code < obj.Length)
             obj[code].SetActive(true);
         Invoke(nameof(DestroyObject), duration);
-        transform.DOScale(0.8f, duration + 0.5f);
+        transform.DOScale(0.9f, duration + 0.5f);
         transform.DOMove(pointB, duration);
 
     }

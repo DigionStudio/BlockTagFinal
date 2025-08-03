@@ -10,38 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 6 (S-500-11) W-11
+  m_Name: Level 6 (S-500-11)
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.2
+    moveSpeed: 0.174
     isScoreTarget: 1
     isBombAbility: 0
     isTagAbility: 0
     shapeCodes: []
     targetData: []
-    bgTileData:
-    - positionIndex: 18
-      tileType: 7
-    - positionIndex: 10
-      tileType: 7
-    - positionIndex: 2
-      tileType: 7
-    - positionIndex: 19
-      tileType: 7
-    - positionIndex: 11
-      tileType: 7
-    - positionIndex: 20
-      tileType: 7
-    - positionIndex: 29
-      tileType: 7
-    - positionIndex: 21
-      tileType: 7
-    - positionIndex: 38
-      tileType: 7
-    - positionIndex: 30
-      tileType: 7
-    - positionIndex: 22
-      tileType: 7
+    bgTileData: []
     gemTileData: []
     moveCount: 11
     totalStarValue: 500

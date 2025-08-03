@@ -28,7 +28,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
     private string iosGameID = "5718826";
     private string gameID;
     private bool adsInitializing;
-
+    private bool isGameStart;
 
 
     private GameDataManager gameDataManager;
@@ -50,7 +50,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         gameDataManager = BlockManager.Instance.gameDataManager;
         leaderBoardManager = LeaderBoardManager.Instance;
         adsLeaderboardManager = AdsLeaderboardManager.Instance;
-
+        isGameStart = false;
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
             isOnline = true;
@@ -119,10 +119,22 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
                 if(gameDataManager == null)
                     gameDataManager = BlockManager.Instance.gameDataManager;
                 Initialize_Ads();
-
-                
             }
             initializeActive = false;
+            GameStart();
+        }
+        else
+        {
+            GameStart();
+        }
+    }
+
+    private void GameStart()
+    {
+        if (!isGameStart)
+        {
+            isGameStart = true;
+            MenuTutorialManager.Instance.GameStart();
         }
     }
 
@@ -319,6 +331,8 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
             var scores = await LeaderboardsService.Instance.GetPlayerScoreAsync(totalScoreBoardID);
             thisPlayerData[1] = scores;
             CheckForUpdateStatus(4, true);
+            if(gameDataManager != null)
+                gameDataManager.SetPlayerGlobalData(scores.Rank, scores.PlayerName, scores.Score);
         }
         catch (System.Exception e)
         {

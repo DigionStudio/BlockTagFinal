@@ -24,11 +24,7 @@ public class TargetShow : MonoBehaviour
 
         if (data.gemType == Gem_Type.none)
         {
-            if (data.blockType != BlockType.Normal_Block && data.blockType != BlockType.None)
-            {
-                abilityIcon.enabled = true;
-
-            }
+            
 
             int blocktype = (int)data.normalBlockType;
             int abilitytype = (int)data.blockType;
@@ -43,21 +39,34 @@ public class TargetShow : MonoBehaviour
                 iconSprite = blockManager.ObstacleSprite(num + 1);
             }
 
-
+           
 
             Sprite abilitySprite = null;
-            if (abilitytype > 0 && abilitytype <= 4)
+            if (data.blockType != BlockType.Normal_Block && data.blockType != BlockType.None)
             {
-                abilitySprite = blockManager.AbilitySprite(abilitytype - 1);
+                abilityIcon.enabled = true;
+                if (abilitytype > 0 && abilitytype <= 4)
+                {
+                    abilitySprite = blockManager.AbilitySprite(abilitytype - 1);
+                }
+                else
+                {
+                    if (abilitytype == 5)
+                    {
+                        abilitySprite = blockManager.ColorAbilitySprite();
+                    }
+                }
+                abilityIcon.sprite = abilitySprite;
+
             }
             else
             {
-                if (abilitytype == 5)
+                if(blocktype == 5 && data.blockType == BlockType.Normal_Block)
                 {
-                    abilitySprite = blockManager.ColorAbilitySprite();
+                    iconSprite = blockManager.IconSprite(6);
                 }
             }
-            abilityIcon.sprite = abilitySprite;
+            
         }
         else
         {

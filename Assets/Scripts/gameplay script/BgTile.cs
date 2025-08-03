@@ -68,6 +68,7 @@ public class BgTile : MonoBehaviour
     }
     public void SetUpNewBgTileData(BgTileData tiledata)
     {
+        isEventInvoked = false;
         isDestroyed = false;
         crackSprite.gameObject.SetActive(false);
         BlockerStatus(false);
@@ -246,6 +247,7 @@ public class BgTile : MonoBehaviour
 
     private void DestroyBgTile()
     {
+        print("adfsdf");
         specialObsObject.SetActive(false);
         currentHitpoint = 0;
         isDestroyed = true;
@@ -420,5 +422,10 @@ public class BgTile : MonoBehaviour
             if (!isDestroyed)
                 DestroyBgTile();
         }
+    }
+
+    public void DestroyObj()
+    {
+        Destroy(gameObject);
     }
 }

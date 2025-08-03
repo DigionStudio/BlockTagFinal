@@ -3,15 +3,18 @@ using Unity.Services.Leaderboards;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Advertisements;
+using Unity.Services.Analytics;
+using System.Collections.Generic;
+
 public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityAdsShowListener
 {
     public static AdsLeaderboardManager Instance;
 
     public bool isTesting;
     public bool isAdsInitialized { get; set; }
-    public bool IsAdReady { get; private set; }
+    private bool IsAdReady;
     private bool isInterCalled = false;
-    public bool IsRVReady { get; private set; }
+    private bool IsRVReady;
     private bool isRVCalled = false;
 
     public bool IsRewardUser { get; private set; }
@@ -35,7 +38,7 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
     private string current_Inter_AdUnitID;
     private string current_Reward_AdUnitID;
     private bool isOnline;
-
+    public bool HasOnline { get { return isOnline; } }
 
 
     private GameDataManager gameDataManager;
@@ -82,11 +85,16 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
 
 
     #region LeaderBoard
+
+    public void UpdateScore(int score)
+    {
+        if (isOnline)
+            SubmitTotalScore(score);
+    }
     public void SubmitDataIntoLeaderboard(int newStar, int score, bool isHigh)
     {
         if (isOnline)
         {
-            SubmitTotalScore(score);
             SubmitStarScore(newStar);
             SubmitHighestScore(score, isHigh);
         }
@@ -154,9 +162,28 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
     }
 
 
+    public bool HasRVReady()
+    {
+        bool status = false;
+        if(isOnline && IsRVReady)
+        {
+            status = true;
+        }
+        return status;
+
+    }
+    public bool HasInterReady()
+    {
+        bool status = false;
+        if (isOnline && IsAdReady)
+        {
+            status = true;
+        }
+        return status;
+    }
     internal void CacheInterstitial()
     {
-        if (!IsAdReady && !isInterCalled)
+        if (!IsAdReady && !isInterCalled && isOnline)
         {
             isInterCalled = true;
             Advertisement.Load(current_Inter_AdUnitID, this);
@@ -164,7 +191,7 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
     }
     internal void CacheRewarded()
     {
-        if (!IsRVReady && !isRVCalled)
+        if (!IsRVReady && !isRVCalled && isOnline)
         {
             isRVCalled = true;
             Advertisement.Load(current_Reward_AdUnitID, this);
@@ -287,5 +314,91 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
         {
             OnAdClosed(placementId, false);
         }
+    }
+
+    //public void LevelWinEvent(int level)
+    //{
+    //    AnalyticsResult analyticsResult = new AnalyticsResult(
+    //         "LevelWin", level );
+    //}
+
+
+    public async void GetCurrentPlayerTopScoreData()
+    {
+        BlockManager.Instance.gameDataManager.SetPlayerGlobalData(999, "", 000);
+        if (isOnline)
+        {
+            try
+            {
+                var scores = await LeaderboardsService.Instance.GetPlayerScoreAsync(InitializeUnityServices.totalScoreBoardID);
+                BlockManager.Instance.gameDataManager.SetPlayerGlobalData(scores.Rank, scores.PlayerName, scores.Score);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("GetPlayerTopScores failed: " + e.Message);
+            }
+        }
+        UiManager.PlayerRankdataUpdate.Invoke();
+    }
+
+    /// <summary>
+    ///  1 = Game start, 2 = tutorial start, 3 = tutorial end, 4 = Game Over, 5 = Play level, 6 = restart level
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="level"></param>
+    public void CheckAnalyticsEvent(int code, int level = -1)
+    {
+        string eventName = "";
+        bool restart = false;
+        if(code == 1)
+        {
+            eventName = "Game_Start";
+        }else if (code == 2)
+        {
+            eventName = "Totorial_Start";
+        }
+        else if (code == 3)
+        {
+            eventName = "Totorial_End";
+        }
+        else if (code == 4)
+        {
+            eventName = "Game_Over";
+        }
+        else if (code == 5)
+        {
+            eventName = "Play_Level";
+        }
+        else if (code == 6)
+        {
+            eventName = "Restart_Level";
+            restart = true;
+        }
+        if (!string.IsNullOrEmpty(eventName) && isOnline)
+        {
+            UploadAnalytics(eventName, code, restart);
+        }
+    }
+
+    public void UploadAnalytics(string eventName, int level, bool isRestart)
+    {
+        string paramName = "Level_Index";
+        if (isRestart)
+        {
+            paramName = "Restart_Level_Index";
+        }
+        CustomEvent myEvent = new CustomEvent(eventName)
+        {
+            {paramName, level }
+        };
+        if(level >= 0)
+        {
+            AnalyticsService.Instance.RecordEvent(myEvent);
+        }
+        else
+        {
+            AnalyticsService.Instance.RecordEvent(eventName);
+        }
+        AnalyticsService.Instance.Flush();
     }
 }

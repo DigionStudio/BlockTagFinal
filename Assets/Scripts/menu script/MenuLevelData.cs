@@ -40,6 +40,7 @@ public class MenuLevelData : MonoBehaviour
     float scrollSpeed = 0.05f;
     private int setPosition;
     private bool isTriggered = false;
+    private bool isSetUp = false;
 
     [SerializeField] private RectTransform levelFadeTrans;
     private string savePathJson = "D:\\Block Tag Repo" + "/LevelDataSaveFile.json";
@@ -250,28 +251,35 @@ public class MenuLevelData : MonoBehaviour
     //private float levelShowScrollValue;
     private void Start()
     {
-        gameDataManager = BlockManager.Instance.gameDataManager;
-        currentLevel = gameDataManager.currentLevel;
-        previousLevel = gameDataManager.previousLevel;
-        CheckLevelPosY();
-        scrollRect.content.anchoredPosition = new Vector3(0, 0, 0);
-        for (int i = 0; i < levelHolderRect.childCount; i++)
+        SetUp();
+    }
+    private void SetUp()
+    {
+        if (!isSetUp)
         {
-            // Get the Transform component of the child at index 'i'
-            Transform childTransform = levelHolderRect.GetChild(i);
-
-            LevelShow lvshow = childTransform.GetComponent<LevelShow>();
-            lvshow.Set_Level_Index(i);
-            levelShow.Add(lvshow);
-
-            if (i <= currentLevel + 15 && i > currentLevel - 15)
+            isSetUp = true;
+            gameDataManager = BlockManager.Instance.gameDataManager;
+            currentLevel = gameDataManager.currentLevel;
+            previousLevel = gameDataManager.previousLevel;
+            CheckLevelPosY();
+            scrollRect.content.anchoredPosition = new Vector3(0, 0, 0);
+            for (int i = 0; i < levelHolderRect.childCount; i++)
             {
-                SetLevelValues(i);
-                SetUpLevelShow(lvshow);
+                // Get the Transform component of the child at index 'i'
+                Transform childTransform = levelHolderRect.GetChild(i);
+
+                LevelShow lvshow = childTransform.GetComponent<LevelShow>();
+                lvshow.Set_Level_Index(i);
+                levelShow.Add(lvshow);
+
+                if (i <= currentLevel + 15 && i > currentLevel - 15)
+                {
+                    SetLevelValues(i);
+                    SetUpLevelShow(lvshow);
+                }
             }
+            levelPlayText.text = "Level " + (currentLevel + 1).ToString();
         }
-        levelPlayText.text = "Level " + (currentLevel + 1).ToString();
-        
     }
 
     private void CheckLevelPosY()
@@ -376,6 +384,7 @@ public class MenuLevelData : MonoBehaviour
 
     public void ScrollPos()
     {
+        SetUp();
         SetLevelFadeImage(previousLevel);
         levelMetaFill.GetAllMetaFill(currentLevel + 1);
         scrollRect.content.anchoredPosition = new Vector3(0, setPosition, 0);

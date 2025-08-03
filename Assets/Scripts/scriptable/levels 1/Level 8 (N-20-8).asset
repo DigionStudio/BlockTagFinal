@@ -10,20 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 1 (S-120-7)
+  m_Name: Level 8 (N-20-8)
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.151
-    isScoreTarget: 1
+    moveSpeed: 0.22
+    isScoreTarget: 0
     isBombAbility: 0
     isTagAbility: 0
     shapeCodes: []
-    targetData: []
+    targetData:
+    - normalBlockType: 5
+      blockType: 0
+      gemType: 0
+      count: 20
     bgTileData: []
     gemTileData: []
-    moveCount: 7
-    totalStarValue: 120
+    moveCount: 8
+    totalStarValue: 500
     reFreshCount: 0
-    ability1Value: 0
-    ability2Value: 0
-    levelNumber: 0
+    ability1Value: 4
+    ability2Value: 3
+    levelNumber: 7

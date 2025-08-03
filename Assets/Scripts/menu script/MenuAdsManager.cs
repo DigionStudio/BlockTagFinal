@@ -15,6 +15,10 @@ public class MenuAdsManager : MonoBehaviour
     private void OnEnable()
     {
         AdsLeaderboardManager.ApplicationNetworkConnectivity += OnlineStatus;
+        if (Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            isOnline = true;
+        }
 
     }
 
@@ -56,7 +60,7 @@ public class MenuAdsManager : MonoBehaviour
     {
         if(adsLeaderboardManager == null)
             adsLeaderboardManager = AdsLeaderboardManager.Instance;
-        bool isRVReady = adsLeaderboardManager.IsRVReady;
+        bool isRVReady = adsLeaderboardManager.HasRVReady();
         if (!isRVReady)
         {
             adsLeaderboardManager.CacheRewarded();
@@ -66,7 +70,7 @@ public class MenuAdsManager : MonoBehaviour
 
     public bool Load_Reward_Ads()
     {
-        bool isRVReady = adsLeaderboardManager.IsRVReady;
+        bool isRVReady = adsLeaderboardManager.HasRVReady();
         return isRVReady;
     }
 

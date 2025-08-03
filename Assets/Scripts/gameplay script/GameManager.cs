@@ -242,7 +242,7 @@ public class GameManager : MonoBehaviour
     private void GameWin()
     {
         boardManager.GameOver(true);
-        if (gameStatus == 1 && HasFirstPlay())
+        if (HasFirstPlay())
         {
             int per = moveCount / 4;
             List<GiftData> data = new List<GiftData>();
@@ -330,11 +330,14 @@ public class GameManager : MonoBehaviour
     {
         FollowCursor.OnMousePressed.Invoke(false);
         SetStar(false, gameStatus);
-
         GameEndValues();
         uiManager.GameEnd(gameStatus);
         if (targetData.Length > 0)
             Array.Clear(targetData, 0, targetData.Length);
+    }
+    public void UpdatePointToLeaderboard()
+    {
+        AdsLeaderboardManager.Instance.UpdateScore(currentPoint);
     }
 
     public void GameEndValues()
@@ -585,7 +588,7 @@ public class GameManager : MonoBehaviour
                 currentMoveCount = 0;
                 moveCountDiff = UnityEngine.Random.Range(3, 7);
             }
-            //CheckGameConnectivity();
+            CheckGameConnectivity();
         }
     }
 
@@ -737,23 +740,22 @@ public class GameManager : MonoBehaviour
         //gameAdsManager.ShowOnGameAds();
     }
 
-    //public void CheckGameConnectivity()
-    //{
-    //    if (gameTypeCode == 0 && !gameDataManager.HasDisableAds)
-    //    {
-    //        if (!gameAdsManager.isOnline)
-    //        {
-    //            uiManager.OpenOfflinePanel(true);
-    //            boardManager.GameStatus(false);
-    //        }
-    //        else
-    //        {
-    //            uiManager.OpenOfflinePanel(false);
-    //            boardManager.GameStatus(true);
-
-    //        }
-    //    }
-    //}
+    public void CheckGameConnectivity()
+    {
+        if (gameTypeCode == 0 && !gameDataManager.HasDisableAds)
+        {
+            if (!AdsLeaderboardManager.Instance.HasOnline)
+            {
+                uiManager.OpenOfflinePanel(true);
+                boardManager.GameStatus(false);
+            }
+            else
+            {
+                uiManager.OpenOfflinePanel(false);
+                boardManager.GameStatus(true);
+            }
+        }
+    }
 
     //public void InsializeAds()
     //{

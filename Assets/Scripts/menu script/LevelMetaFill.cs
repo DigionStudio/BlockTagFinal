@@ -30,19 +30,26 @@ public class LevelMetaFill : MonoBehaviour
     private int currrentLevel = 0;
     public bool HasMetaFill { get; private set; }
     private int currentSlideIndex;
-
+    private bool isSetUp = false;
     void Start()
     {
-        //PlayerPrefs.SetInt(FillLevelIndex, 20);
-        fillEffect.gameObject.SetActive(false);
-        for (int i = 0; i < levelMetaHoldes.Length; i++)
+        SetUp();
+    }
+    private void SetUp()
+    {
+        if (!isSetUp)
         {
-            MetaFillContent itemcontent = new MetaFillContent();
-            itemcontent.metaitems = new List<MetaItem>();
-            metaFillContents.Add(itemcontent);
+            fillEffect.gameObject.SetActive(false);
+            currrentLevel = PlayerPrefs.GetInt(FillLevelIndex, 0);
+            isSetUp = true;
+            for (int i = 0; i < levelMetaHoldes.Length; i++)
+            {
+                MetaFillContent itemcontent = new MetaFillContent();
+                itemcontent.metaitems = new List<MetaItem>();
+                metaFillContents.Add(itemcontent);
+            }
+            LoadAllMetaItems();
         }
-        currrentLevel = PlayerPrefs.GetInt(FillLevelIndex, 0);
-        LoadAllMetaItems();
     }
 
     private void LoadAllMetaItems()
@@ -159,6 +166,7 @@ public class LevelMetaFill : MonoBehaviour
 
     public void GetAllMetaFill(int level)
     {
+        SetUp();
         int diff = level - currrentLevel;
         if(diff == 0)
         {

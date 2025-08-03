@@ -382,12 +382,15 @@ public class BoardManager : MonoBehaviour
         if (gameTypeCode == 1)
         {
             gameManager.GameEndMoveDecrese();
+
         }
         else
         {
             Invoke(nameof(GameEnded), 3f);
 
         }
+        if((isGamewin && gameTypeCode == 1) || gameTypeCode == 0)
+            gameManager.UpdatePointToLeaderboard();
         InvokeRepeating(nameof(GameEndBlockDes), 0, 0.05f);
     }
     void GameEndBlockDes()
@@ -433,13 +436,21 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
+    private void DestroyBgBlocks()
+    {
+        foreach (var bg in bgTiles)
+        {
+            bg.DestroyObj();
+        }
+        bgTiles.Clear();
+    }
 
     private void GameEnded()
     {
         if (!isGameEnd) return;
         print("ended");
+        DestroyBgBlocks();
         GameStatus(false);
-        BgTileSetUp(false);
         count = 0;
         currentCount = 0;
         isGameEnd = false;
