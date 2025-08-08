@@ -88,7 +88,7 @@ public class CrushTile : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Disturb"))
+        if (collision.gameObject.CompareTag("Disturb") && isObstacle)
         {
             isObstacle = false;
         }
@@ -326,7 +326,7 @@ public class CrushTile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!isTriggerEnter && !boardManager.HasTurn && isRaycast)
+        if (!boardManager.HasTurn && isRaycast)
         {
             RaycastHit2D obs = Physics2D.Raycast(transform.position, Vector3.forward,
                                           float.PositiveInfinity, layerMaskObs);
@@ -334,9 +334,14 @@ public class CrushTile : MonoBehaviour
             {
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector3.forward,
                                                float.PositiveInfinity, layerMask);
-                if (hit && !isObstacle)
+                if (hit)
                 {
-                    TriggerEnter(hit.transform.gameObject);
+                    if(!isObstacle)
+                        TriggerEnter(hit.transform.gameObject);
+                }
+                else
+                {
+                    isObstacle = false;
                 }
             }
             else

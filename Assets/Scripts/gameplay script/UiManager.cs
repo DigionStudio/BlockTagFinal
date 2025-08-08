@@ -63,7 +63,9 @@ public class UiManager : MonoBehaviour
     [SerializeField] private Button refreshButton;
     [SerializeField] private GameObject disableRefreshButton;
     [SerializeField] private Image disableRefreshButtonFill;
-    [SerializeField] private Button resetButton;
+    [SerializeField] private Button rotateButton;
+    [SerializeField] private GameObject disableRotateButton;
+    [SerializeField] private Image disableRotateButtonFill;
     [SerializeField] private Button pauseButton;
     private Image pauseIcon;
     private bool isPaused;
@@ -240,7 +242,7 @@ public class UiManager : MonoBehaviour
 
         pauseIcon = pauseButton.transform.GetChild(0).GetComponent<Image>();
         refreshButton.onClick.AddListener(RefreshCrush);
-        resetButton.onClick.AddListener(ResetCrushPanel);
+        rotateButton.onClick.AddListener(ResetCrushPanel);
         pauseButton.onClick.AddListener(PauseGame);
         gameOverButton[0].onClick.AddListener(ReStart);
         gameOverButton[1].onClick.AddListener(MainMenu);
@@ -258,6 +260,7 @@ public class UiManager : MonoBehaviour
         GetPanelPosY();
         DisableSpTrans();
         DisableRefresh();
+        DisableRotate();
     }
 
     private void Update()
@@ -1303,14 +1306,14 @@ public class UiManager : MonoBehaviour
         spTrans.gameObject.SetActive(false);
     }
 
-    private Tween fillTween;
+    private Tween refreshFillTween;
     public void ActivateDisableRefresh(float time)
     {
         disableRefreshButtonFill.fillAmount = 1;
         StopCoroutine(DisableRefreshCo(time));
-        if(fillTween != null)
-            fillTween.Kill();
-        fillTween = disableRefreshButtonFill.DOFillAmount(0, time);
+        if(refreshFillTween != null)
+            refreshFillTween.Kill();
+        refreshFillTween = disableRefreshButtonFill.DOFillAmount(0, time);
         StartCoroutine(DisableRefreshCo(time));
     }
     IEnumerator DisableRefreshCo(float time)
@@ -1325,6 +1328,30 @@ public class UiManager : MonoBehaviour
     {
         disableRefreshButton.SetActive(false);
         refreshButton.enabled = true;
+    }
+
+    private Tween rotateFillTween;
+    public void ActivateDisableRotate(float time)
+    {
+        disableRotateButtonFill.fillAmount = 1;
+        StopCoroutine(DisableRotateCo(time));
+        if (rotateFillTween != null)
+            rotateFillTween.Kill();
+        rotateFillTween = disableRotateButtonFill.DOFillAmount(0, time);
+        StartCoroutine(DisableRotateCo(time));
+    }
+    IEnumerator DisableRotateCo(float time)
+    {
+        disableRotateButton.SetActive(true);
+        rotateButton.enabled = false;
+        yield return new WaitForSeconds(time);
+        DisableRotate();
+    }
+
+    private void DisableRotate()
+    {
+        disableRotateButton.SetActive(false);
+        rotateButton.enabled = true;
     }
 
     private void OnDisable()

@@ -218,7 +218,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
                         GetTopHighestScore(index);
                     }else if(index == 1)
                     {
-                        GetThisPlayerTopScoreData();
+                        GetThisPlayerTotalScoreData();
                         GetTopTotalScore(index);
                     }
                     else
@@ -247,7 +247,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         GetTopHighestScore(index);
         GetTopTotalStarScore(index);
 
-        GetThisPlayerTopScoreData();
+        GetThisPlayerTotalScoreData();
         GetThisPlayerStarScoreData();
         GetThisPlayerHighestScoreData();
     }
@@ -324,7 +324,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         }
         leaderBoardManager.UpdateLeaderboardsDataDictionary(leaderboardsTopScore, 2, index);
     }
-    private async void GetThisPlayerTopScoreData()
+    private async void GetThisPlayerTotalScoreData()
     {
         try
         {
@@ -337,6 +337,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         catch (System.Exception e)
         {
             Debug.LogError("GetPlayerTopScores failed: " + e.Message);
+            adsLeaderboardManager.SubmitTotalScore(0);
             CheckForUpdateStatus(4, false);
         }
     }
@@ -352,8 +353,8 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         catch (System.Exception e)
         {
             Debug.LogError("GetPlayerHighestScores failed: " + e.Message);
+            adsLeaderboardManager.SubmitHighestScore(0, false);
             CheckForUpdateStatus(5, false);
-
         }
     }
 
@@ -368,7 +369,9 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         catch (System.Exception e)
         {
             Debug.LogError("GetPlayerHighestScores failed: " + e.Message);
+            adsLeaderboardManager.SubmitStarScore(0);
             CheckForUpdateStatus(6, false);
+
         }
     }
 
@@ -416,7 +419,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         }
         else if (!UpdateStatus[4])
         {
-            GetThisPlayerTopScoreData();
+            GetThisPlayerTotalScoreData();
         }
         else if (!UpdateStatus[5])
         {

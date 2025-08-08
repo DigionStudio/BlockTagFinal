@@ -94,8 +94,6 @@ public class MenuLevelData : MonoBehaviour
     {
         //Level Speed Data Set
         List<double> speedDatas = LevelBlockSpeedData.blockSpeedDatas;
-        print(speedDatas.Count);
-
         for (int i = 0; i < levelDataInfos.Length; i++)
         {
             var item = levelDataInfos[i];

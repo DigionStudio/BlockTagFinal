@@ -7,8 +7,8 @@ using UnityEngine;
 public class Special_Object
 {
     public Special_Object_Type Special_Object_Type;
-    public String discription;
-    public String uiShowDis;
+    public string discription;
+    public string uiShowDis;
     public Sprite iconSprite;
     public int hitPoint;
     public float endTime;

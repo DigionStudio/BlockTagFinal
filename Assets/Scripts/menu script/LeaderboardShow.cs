@@ -44,11 +44,17 @@ public class LeaderboardShow : MonoBehaviour
         if (playerRank <= 2)
         {
             rankIndex = 0;
+            serialObj[rankIndex].rankText.enabled = false;
             if (colCode < 0)
                 col = colorCode[playerRank];
             medal = rankIcons.iconSprite[playerRank];
         }
-        if(colCode == 1)
+        else
+        {
+            if (colCode == 1)
+                serialObj[rankIndex].rankText.enabled = true;
+        }
+        if (colCode == 1)
         {
             col = Color.green;
         }

@@ -874,7 +874,8 @@ public class BoardManager : MonoBehaviour
         if (isTurn == false) return;
         isTurn = false;
         ShowEffect(totalBlockDes);
-        UpdatePoint(totalBlockDes + totalObsDes);
+        totalObsDes += totalBlockDes;
+        UpdatePoint(totalObsDes);
         totalBlockDes = 0;
         totalObsDes = 0;
         gameManager.TotalCoinDesEffect();
@@ -1183,7 +1184,6 @@ public class BoardManager : MonoBehaviour
                     showTextIndex = 5;
                 }
             }
-            print(num);
             if (showTextIndex >= 0)
                 textEffect.ShowEffect(showTextIndex, textEffectPos, effet);
         }
@@ -1251,54 +1251,37 @@ public class BoardManager : MonoBehaviour
 
     private List<BlockTile> AreaBlock(int row, int column)
     {
-        var list = new List<BlockTile>();
-        int colmin = 0;
-        int colmax = 8;
-        if(column > 1 && column < 8)
+        List<BlockTile> selectedBlocks = new List<BlockTile>();
+
+        int colMin = Mathf.Max(0, column - 2);      // Ensure column doesn't go below 0
+        int colMax = Mathf.Min(8, column + 2);      // Assume max column is 8
+
+        int rowMin = row - 2;
+        int rowMax = row + 2;
+
+        for (int i = colMin; i <= colMax; i++)
         {
-            colmin = column - 2;
-            colmax = column + 2;
-        }
-        else
-        {
-            if(column <= 1)
+            for (int j = rowMin; j <= rowMax; j++)
             {
-                colmax = column + 3;
-            }
-            if(column >= 7)
-            {
-                colmin = column - 3;
-            }
-        }
-        for (int i = colmin; i <= colmax; i++)
-        {
-            for (int j = row - 2; j <= row + 2; j++)
-            {
-                foreach (var item in blockList)
+                foreach (var block in blockList)
                 {
-                    
-                    if (item != null && !item.HasBlockSelected && item.gameObject.activeInHierarchy)
+                    if (block == null || block.HasBlockSelected || !block.gameObject.activeInHierarchy)
+                        continue;
+
+                    if (block.transform.position.y >= 15) // Early skip on high Y
+                        continue;
+
+                    if (block.ColumnValue == i && block.RowValue == j)
                     {
-                        if (item.transform.position.y < 15)
-                        {
-                            if (item.ColumnValue == i && item.RowValue == j)
-                            {
-                                list.Add(item);
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        selectedBlocks.Add(block);
                     }
                 }
-                
             }
         }
         gameManager.HasAbility = true;
         if (isTurn)
-            totalBlockDes += list.Count;
-        return list;
+            totalBlockDes += selectedBlocks.Count;
+        return selectedBlocks;
     }
 
     private void ClearEmptyBlockTile()
@@ -1777,8 +1760,11 @@ public class BoardManager : MonoBehaviour
                 if(spIndex == 0)
                 {
                     uiManager.ActivateDisableRefresh(spObject.endTime);
+                }else if(spIndex == 1)
+                {
+                    uiManager.ActivateDisableRotate(spObject.endTime);
                 }
-                else if(spIndex == 1)
+                else if(spIndex == 2)
                 {
                     float increment = moveSpeed / 10;
                     moveSpeed += increment;

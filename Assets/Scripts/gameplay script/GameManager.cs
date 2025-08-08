@@ -312,7 +312,7 @@ public class GameManager : MonoBehaviour
                     {
                         if (giftIndex == 3)
                         {
-                            int ran = UnityEngine.Random.Range(0, 3);
+                            int ran = UnityEngine.Random.Range(0, 4);
                             if (ran == 1)
                             {
                                 break;

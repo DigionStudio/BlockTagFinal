@@ -236,7 +236,7 @@ public class LeaderBoardManager : MonoBehaviour
             }
             SetHolderSize(140, false);
         }
-        if (thisPlayerShow != null)
+        if (thisPlayerShow != null && thisPlayerShow != null)
         {
             thisPlayerShow.gameObject.SetActive(status);
         }

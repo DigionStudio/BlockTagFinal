@@ -60,6 +60,7 @@ public enum Special_Object_Type
 {
     none,
     UnFresh,// 10 Sec Disable Reset Tag buttton
+    UnRotate, // 15 sec disable Rotate Tag Button
     SpeedUp, // +20% speed
     Disolve, //Disable Ability 
     Disable, // 5 Sec Disable Ability Use

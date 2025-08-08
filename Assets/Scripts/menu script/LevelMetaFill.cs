@@ -233,7 +233,6 @@ public class LevelMetaFill : MonoBehaviour
                         colorCode++;
                     }
                 }
-                yield return new WaitForSeconds(0.1f);
                 fillEffect.gameObject.SetActive(true);
 
                 foreach (var item in effectlist)

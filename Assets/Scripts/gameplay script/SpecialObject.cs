@@ -12,22 +12,37 @@ public class SpecialObject : MonoBehaviour
     private Special_Object_Type SpObjectType;
     public Special_Object_Type SPObjectType { get { return SpObjectType; } }
 
-    private bool isGemCollected;
+    private bool isSPDes;
     private int hitPoint;
     private BoardManager boardManager;
     private bool isActivated;
+    private float desTime;
     public void SetUp(Sprite icon, Special_Object_Type sptype, int hitpoint)
     {
         if(boardManager == null)
         {
             boardManager = BoardManager.Instance;
         }
+        desTime = 0;
         desEffect.SetActive(false);
         SpObjectType = sptype;
         spriteRenderer.sprite = icon;
         spriteRenderer.DOFade(1, 0.5f);
         hitPoint = hitpoint;
-        Invoke(nameof(Des), 15f);
+    }
+    private void Update()
+    {
+        if (BoardManager.Instance.isGameStarted && !isSPDes)
+        {
+            if(desTime < 20)
+            {
+                desTime += Time.deltaTime;
+            }
+            else
+            {
+                DestroySpecialObject(false);
+            }
+        }
     }
 
 
@@ -55,17 +70,12 @@ public class SpecialObject : MonoBehaviour
             ActiveSpecialObject();
         }
     }
-    private void Des()
-    {
-        DestroySpecialObject(false);
-    }
-
     public void DestroySpecialObject(bool isDes = false)
     {
-        if (!isGemCollected)
+        if (!isSPDes)
         {
             circleCollider.enabled = false;
-            isGemCollected = true;
+            isSPDes = true;
             desEffect.SetActive(true);
             bgspriteRenderer.enabled = false;
             spriteRenderer.enabled = false;
