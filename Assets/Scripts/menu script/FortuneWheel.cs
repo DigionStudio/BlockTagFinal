@@ -57,8 +57,7 @@ public class FortuneWheel : MonoBehaviour
     private float _finalAngle;                  // The final angle is needed to calculate the reward
     private float _startAngle;                  // The first time start angle equals 0 but the next time it equals the last final angle
     private float _currentLerpRotationTime;     // Needed for spinning animation
-    private int maxRandIndex;
-
+    private int[] sectorsAngles;
 
     private FortuneWheelSector[] Sectors;
     private List<int> sectorIndex = new List<int>();
@@ -82,6 +81,8 @@ public class FortuneWheel : MonoBehaviour
         _finalTransform.gameObject.SetActive(false);
         adsLeaderboardManager.GratifyRewards.AddListener(Reward);
         adsLeaderboardManager.RewardAdsLoaded.AddListener(RewardButton);
+
+        
         SetUp();
     }
     public void SetUpFortuneWheel()
@@ -117,6 +118,13 @@ public class FortuneWheel : MonoBehaviour
             }
             sectorShowUI[rand].SetUpReward(sector.RewardValue, sector.iconSprite, isCoin);
             rand++;
+        }
+        sectorsAngles = new int[Sectors.Length];
+        // Fill the necessary angles (for example if we want to have 12 sectors we need to fill the angles with 30 degrees step)
+        // It's recommended to use the EVEN sectors count (2, 4, 6, 8, 10, 12, etc)
+        for (int i = 1; i <= Sectors.Length; i++)
+        {
+            sectorsAngles[i - 1] = -360 / Sectors.Length * i;
         }
     }
 
@@ -165,12 +173,10 @@ public class FortuneWheel : MonoBehaviour
         {
             CheckAndDecrease();
             TurnWheel();
-            maxRandIndex = 7;
         }
         else
         {
             RewardAds();
-            maxRandIndex = 3;
         }
     }
 
@@ -218,57 +224,31 @@ public class FortuneWheel : MonoBehaviour
 
     private void TurnWheel()
     {
-        rewardCode = 0;
         _currentLerpRotationTime = 0f;
-        // All sectors angles
-        int[] sectorsAngles = new int[Sectors.Length];
 
-        // Fill the necessary angles (for example if we want to have 12 sectors we need to fill the angles with 30 degrees step)
-        // It's recommended to use the EVEN sectors count (2, 4, 6, 8, 10, 12, etc)
-        for (int i = 1; i <= Sectors.Length; i++)
-        {
-            sectorsAngles[i - 1] = 360 / Sectors.Length * i;
-        }
+        
 
         //int cumulativeProbability = Sectors.Sum(sector => sector.Probability);
-
-        double rndNumber = UnityEngine.Random.Range(1, Sectors.Sum(sector => sector.Probability));
 
         // Random final sector accordingly to probability
         int randomFinalAngle = sectorsAngles[0];
         _finalSector = Sectors[0];
-
-
-        //// Calculate the propability of each sector with respect to other sectors
-        //int cumulativeProbability = 0;
-
-        //for (int i = 0; i < Sectors.Length; i++)
-        //{
-        //    cumulativeProbability += Sectors[i].Probability;
-
-        //    if (rndNumber <= cumulativeProbability)
-        //    {
-        //        // Choose final sector
-
-        //        break;
-        //    }
-        //}
-        int sectorIndex = FinalSector(rndNumber);
+        int sectorIndex = FinalSector();
         randomFinalAngle = sectorsAngles[sectorIndex];
         if (sectorIndex < Sectors.Length - 1)
         {
             _finalSector = Sectors[sectorIndex + 1];
 
         }
-        int rand = UnityEngine.Random.Range(0, maxRandIndex);
-        if (rand != 1)
+
+        if (rewardCode == 3)
         {
+            int num = UnityEngine.Random.Range(0, 3);
             for (int i = 0; i < 100; i++)
             {
-                if ((_finalSector.variableType != VariableTypeCode.Coin || _finalSector.RewardValue > 2))
+                if ((_finalSector.variableType == VariableTypeCode.Coin && _finalSector.RewardValue < 10) || (_finalSector.variableType != VariableTypeCode.Coin && _finalSector.RewardValue >= 3 && num != 1))
                 {
-                    rndNumber = UnityEngine.Random.Range(1, Sectors.Sum(sector => sector.Probability));
-                    sectorIndex = FinalSector(rndNumber);
+                    sectorIndex = FinalSector();
                     randomFinalAngle = sectorsAngles[sectorIndex];
                     if (sectorIndex < Sectors.Length - 1)
                     {
@@ -281,7 +261,34 @@ public class FortuneWheel : MonoBehaviour
                     break;
                 }
             }
+
         }
+        else
+        {
+            int rand = UnityEngine.Random.Range(0, 5);
+            if (rand != 1)
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    if (_finalSector.variableType != VariableTypeCode.Coin || _finalSector.RewardValue > 5)
+                    {
+                        sectorIndex = FinalSector();
+                        randomFinalAngle = sectorsAngles[sectorIndex];
+                        if (sectorIndex < Sectors.Length - 1)
+                        {
+                            _finalSector = Sectors[sectorIndex + 1];
+
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        rewardCode = 0;
 
         int fullTurnovers = 5;
 
@@ -300,8 +307,9 @@ public class FortuneWheel : MonoBehaviour
         // disable for wheel
         Invoke(nameof(HideCoinsDelta), 0.8f);
     }
-    private int FinalSector(double rndNumber)
+    private int FinalSector()
     {
+        double rndNumber = UnityEngine.Random.Range(1, Sectors.Sum(sector => sector.Probability));
         int num = 0;
         int cumulativeProbability = 0;
 
@@ -398,7 +406,7 @@ public class FortuneWheel : MonoBehaviour
             t = t * t * t * (t * (6f * t - 15f) + 10f);
 
             float angle = Mathf.Lerp(_startAngle, _finalAngle, t);
-            Circle.transform.eulerAngles = new Vector3(0, 0, angle);
+            Circle.transform.eulerAngles = new Vector3(0, 0, -angle);
         }
     }
 

@@ -17,7 +17,7 @@ public class TargetEffectShow : MonoBehaviour
     [SerializeField] private SpriteRenderer gemIcon;
     [SerializeField] private ParticleSystem particleSystem;
     
-    public void SetUp(Vector3 pos1, Vector3 pos2, Normal_Block_Type type, BlockType abilityType, Gem_Type gemType)
+    public void SetUp(Vector3 pos1, Vector3 pos2, Normal_Block_Type type, BlockType abilityType, Special_Object_Type gemType)
     {
         Invoke(nameof(DestroyObject), duration);
         float time = duration - 0.2f;
@@ -36,7 +36,7 @@ public class TargetEffectShow : MonoBehaviour
         transform.DOScale(0.8f, 0.6f).SetDelay(0.3f);
     }
 
-    private void SetUpShow(Normal_Block_Type type, BlockType abilityType, Gem_Type gemType)
+    private void SetUpShow(Normal_Block_Type type, BlockType abilityType, Special_Object_Type gemType)
     {
         icon.gameObject.SetActive(false);
         icon.enabled = true;
@@ -44,7 +44,7 @@ public class TargetEffectShow : MonoBehaviour
         gemIcon.gameObject.SetActive(false);
         Sprite iconSprite;
 
-        if (gemType == Gem_Type.none)
+        if (gemType == Special_Object_Type.none)
         {
             icon.gameObject.SetActive(true);
             int blocktype = (int)type;

@@ -61,6 +61,8 @@ public class UiManager : MonoBehaviour
 {
     [SerializeField] private Image startFadeImage;
     [SerializeField] private Button refreshButton;
+    [SerializeField] private GameObject disableRefreshButton;
+    [SerializeField] private Image disableRefreshButtonFill;
     [SerializeField] private Button resetButton;
     [SerializeField] private Button pauseButton;
     private Image pauseIcon;
@@ -184,6 +186,10 @@ public class UiManager : MonoBehaviour
     private PlayerGlobalData rankDataCurrent;
     public static UnityEvent PlayerRankdataUpdate = new();
 
+    [SerializeField] private Transform spTrans;
+    [SerializeField] private Image spIcon;
+    [SerializeField] private Text detailText;
+    
 
     private BoardManager boardManager;
     private GameManager gameManager;
@@ -250,8 +256,10 @@ public class UiManager : MonoBehaviour
         Resetgift();
         GameStatus();
         GetPanelPosY();
+        DisableSpTrans();
+        DisableRefresh();
     }
-    
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -1278,6 +1286,45 @@ public class UiManager : MonoBehaviour
         freezeImage.gameObject.SetActive(false);
         fillImage.fillAmount = 1;
         bgFill.SetActive(false);
+    }
+
+    public void SetUpSpObjectPanel(Vector2 pos, Sprite icon, string detail)
+    {
+        DisableSpTrans();
+        spIcon.sprite = icon;
+        detailText.text = detail;
+        spTrans.position = pos;
+        spTrans.gameObject.SetActive(true);
+        Invoke(nameof(DisableSpTrans), 3f);
+    }
+
+    private void DisableSpTrans()
+    {
+        spTrans.gameObject.SetActive(false);
+    }
+
+    private Tween fillTween;
+    public void ActivateDisableRefresh(float time)
+    {
+        disableRefreshButtonFill.fillAmount = 1;
+        StopCoroutine(DisableRefreshCo(time));
+        if(fillTween != null)
+            fillTween.Kill();
+        fillTween = disableRefreshButtonFill.DOFillAmount(0, time);
+        StartCoroutine(DisableRefreshCo(time));
+    }
+    IEnumerator DisableRefreshCo(float time)
+    {
+        disableRefreshButton.SetActive(true);
+        refreshButton.enabled = false;
+        yield return new WaitForSeconds(time);
+        DisableRefresh();
+    }
+
+    private void DisableRefresh()
+    {
+        disableRefreshButton.SetActive(false);
+        refreshButton.enabled = true;
     }
 
     private void OnDisable()

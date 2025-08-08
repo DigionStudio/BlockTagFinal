@@ -23,11 +23,10 @@ public class BgTileData
 }
 
 [Serializable]
-public class GemTileData
+public class SpecialObjectTileData:System.Object
 {
-    public Gem_Type gemType = Gem_Type.none;
-    public int spawnpercentmin;
-    public int spawnpercentmax;
+    public Special_Object_Type specialObjType = Special_Object_Type.none;
+    public int spawnProb;
 }
 
 [Serializable]
@@ -47,7 +46,7 @@ public class LevelData
     public ShapeData[] shapeCodes;
     public TargetData[] targetData;
     public BgTileData[] bgTileData;
-    public GemTileData[] gemTileData;
+    public SpecialObjectTileData[] specialObjectTileData;
     public int moveCount;
     public int totalStarValue;
     public int reFreshCount;
@@ -57,12 +56,13 @@ public class LevelData
 }
 
 [Serializable]
-public enum Gem_Type
+public enum Special_Object_Type
 {
     none,
-    Gem_1,
-    Gem_2,
-    Gem_3,
+    UnFresh,// 10 Sec Disable Reset Tag buttton
+    SpeedUp, // +20% speed
+    Disolve, //Disable Ability 
+    Disable, // 5 Sec Disable Ability Use
     Gem_4,
     Gem_5
 }
@@ -98,7 +98,7 @@ public class TargetData
 {
     public Normal_Block_Type normalBlockType;
     public BlockType blockType;
-    public Gem_Type gemType;
+    public Special_Object_Type specialObject;
     public int count;
 }
 
@@ -490,6 +490,7 @@ public class MenuManager : MonoBehaviour
     }
     public void GameMenuPlay()
     {
+        gameDataManager.levelData = gameDataManager.classicModelevelData;
         menuAdsManager.LoadRewardedAds();
         gameDataManager.CheckForFreeClaim(-1, true);
         gameDataManager.GameTypeCode = 0;
@@ -554,6 +555,7 @@ public class MenuManager : MonoBehaviour
         if (gameDataManager.isplayerNameSelect)
         {
             menuTutorialManager.SetPlayerName();
+            menuTutorialManager.GameNameAnim(false);
         }
         else
         {
@@ -566,9 +568,14 @@ public class MenuManager : MonoBehaviour
         bool status = bonusGiftManager.CheckForBonus();
         if (!status)
         {
-            ChangePanelPos(true, menuTween, 0.3f);
+            ChangePanelPos(true, menuTween, 0.5f);
             LevelLoad(false);
             PlayBGMusic();
+            menuTutorialManager.GameNameAnim(true);
+        }
+        else
+        {
+            menuTutorialManager.GameNameAnim(false);
         }
     }
 
@@ -801,7 +808,7 @@ public class MenuManager : MonoBehaviour
                 {
                     normalBlockType = data.targetData[i].normalBlockType,
                     blockType = data.targetData[i].blockType,
-                    gemType = data.targetData[i].gemType,
+                    specialObject = data.targetData[i].specialObject,
                     count = data.targetData[i].count
                 };
                 info.targetData[i] = targetdata;
@@ -826,21 +833,20 @@ public class MenuManager : MonoBehaviour
             }
         }
 
-        int gemLength = 0;
-        if (data.gemTileData != null)
-            gemLength = data.gemTileData.Length;
-        if (gemLength > 0)
+        int spLength = 0;
+        if (data.specialObjectTileData != null)
+            spLength = data.specialObjectTileData.Length;
+        if (spLength > 0)
         {
-            info.gemTileData = new GemTileData[gemLength];
-            for (int i = 0; i < gemLength; i++)
+            info.specialObjectTileData = new SpecialObjectTileData[spLength];
+            for (int i = 0; i < spLength; i++)
             {
-                GemTileData gemdata = new GemTileData
+                SpecialObjectTileData spdata = new SpecialObjectTileData
                 {
-                    gemType = data.gemTileData[i].gemType,
-                    spawnpercentmin = data.gemTileData[i].spawnpercentmin,
-                    spawnpercentmax = data.gemTileData[i].spawnpercentmax
+                    specialObjType = data.specialObjectTileData[i].specialObjType,
+                    spawnProb = data.specialObjectTileData[i].spawnProb,
                 };
-                info.gemTileData[i] = gemdata;
+                info.specialObjectTileData[i] = spdata;
             }
         }
 

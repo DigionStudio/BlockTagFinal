@@ -12,6 +12,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private CrushTileCreator tileCreator;
     [SerializeField] private Button skipButton;
     [SerializeField] private GameObject tutorialTextImageObj;
+    [SerializeField] private GameObject tutorialButtonTextImageObj;
 
     [SerializeField] private Button[] Button;
     private int buttonPressId = -1;
@@ -59,6 +60,7 @@ public class TutorialManager : MonoBehaviour
     private void DisableTutorial()
     {
         tutorialTextImageObj.SetActive(false);
+        tutorialButtonTextImageObj.SetActive(false);
         cursorIcon.gameObject.SetActive(false);
         skipButton.gameObject.SetActive(false);
         cursorHoder.gameObject.SetActive(false);
@@ -140,6 +142,7 @@ public class TutorialManager : MonoBehaviour
         if (isTutorial)
         {
             tutorialTextImageObj.SetActive(true);
+            tutorialButtonTextImageObj.SetActive(true);
             if (!isLastStep)
             {
                 if (tuteCount == 1 && buttonPressId == 2 && index == 0)

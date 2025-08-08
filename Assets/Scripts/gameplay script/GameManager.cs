@@ -12,13 +12,17 @@ public class GameManager : MonoBehaviour
     private int totalStarValue;
     private bool isScoreTarget;
     [SerializeField] private LevelDataInfo[] allLeveldata;
-
+    private List<int> playedLevelData = new List<int>();
+    private int minRandomLevel;
+    private int maxRandomLevel;
 
     private TargetEffect targetEffect;
     private TargetData[] targetData;
     private BgTileData[] bgTileData;
+    private SpecialObjectTileData[] specialObjectTileDatas;
     private int moveCount;
     private int currentMoveCount;
+    public bool isSpecialObject;
 
     private int moveCountDiff = 5;
     private int lastLevelBg = 0;
@@ -35,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     
     public static Action OnMoveTaken = delegate { };
-    public static Action<Normal_Block_Type, BlockType,Gem_Type, Vector3> BlockDes = delegate { };
+    public static Action<Normal_Block_Type, BlockType,Special_Object_Type, Vector3> BlockDes = delegate { };
     public static Action<int, bool> OnCoinUpdate = delegate { };
     public static int gameStatus = -1;
     private bool gameWin;
@@ -59,7 +63,7 @@ public class GameManager : MonoBehaviour
     private GameAdsManager gameAdsManager;
     void Start()
     {
-        
+        maxRandomLevel = 10;
         gameStatus = -1;
         currentHitPoint = 0;
         boardManager = BoardManager.Instance;
@@ -67,7 +71,6 @@ public class GameManager : MonoBehaviour
         targetEffect = TargetEffect.Instance;
         gameAdsManager = GameAdsManager.Instance;
         shapeCreator = ShapeCreator.Instance;
-        //uiManager = FindObjectOfType<UiManager>();
         BlockDes += OnBlockDdestroy;
         OnMoveTaken += MoveCount;
         OnCoinUpdate += CoinShow;
@@ -96,10 +99,16 @@ public class GameManager : MonoBehaviour
         if(levelData.bgTileData != null)
             bgtileLength = levelData.bgTileData.Length;
 
+        int sptileLength = 0;
+        if (levelData.specialObjectTileData != null)
+            sptileLength = levelData.specialObjectTileData.Length;
+
+
 
         isGamedataUpdated = false;
         targetData = new TargetData[targetLength];
         bgTileData = new BgTileData[bgtileLength];
+        specialObjectTileDatas = new SpecialObjectTileData[sptileLength];
         totalStarValue = gameDataManager.levelData.totalStarValue;
         isScoreTarget = gameDataManager.levelData.isScoreTarget;
         BgImageSpriteSetUP();
@@ -156,7 +165,7 @@ public class GameManager : MonoBehaviour
             TargetData data = new TargetData();
             data.normalBlockType = levelData.targetData[i].normalBlockType;
             data.blockType = levelData.targetData[i].blockType;
-            data.gemType = levelData.targetData[i].gemType;
+            data.specialObject = levelData.targetData[i].specialObject;
             data.count = levelData.targetData[i].count;
             targetData[i] = data;
 
@@ -167,6 +176,14 @@ public class GameManager : MonoBehaviour
             data.positionIndex = levelData.bgTileData[i].positionIndex;
             data.tileType = levelData.bgTileData[i].tileType;
             bgTileData[i] = data;
+
+        }
+        for (int i = 0; i < specialObjectTileDatas.Length; i++)
+        {
+            SpecialObjectTileData data = new SpecialObjectTileData();
+            data.specialObjType = levelData.specialObjectTileData[i].specialObjType;
+            data.spawnProb = levelData.specialObjectTileData[i].spawnProb;
+            specialObjectTileDatas[i] = data;
 
         }
         bool isSlime = false;
@@ -185,7 +202,7 @@ public class GameManager : MonoBehaviour
         currentMoveCount = 0;
         TutorialManager.Instance.IntroPanel();
         uiManager.StartGame(gameTypeCode, levelData);
-        boardManager.StartGame(gameTypeCode, bgTileData, levelData.ability1Value, levelData.ability2Value, isSlime, levelData.moveSpeed);
+        boardManager.StartGame(gameTypeCode, bgTileData, specialObjectTileDatas, levelData.ability1Value, levelData.ability2Value, isSlime, levelData.moveSpeed);
         GameAIManager.Instance.GameStarted(targetData, levelData.moveCount);
         shapeCreator.SetUpShapeCreator(gameTypeCode, levelData.isBombAbility, levelData.isTagAbility, levelData.shapeCodes);
         Invoke(nameof(StartBoardSetUp), 1f);
@@ -363,63 +380,69 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void OnBlockDdestroy(Normal_Block_Type type, BlockType abilityType,Gem_Type gemType, Vector3 pos)
+    private void OnBlockDdestroy(Normal_Block_Type type, BlockType abilityType,Special_Object_Type specialObjectType, Vector3 pos)
     {
-        if (gameTypeCode == 1)
+        if (!TutorialManager.Instance.isTutorial)
         {
-            for (int i = 0; i < targetData.Length; i++)
+            if (gameTypeCode == 1)
             {
-                bool change = false;
-                var item = targetData[i];
-                if (item != null && item.count > 0)
+                for (int i = 0; i < targetData.Length; i++)
                 {
-                    if (item.gemType == Gem_Type.none)
+                    bool change = false;
+                    var item = targetData[i];
+                    if (item != null && item.count > 0)
                     {
-                        if (item.normalBlockType == type && item.blockType == abilityType)
+                        if (item.specialObject == Special_Object_Type.none)
                         {
-                            StartEffect(pos, type, abilityType, i);
-                            item.count--;
-                            change = true;
+                            if (item.normalBlockType == type && item.blockType == abilityType)
+                            {
+                                StartEffect(pos, type, abilityType, i);
+                                item.count--;
+                                change = true;
+                            }
+                            else if (item.normalBlockType == Normal_Block_Type.none && item.blockType == abilityType)
+                            {
+                                StartEffect(pos, Normal_Block_Type.none, abilityType, i);
+                                item.count--;
+                                change = true;
+                            }
+                            else if (item.normalBlockType == type && item.blockType == BlockType.Normal_Block)
+                            {
+                                StartEffect(pos, type, BlockType.Normal_Block, i);
+                                item.count--;
+                                change = true;
+                            }
                         }
-                        else if (item.normalBlockType == Normal_Block_Type.none && item.blockType == abilityType)
+                        else
                         {
-                            StartEffect(pos, Normal_Block_Type.none, abilityType, i);
-                            item.count--;
-                            change = true;
+                            if (item.specialObject == specialObjectType)
+                            {
+                                targetEffect.SetUpGemTarget(pos, specialObjectType, i);
+                                item.count--;
+                                change = true;
+                            }
                         }
-                        else if (item.normalBlockType == type && item.blockType == BlockType.Normal_Block)
-                        {
-                            StartEffect(pos, type, BlockType.Normal_Block, i);
-                            item.count--;
-                            change = true;
-                        }
+                        uiManager.ChangetargetCount(targetData[i].count, i, change);
                     }
-                    else
-                    {
-                        if (item.gemType == gemType) 
-                        {
-                            targetEffect.SetUpGemTarget(pos, gemType, i);
-                            item.count--;
-                            change = true;
-                        }
-                    }
-                    uiManager.ChangetargetCount(targetData[i].count, i, change);
                 }
             }
-        }
-        else
-        {
-            int num = (int)type;
-            if (type == Normal_Block_Type.none && abilityType == BlockType.None)
+            else
             {
-                totalCoinDes++;
-                CoinAddEffect(pos);
-            }
-            else if (num >= 7)
-            {
-                if (totalBgDesCount > 0)
+                if (specialObjectType == Special_Object_Type.none)
                 {
-                    totalBgDesCount--;
+                    int num = (int)type;
+                    if (type == Normal_Block_Type.none && abilityType == BlockType.None)
+                    {
+                        totalCoinDes++;
+                        CoinAddEffect(pos);
+                    }
+                    else if (num >= 7)
+                    {
+                        if (totalBgDesCount > 0)
+                        {
+                            totalBgDesCount--;
+                        }
+                    }
                 }
             }
         }
@@ -445,7 +468,7 @@ public class GameManager : MonoBehaviour
                 var item = targetData[i];
                 if (item != null && item.count > 0)
                 {
-                    if (item.gemType == Gem_Type.none)
+                    if (item.specialObject == Special_Object_Type.none)
                     {
                         if (item.normalBlockType == Normal_Block_Type.Slime && item.count < levelData.targetData[i].count)
                         {
@@ -569,15 +592,29 @@ public class GameManager : MonoBehaviour
                 if (currentMoveCount >= moveCountDiff)
                 {
                     currentMoveCount = 0;
-
-                    foreach (LevelDataInfo data in allLeveldata)
+                    int min = minRandomLevel;
+                    int max = maxRandomLevel;
+                    if (playedLevelData.Count >= maxRandomLevel)
                     {
-                        if (data.levelData.levelNumber > lastLevelBg && data.levelData.bgTileData.Length > 0 && data.levelData.bgTileData[0].tileType != Normal_Block_Type.Invisible)
+                        minRandomLevel = maxRandomLevel;
+                        min = maxRandomLevel;
+                        maxRandomLevel += 10;
+                        max = maxRandomLevel;
+                    }
+                    for (int i = 0; i < 100; i++)
+                    {
+                        lastLevelBg = UnityEngine.Random.Range(min, max);
+                        if (!playedLevelData.Contains(lastLevelBg) && allLeveldata.Length > lastLevelBg)
                         {
-                            lastLevelBg = data.levelData.levelNumber;
-                            bgTileData = data.levelData.bgTileData;
-                            totalBgDesCount = bgTileData.Length;
-                            break;
+                            LevelDataInfo data = allLeveldata[lastLevelBg];
+                            if (data.levelData.bgTileData.Length > 0 && data.levelData.bgTileData[0].tileType != Normal_Block_Type.Invisible)
+                            {
+                                lastLevelBg = data.levelData.levelNumber;
+                                bgTileData = data.levelData.bgTileData;
+                                totalBgDesCount = bgTileData.Length;
+                                break;
+                            }
+                            playedLevelData.Add(lastLevelBg);
                         }
                     }
                     Invoke(nameof(ChangeBgTileData), 1f);
@@ -589,6 +626,16 @@ public class GameManager : MonoBehaviour
                 moveCountDiff = UnityEngine.Random.Range(3, 7);
             }
             CheckGameConnectivity();
+            if (isSpecialObject)
+                boardManager.InstaSpecialObject();
+            else
+            {
+                int rand = UnityEngine.Random.Range(0, 5);
+                if (rand == 2)
+                {
+                    isSpecialObject = true;
+                }
+            }
         }
     }
 
@@ -757,8 +804,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //public void InsializeAds()
-    //{
-    //    CheckGameConnectivity();
-    //}
+    public void InsializeAds()
+    {
+        CheckGameConnectivity();
+    }
 }

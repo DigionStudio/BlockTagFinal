@@ -941,8 +941,8 @@ public class CrushTileCreator : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         }
         else if (thisCrushTileType == CrushTileType.ReAlign)
         {
-            boardManager.Re_Alignr_Ability();
-            Invoke(nameof(DestroyCrush), 2f);
+            float time = boardManager.Re_Alignr_Ability();
+            Invoke(nameof(DestroyCrush), time);
 
         }
         else if (thisCrushTileType == CrushTileType.Bomb)
@@ -955,8 +955,8 @@ public class CrushTileCreator : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         }
         else if (thisCrushTileType == CrushTileType.Magnet)
         {
-            boardManager.MagnaticAbility();
-            Invoke(nameof(DestroyCrush), 1.5f);
+            float time = boardManager.MagnaticAbility();
+            Invoke(nameof(DestroyCrush), time);
         }
         else
         {

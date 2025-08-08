@@ -16,6 +16,7 @@ TagManager:
   - Recover
   - Shield
   - Destruction
+  - Special_Object
   layers:
   - Default
   - TransparentFX

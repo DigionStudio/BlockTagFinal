@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class TextEffect : MonoBehaviour
 {
-    [SerializeField] private GameObject[] textEffects;
-    private GameObject currentEffect;
+    [SerializeField] private UpperObject[] textEffects;
+    private int currentEffectIndex = -1;
     [SerializeField] private AudioSource startAudioEffect;
     [SerializeField] private AudioSource endAudioEffect;
     void Start()
@@ -24,46 +25,54 @@ public class TextEffect : MonoBehaviour
     {
         foreach (var effect in textEffects)
         {
-            effect.gameObject.SetActive(false);
+            effect.holder.SetActive(false);
+            effect.addEffect.SetActive(false);
         }
     }
 
-    public void ShowEffect(int num, Vector2 pos)
+    public void ShowEffect(int num, Vector2 pos, bool isEffect)
     {
         startAudioEffect.Play();
-        if (currentEffect!= null)
+        if(pos.x < 4)
         {
-            currentEffect.SetActive(false);
+            pos.x = 4f;
         }
-        if(pos.x < 3)
+        if (pos.x > 16)
         {
-            pos.x = 3f;
+            pos.x = 16f;
         }
-        if (pos.x > 17)
+        if(pos.y < -11)
         {
-            pos.x = 17f;
+            pos.y = -11;
         }
-        if(pos.y < -12)
+        if(pos.y > 11)
         {
-            pos.y = -12;
+            pos.y = 11;
         }
-        if(pos.y > 12)
+        if(!isEffect)
+            transform.position = pos;
+        else
         {
-            pos.y = 12;
+            transform.position = new Vector2(10, 1);
         }
-        transform.position = pos;
-        currentEffect = textEffects[num];
-        currentEffect.SetActive(true);
+        if(num >= 0)
+        {
+            currentEffectIndex = num;
+        }
+        textEffects[currentEffectIndex].addEffect.SetActive(isEffect);
+        textEffects[currentEffectIndex].holder.SetActive(true);
 
         CancelInvoke(nameof(DiableEffect));
-        Invoke(nameof(DiableEffect), 1.3f);
+        Invoke(nameof(DiableEffect), 1.4f);
     }
 
     private void OffEffect()
     {
-        if (currentEffect != null)
+        if (currentEffectIndex >= 0)
         {
-            currentEffect.SetActive(false);
+            textEffects[currentEffectIndex].addEffect.SetActive(false);
+            textEffects[currentEffectIndex].holder.SetActive(false);
+            currentEffectIndex = -1;
         }
     }
     public void GameEnd()

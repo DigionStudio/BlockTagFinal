@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using System.Linq;
 
 [Serializable]
 public enum BlockType
@@ -39,8 +40,8 @@ public class BoardManager : MonoBehaviour
     private BlockManager blockManager;
     public GameDataManager gameDataManager;
     [SerializeField] private Transform holderObj;
-    private int gemIndex = -1;
-    private int gemTargetIndex = -1;
+    private int specialObjectIndex = -1;
+    private int specialObjTargetIndex = -1;
     private readonly float diff = 2.5f;
     private readonly float width = 9;
     private float height = 0;
@@ -58,12 +59,14 @@ public class BoardManager : MonoBehaviour
     public int TotalBlockDes { set { totalBlockDes += value; } }
     private int shapeIndex;
 
+
     private bool isMove;
     private bool isDashMove;
     private List<BlockTile> blockList = new List<BlockTile>();
     private Transform startBlockTrans;
     private Transform blockTrans;
-    private List<GemTile> gemList = new List<GemTile>();
+    private List<SpecialObject> specialObjectList = new List<SpecialObject>();
+    private SpecialObjectTileData[] specialObjectTileDatas;
     //private float speed = f;
     //private float currentSpeed;
     private bool isBlockSetUp;
@@ -73,7 +76,7 @@ public class BoardManager : MonoBehaviour
     private int abilityDiff1 = 5;
     private int abilityDiff2 = 5;
     private bool isMoving;
-    private float moveSpeed = 0.15f;
+    private float moveSpeed = 0.2f;
     private bool isFreezeMove;
     public bool HasFreezed { get { return isFreezeMove; } }
     private float totalFreezeTime = 20f;
@@ -90,7 +93,6 @@ public class BoardManager : MonoBehaviour
     //public Transform limitTrans;
     //public RectTransform limitRectTrans;
 
-    [SerializeField] private AudioSource dragSFX;
     [SerializeField] private GameManager gameManager;
     private ShapeCreator shapeCreator;
     [SerializeField] private UiManager uiManager;
@@ -254,10 +256,11 @@ public class BoardManager : MonoBehaviour
         blockManager = BlockManager.Instance;
     }
 
-    public void StartGame(int gametypecode, BgTileData[] bgtileData, int abilityvalue1, int abilityvalue2, bool isslime, float movespeed)
+    public void StartGame(int gametypecode, BgTileData[] bgtileData, SpecialObjectTileData[] specialObjectdata, int abilityvalue1, int abilityvalue2, bool isslime, float movespeed)
     {
         isRandom = TutorialManager.Instance.isTutorial;
         bgTileData = bgtileData;
+        specialObjectTileDatas = specialObjectdata;
         gameTypeCode = gametypecode;
         BgTileSetUp(true);
 
@@ -271,7 +274,6 @@ public class BoardManager : MonoBehaviour
         isBlockSetUp = true;
         posY = holderObj.position.y;
         blockList.Clear();
-        gemList.Clear();
         isMoving = true;
         
         if (gameTypeCode == 1)
@@ -342,7 +344,7 @@ public class BoardManager : MonoBehaviour
                     else
                     {
                         desCount = CalculateBoardTiles(0);
-                        DestroyGems();
+                        DestroySpecialObjects();
                         if (gameEndID == 1)
                             InvokeRepeating(nameof(GameEndBlockDes), 0, 0.05f);
                     }
@@ -429,7 +431,7 @@ public class BoardManager : MonoBehaviour
             else
             {
                 CancelInvoke(nameof(GameEndBlockDes));
-                DestroyGems();
+                DestroySpecialObjects();
                 if (isGameEnd)
                     Invoke(nameof(GameEnded), 1f);
                 break;
@@ -466,14 +468,14 @@ public class BoardManager : MonoBehaviour
         blockList.Clear();
 
 
-        foreach (var item in gemList)
+        foreach (var item in specialObjectList)
         {
             if (item != null)
             {
                 Destroy(item.gameObject);
             }
         }
-        gemList.Clear();
+        specialObjectList.Clear();
     }
     private void OnDisable()
     {
@@ -524,25 +526,18 @@ public class BoardManager : MonoBehaviour
             {
                 float posX;
                 int colorIndex = 0;
-                gemIndex = -1;
+                specialObjectIndex = -1;
                 posX = diff * currentWidth;
                 Vector2 pos = new Vector2(posX, posY);
-                if ((!CheckGem() || height == 0))
+                colorIndex = BlockTypeColorSetUp(false);
+                int index = BlockAbilitySetUp((int)height, (int)currentWidth, colorIndex);
+                if (colorIndex == 5)
                 {
-                    colorIndex = BlockTypeColorSetUp(false);
-                    int index = BlockAbilitySetUp((int)height, (int)currentWidth, colorIndex);
-                    if (colorIndex == 5)
-                    {
-                        index = 6;
-                    }
-                    BlockTile tile = blockManager.InstatiateBlockObject(pos, holderObj, colorIndex, index, (int)height, (int)currentWidth);
-                    blockList.Add(tile);
-                    blockTrans = tile.transform;
+                    index = 6;
                 }
-                else
-                {
-                    InstaGem(pos, gemIndex, (int)height, (int)width);
-                }
+                BlockTile tile = blockManager.InstatiateBlockObject(pos, holderObj, colorIndex, index, (int)height, (int)currentWidth);
+                blockList.Add(tile);
+                blockTrans = tile.transform;
             }
             if (currentWidth < width - 1)
             {
@@ -558,15 +553,30 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            GameAIManager.Instance.AiAssists((int)height - 1, blockList, gemList);
+            GameAIManager.Instance.AiAssists((int)height - 1, blockList);
             CancelInvoke(nameof(BoardInsta));
         }
     }
-    public void InstaGem(Vector2 pos, int gemindex, int height, int width)
+    public void InstaSpecialObject()
     {
-        GemTile tile = blockManager.InstantiateGemTile(pos, holderObj, gemindex, height, width);
-        gemList.Add(tile);
+        if (CheckSpecialObject())
+        {
+            int rand = UnityEngine.Random.Range(27, bgTiles.Count - 27);
+            for (int i = 0; i < 100; i++)
+            {
+                Vector2 pos = bgTiles[rand].transform.position;
+                if(bgTiles[rand].BlockTypeCode == Normal_Block_Type.none && CheckSpecialObjInstaPos(pos))
+                {
+                    SpecialObject tile = blockManager.InstantiateSpObjectTile(pos, bgHolder, specialObjectIndex);
+                    specialObjectList.Add(tile);
+                    gameManager.isSpecialObject = false;
+                    break;
+                }
+            }
+        }
+        
     }
+
 
     private int BlockTypeColorSetUp(bool isMod)
     {
@@ -614,23 +624,24 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    private bool CheckGem()
+    private bool CheckSpecialObject()
     {
         bool isActive = false;
-        int number = UnityEngine.Random.Range(0, 300);
-        if (number >= 0 && number < 100)
+        bool isSp = gameManager.isSpecialObject;
+        if (specialObjectTileDatas.Length > 0 && isSp)
         {
-            if (gameDataManager.levelData.gemTileData != null && gameDataManager.levelData.gemTileData.Length > 0 && gameTypeCode == 1)
+            int rndNumber = UnityEngine.Random.Range(1, specialObjectTileDatas.Sum(sector => sector.spawnProb));
+            int cumulativeProbability = 0;
+            for (int i = 0; i < specialObjectTileDatas.Length; i++)
             {
-                for (int i = 0; i < gameDataManager.levelData.gemTileData.Length; i++)
+                var item = specialObjectTileDatas[i];
+                cumulativeProbability += item.spawnProb;
+                if (rndNumber <= cumulativeProbability)
                 {
-                    var item = gameDataManager.levelData.gemTileData[i];
-                    if (number >= item.spawnpercentmin && number < item.spawnpercentmax)
-                    {
-                        isActive = true;
-                        gemIndex = (int)item.gemType - 1;
-                        gemTargetIndex = i;
-                    }
+                    isActive = true;
+                    specialObjectIndex = (int)item.specialObjType - 1;
+                    specialObjTargetIndex = i;
+                    break;
                 }
             }
         }
@@ -694,6 +705,7 @@ public class BoardManager : MonoBehaviour
         if (count == 0)
         {
             num = 10f;
+            UpMoveSpeed(0.03f);
         }
         else
         {
@@ -702,6 +714,7 @@ public class BoardManager : MonoBehaviour
                 if (count > 0 && count <= 2)
                 {
                     num = 6f;
+                    UpMoveSpeed(0.01f);
                 }
                 else if (count > 2 && count <= 4)
                 {
@@ -727,15 +740,23 @@ public class BoardManager : MonoBehaviour
                 else
                 {
                     currentCount = 0;
-                    if (gameTypeCode == 0)
-                    {
-                        moveSpeed += 0.01f;
-                    }
+                    UpMoveSpeed(0.05f);
+                    
                 }
 
             }
         }
         DashMove(num);
+    }
+
+    private void UpMoveSpeed(float time)
+    {
+        if (gameTypeCode == 0)
+        {
+            currentCount = 0;
+            if (moveSpeed < 1)
+                moveSpeed += time;
+        }
     }
 
     private bool CheckForBlockAvaiable()
@@ -853,8 +874,9 @@ public class BoardManager : MonoBehaviour
         if (isTurn == false) return;
         isTurn = false;
         ShowEffect(totalBlockDes);
-        UpdatePoint(totalBlockDes);
+        UpdatePoint(totalBlockDes + totalObsDes);
         totalBlockDes = 0;
+        totalObsDes = 0;
         gameManager.TotalCoinDesEffect();
         gameManager.HasAbility = false;
         shapeCreator.CreateTile(shapeIndex);
@@ -869,6 +891,13 @@ public class BoardManager : MonoBehaviour
         }
 
     }
+
+    private int totalObsDes;
+    public void ObsDesCount(int point)
+    {
+        totalObsDes += point;
+    }
+
 
     public void UpdatePoint(int num)
     {
@@ -1031,12 +1060,12 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private int DestroyGems(bool isIndex = false)
+    private int DestroySpecialObjects(bool isIndex = false)
     {
         int index = 0;
-        for (int i = 0; i < gemList.Count; i++)
+        for (int i = 0; i < specialObjectList.Count; i++)
         {
-            var item = gemList[i];
+            var item = specialObjectList[i];
             if (item != null && item.gameObject.activeInHierarchy)
             {
                 if (item.transform.position.y < 16)
@@ -1050,7 +1079,7 @@ public class BoardManager : MonoBehaviour
                     }
                     else
                     {
-                        item.DestroyGem();
+                        item.DestroySpecialObject();
                     }
                 }
                 else
@@ -1122,7 +1151,7 @@ public class BoardManager : MonoBehaviour
         if (isEfectActive)
             return;
         isEfectActive = true;
-        if (num >= 12)
+        if (num >= 10)
         {
             int maxitter = 50;
             int code = UnityEngine.Random.Range(0, 5);
@@ -1145,8 +1174,18 @@ public class BoardManager : MonoBehaviour
 
                 }
             }
+            bool effet = false;
+            if(num >= 20)
+            {
+                effet = true;
+                if(num >= 40)
+                {
+                    showTextIndex = 5;
+                }
+            }
+            print(num);
             if (showTextIndex >= 0)
-                textEffect.ShowEffect(showTextIndex, textEffectPos);
+                textEffect.ShowEffect(showTextIndex, textEffectPos, effet);
         }
     }
 
@@ -1266,12 +1305,23 @@ public class BoardManager : MonoBehaviour
     {
         for (int i = 0; i < 100; i++)
         {
-            if (!isGameEnd && blockList.Count > i)
+            if (!isGameEnd)
             {
-                var item = blockList[i];
-                if (item == null)
+                if (blockList.Count > i)
                 {
-                    blockList.RemoveAt(i);
+                    var item = blockList[i];
+                    if (item == null)
+                    {
+                        blockList.RemoveAt(i);
+                    }
+                }
+                if(specialObjectList.Count > i)
+                {
+                    var item = specialObjectList[i];
+                    if (item == null)
+                    {
+                        specialObjectList.RemoveAt(i);
+                    }
                 }
             }
             else
@@ -1286,16 +1336,16 @@ public class BoardManager : MonoBehaviour
         gameManager.AddMoves(num, coin);
     }
 
-    public void Re_Alignr_Ability()
-    {
-        StartCoroutine(GetStarting());
-    }
-
-    private IEnumerator GetStarting()
+    public float Re_Alignr_Ability()
     {
         int index = CalculateBoardTiles(4);
+        float time = CalculateTime(index, 0.1f) + 0.5f;
+        StartCoroutine(GetStarting(index));
+        return time;
+    }
 
-        dragSFX.Play();
+    private IEnumerator GetStarting(int index)
+    {
         yield return new WaitForSeconds(0.01f);
         GameStatus(false);
         for (int j = index; j > 0; j--)
@@ -1326,7 +1376,7 @@ public class BoardManager : MonoBehaviour
                 {
                     
                     Vector2 pos = currentTilePos + new Vector2(diff * (float)Xmul, diff * Ymul);
-                    if (CheckGemPos(pos))
+                    if (CheckSpecialObjPos(pos))
                     {
                         nextWidth -= 1;
                         Xmul -= 1;
@@ -1381,11 +1431,11 @@ public class BoardManager : MonoBehaviour
                 if (distance > 2 && iscalculate)
                 {
                     nexttile.Re_Oreder(nextTileCurentPos, nextHeight, nextWidth);
-                    yield return new WaitForSeconds(0.03f);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
         }
-        StartCoroutine(GemRe_Position());
+        //StartCoroutine(GemRe_Position());
         yield return new WaitForSeconds(0.2f);
         GameStatus(true);
         //CheckForDash(0.5f);
@@ -1403,8 +1453,8 @@ public class BoardManager : MonoBehaviour
             if (tile != null)
             {
                 Vector2 pos = tile.transform.position;
-                bool isGem = CheckGemPos(pos);
-                if (!CollderStatus(pos) && !isGem && tile.ColumnValue >= 0 && tile.ColumnValue < 6 && tile.RowValue < maxrowval)
+                bool isSpecialObj = CheckSpecialObjPos(pos);
+                if (!CollderStatus(pos) && !isSpecialObj && tile.ColumnValue >= 0 && tile.ColumnValue < 6 && tile.RowValue < maxrowval)
                 {
                     num = i;
                     break;
@@ -1438,13 +1488,15 @@ public class BoardManager : MonoBehaviour
         return pos;
     }
 
-    public void MagnaticAbility()
-    {
-        StartCoroutine(MagneticAbility());
-    }
-    private IEnumerator MagneticAbility()
+    public float MagnaticAbility()
     {
         int startindex = CalculateBoardTiles(4);
+        float time = CalculateTime(startindex, 0.07f) + 0.3f;
+        StartCoroutine(MagneticAbility(startindex));
+        return time;
+    }
+    private IEnumerator MagneticAbility(int startindex)
+    {
         for (int i = startindex; i >= 0; i--)
         {
             BlockTile block = blockList[i];
@@ -1465,7 +1517,7 @@ public class BoardManager : MonoBehaviour
                         while (maxitte > 0)
                         {
                             maxitte--;
-                            if (CheckGemPos(pos))
+                            if (CheckSpecialObjPos(pos))
                             {
                                 val--;
                                 pos = (Vector2)blockTile.transform.position + new Vector2(0, diff * val);
@@ -1475,13 +1527,27 @@ public class BoardManager : MonoBehaviour
                                 break;
                             }
                         }
-                        block.Re_Oreder(pos, currentRow + val, block.ColumnValue);
-                        yield return new WaitForSeconds(0.03f);
+                        block.Re_Oreder(pos, currentRow + val, block.ColumnValue, true);
+                        yield return new WaitForSeconds(0.07f);
                     }
                 }
             }
         }
-        StartCoroutine(GemRe_Position());
+        //StartCoroutine(GemRe_Position());
+    }
+
+    private float CalculateTime(int index, float increment)
+    {
+        float time = 0;
+        for (int j = index; j > 0; j--)
+        {
+            BlockTile tile = blockList[j];
+            if (tile != null)
+            {
+                time += increment;
+            }
+        }
+        return time;
     }
 
     private Vector2 BlockPosY(int row, int starting)
@@ -1497,64 +1563,80 @@ public class BoardManager : MonoBehaviour
         return pos;
     }
 
-    private IEnumerator GemRe_Position()
-    {
-        yield return new WaitForSeconds(0.03f);
-        int index = DestroyGems(true);
-        if (gemList.Count > 0)
-        {
-            for (int i = index; i >= 0; i--)
-            {
-                GemTile gem = gemList[i];
-                if (gem != null)
-                {
-                    RaycastHit2D obs = Physics2D.Raycast(gem.transform.position, Vector3.up,
-                                              float.PositiveInfinity, layerMaskTile);
-                    if (obs && obs.distance > 2)
-                    {
-                        if (obs.transform.TryGetComponent<BlockTile>(out var blockTile))
-                        {
-                            int row = blockTile.RowValue;
-                            int column = blockTile.ColumnValue;
-                            int val = -1;
-                            Vector2 pos = (Vector2)blockTile.transform.position + new Vector2(0, diff * val);
-                            int maxitte = 50;
-                            while (maxitte > 0)
-                            {
-                                maxitte--;
-                                if (CheckGemPos(pos))
-                                {
-                                    val--;
-                                    pos = (Vector2)blockTile.transform.position + new Vector2(0, diff * val);
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            gem.transform.position = pos;
-                            gem.Re_Pos(row + val, column);
-                            yield return new WaitForSeconds(0.02f);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //private IEnumerator GemRe_Position()
+    //{
+    //    yield return new WaitForSeconds(0.03f);
+    //    int index = DestroyGems(true);
+    //    if (specialObjectList.Count > 0)
+    //    {
+    //        for (int i = index; i >= 0; i--)
+    //        {
+    //            SpecialObject SpecialObj = specialObjectList[i];
+    //            if (SpecialObj != null)
+    //            {
+    //                RaycastHit2D obs = Physics2D.Raycast(SpecialObj.transform.position, Vector3.up,
+    //                                          float.PositiveInfinity, layerMaskTile);
+    //                if (obs && obs.distance > 2)
+    //                {
+    //                    if (obs.transform.TryGetComponent<BlockTile>(out var blockTile))
+    //                    {
+    //                        int row = blockTile.RowValue;
+    //                        int column = blockTile.ColumnValue;
+    //                        int val = -1;
+    //                        Vector2 pos = (Vector2)blockTile.transform.position + new Vector2(0, diff * val);
+    //                        int maxitte = 50;
+    //                        while (maxitte > 0)
+    //                        {
+    //                            maxitte--;
+    //                            if (CheckSpecialObjPos(pos))
+    //                            {
+    //                                val--;
+    //                                pos = (Vector2)blockTile.transform.position + new Vector2(0, diff * val);
+    //                            }
+    //                            else
+    //                            {
+    //                                break;
+    //                            }
+    //                        }
+    //                        SpecialObj.transform.position = pos;
+    //                        SpecialObj.Re_Pos(row + val, column);
+    //                        yield return new WaitForSeconds(0.02f);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
     
 
-    private bool CheckGemPos(Vector2 pos)
+    private bool CheckSpecialObjPos(Vector2 pos)
     {
-        bool isGem = false;
+        bool isSpecialObj = false;
         RaycastHit2D hit = Physics2D.CircleCast(pos, 0.5f, Vector2.zero);
         if(hit.collider != null)
         {
-            if (hit.collider.gameObject.tag == "Gem")
+            if (hit.collider.gameObject.tag == "Special_Object")
             {
-                isGem = true;
+                isSpecialObj = true;
             }
         }
-        return isGem;
+        return isSpecialObj;
+    }
+
+    private bool CheckSpecialObjInstaPos(Vector2 pos)
+    {
+        bool isInsta = true;
+        RaycastHit2D hit = Physics2D.CircleCast(pos, 1f, Vector2.zero);
+        if (hit.collider != null)
+        {
+            print("3");
+
+            if (hit.collider.gameObject.CompareTag("Tile") || hit.collider.gameObject.CompareTag("Disturb") || hit.collider.gameObject.CompareTag("Special_Object"))
+            {
+                isInsta = false;
+            }
+        }
+        return isInsta;
     }
 
     public void CheckForDash(float value)
@@ -1680,5 +1762,28 @@ public class BoardManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         blockSlideAbilitySFX.Play();
         holderObj.DOMove(Vector2.up * value, 0.5f);
+    }
+
+
+    public void CheckForSpecialObject(Special_Object_Type spType, Vector2 pos)
+    {
+        if (spType != Special_Object_Type.none)
+        {
+            int spIndex = (int)spType - 1;
+            Special_Object spObject = blockManager.GetSpecialObject(spIndex);
+            if(spObject != null && spIndex >= 0)
+            {
+                uiManager.SetUpSpObjectPanel(pos, spObject.iconSprite, spObject.uiShowDis);
+                if(spIndex == 0)
+                {
+                    uiManager.ActivateDisableRefresh(spObject.endTime);
+                }
+                else if(spIndex == 1)
+                {
+                    float increment = moveSpeed / 10;
+                    moveSpeed += increment;
+                }
+            }
+        }
     }
 }

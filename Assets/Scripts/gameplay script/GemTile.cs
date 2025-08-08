@@ -7,15 +7,15 @@ public class GemTile : MonoBehaviour
     [SerializeField] private SpriteRenderer bgspriteRenderer;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject desEffect;
-    private Gem_Type gemType;
+    private Special_Object_Type gemType;
     private int rowValue;
     private int colValue;
     public int RowValue { get { return rowValue; } }
     public int ColumeValue { get { return colValue; } }
-    public Gem_Type GemType { get { return gemType; } }
+    public Special_Object_Type GemType { get { return gemType; } }
 
     private bool isGemCollected;
-    public void SetUp(Sprite icon, Gem_Type gemtype, int rowvalue, int colomeval)
+    public void SetUp(Sprite icon, Special_Object_Type gemtype, int rowvalue, int colomeval)
     {
         desEffect.SetActive(false);
         gemType = gemtype;

@@ -472,7 +472,7 @@ public class MenuLevelData : MonoBehaviour
         TargetData[] target = levelDataInfos[index].levelData.targetData;
         foreach (TargetData targetData in target)
         {
-            if(targetData.gemType != Gem_Type.none)
+            if(targetData.specialObject != Special_Object_Type.none)
             {
                 isGem = true;
                 break;

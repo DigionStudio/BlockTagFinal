@@ -93,7 +93,7 @@ public class DailyGoalsManager : MonoBehaviour
             }
             if(dayDifference > 4)
             {
-                BonusGiftManager.OnWelcomeData(true);
+                gameDataManager.SetSaveValues(18, 1);
             }
 
         }
@@ -103,7 +103,7 @@ public class DailyGoalsManager : MonoBehaviour
             PlayerPrefs.SetString(gameDataManager.DailyGoalsPref, today.ToString());
             SetUpDailyTargets();
             gameDataManager.SpecialData(1);
-            BonusGiftManager.OnWelcomeData(false);
+            gameDataManager.SetSaveValues(18, 2);
         }
         StartCoroutine(SetUpGoals());
     }
@@ -167,7 +167,7 @@ public class DailyGoalsManager : MonoBehaviour
         SaveDailyTargets();
 
     }
-    private void OnBlockDdestroy(Normal_Block_Type arg1, BlockType arg2,Gem_Type gemtype, Vector3 arg3)
+    private void OnBlockDdestroy(Normal_Block_Type arg1, BlockType arg2,Special_Object_Type gemtype, Vector3 arg3)
     {
         if (isNewLevel)
         {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -24,6 +25,7 @@ public enum VideoNameCode
 public class MenuTutorialManager : MonoBehaviour
 {
     public static MenuTutorialManager Instance;
+    [SerializeField] private PanelTween menuGameNameHolder;
 
 
     [SerializeField] private Button startVideoButton;
@@ -173,7 +175,11 @@ public class MenuTutorialManager : MonoBehaviour
         {
             isFirstPlayLevel = true;
         }
-
+        playerName = gameDataManager.GetStringData(14);
+        if (string.IsNullOrEmpty(playerName))
+        {
+            gameDataManager.isplayerNameSelect = true;
+        }
 
         int num = PlayerPrefs.GetInt(gameDataManager.TutorialPref);
         if (num == 0)
@@ -195,13 +201,13 @@ public class MenuTutorialManager : MonoBehaviour
     }
     private bool CoinCheck()
     {
-        bool coins = false;
+        bool isCoin = false;
         int coin = gameDataManager.GetSaveValues(0);
         if (coin >= 5000)
         {
-            coins = true;
+            isCoin = true;
         }
-        return coins;
+        return isCoin;
     }
     private void EditName()
     {
@@ -227,15 +233,12 @@ public class MenuTutorialManager : MonoBehaviour
 
     public void SettingInputFieldCheck()
     {
-        bool interactable;
+        bool interactable = false;
         string name = nameInput.text;
-        if (!string.IsNullOrEmpty(name) && name.Length >= 3 && CheckSettingProfileName() && CoinCheck())
+        bool isCoin = CoinCheck();
+        if (!string.IsNullOrEmpty(name) && name.Length >= 3 && CheckSettingProfileName() && isCoin)
         {
             interactable = true;
-        }
-        else
-        {
-            interactable = false;
         }
         changeButton.interactable = interactable;
     }
@@ -280,8 +283,8 @@ public class MenuTutorialManager : MonoBehaviour
         {
             playerNameShowPanel.panel.DOAnchorPosY(playerNameShowPanel.posFinalFloat, 0.3f);
             settingShowBg.gameObject.SetActive(true);
-            
-
+            nameInputField.Select();
+            nameInputField.text = playerName;
         }
         settingShowBg.DOFade(fade, 0.3f).OnComplete(() =>
         {
@@ -459,6 +462,8 @@ public class MenuTutorialManager : MonoBehaviour
             SetUpProfile();
             settingShowBg.gameObject.SetActive(true);
             changeButton.interactable = false;
+            bool isCoin = CoinCheck();
+            nameInput.interactable = isCoin;
         }
         menuManager.MenuPanelSetup(isSettingShow, 0.3f);
         settingShowBg.DOFade(fade, 0.3f).OnComplete(() =>
@@ -472,10 +477,16 @@ public class MenuTutorialManager : MonoBehaviour
     private void SetUpProfile()
     {
         string name = gameDataManager.GetStringData(14);
-        string score = gameDataManager.GetSaveValues(2).ToString();
-        string totalStar = gameDataManager.GetSaveValues(13).ToString();
+        int lastScore = gameDataManager.GetSaveValues(16);
+        string totalStar = gameDataManager.GetSaveValues(17).ToString();
         string maxHit = gameDataManager.GetSaveValues(6).ToString();
         nameInput.text = name;
+        int currentScore = gameDataManager.GetSaveValues(2);
+        string score = currentScore.ToString();
+        if(lastScore > 4999)
+        {
+            score = lastScore.ToString();
+        }
         scoreText.text = score;
         totalStarText.text = totalStar;
         maxHitText.text = maxHit;
@@ -603,6 +614,22 @@ public class MenuTutorialManager : MonoBehaviour
             videoPlayer.url = videoPath;
             videoPlayer.Play();
         }
+    }
+
+    public void GameNameAnim(bool isFinal)
+    {
+        GameNameTween(isFinal);
+    }
+
+
+    private void GameNameTween(bool isFinal)
+    {
+        float yPos = menuGameNameHolder.posInitialFloat;
+        if (isFinal)
+        { 
+            yPos = menuGameNameHolder.posFinalFloat;
+        }
+        menuGameNameHolder.panel.DOAnchorPosY(yPos, 0.3f);
     }
 
 }

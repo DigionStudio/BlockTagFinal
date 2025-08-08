@@ -184,13 +184,13 @@ public class GameAIManager : MonoBehaviour
 
 
     }
-    public void AiAssists(int row, List<BlockTile> blockList, List<GemTile> gemList)
+    public void AiAssists(int row, List<BlockTile> blockList)
     {
         ChangeTypeDiff();
         if(targetData.Length > 0) {
             foreach (var item in targetData)
             {
-                if (item.gemType == Gem_Type.none)
+                if (item.specialObject == Special_Object_Type.none)
                 {
                     int value = (int)item.normalBlockType;
                     if (value < 6)
@@ -239,85 +239,85 @@ public class GameAIManager : MonoBehaviour
                             if (isAsist)
                             {
                                 print("Asists");
-                                BlockTypeChange(false, num, item, sampleBlocks, 0);
+                                BlockTypeChange(num, item, sampleBlocks);
                             }
                             max = min;
                             min -= num;
                         }
                     }
                 }
-                else
-                {
-                    int num = gemTypeDiff;
-                    int loopVal = (row - prevValue) / num;
-                    int max = row;
-                    int min = row - num;
-                    for (int i = 0; i < loopVal + 1; i++)
-                    {
-                        if (max <= prevValue)
-                        {
-                            break;
-                        }
-                        if (min <= prevValue)
-                        {
-                            min = prevValue;
-                            num = max - min;
-                        }
-                        List<GemTile> sampleGem = GemSampleSpace(gemList, max, min);
-                        bool isAsist = true;
-                        foreach (var gem in sampleGem)
-                        {
+                //else
+                //{
+                //    int num = gemTypeDiff;
+                //    int loopVal = (row - prevValue) / num;
+                //    int max = row;
+                //    int min = row - num;
+                //    for (int i = 0; i < loopVal + 1; i++)
+                //    {
+                //        if (max <= prevValue)
+                //        {
+                //            break;
+                //        }
+                //        if (min <= prevValue)
+                //        {
+                //            min = prevValue;
+                //            num = max - min;
+                //        }
+                //        List<SpecialObject> sampleSpecialObj = SpecialObjectSampleSpace(specialObj, max, min);
+                //        bool isAsist = true;
+                //        foreach (var sp in sampleSpecialObj)
+                //        {
 
-                            if (item.gemType == gem.GemType)
-                            {
-                                isAsist = false;
-                                break;
-                            }
-                        }
-                        int gemIndex = (int)item.gemType;
+                //            if (item.specialObject == sp.GemType)
+                //            {
+                //                isAsist = false;
+                //                break;
+                //            }
+                //        }
+                //        int gemIndex = (int)item.specialObject;
 
-                        if (isAsist)
-                        {
-                            if (sampleGem.Count > 0)
-                            {
-                                int randomGem = Random.Range(0, sampleGem.Count);
-                                int maxitter = 50;
-                                while (maxitter > 0)
-                                {
-                                    if (sampleGem.Count > randomGem && sampleGem[randomGem] != null)
-                                    {
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        maxitter--;
-                                        randomGem = Random.Range(0, sampleGem.Count);
-                                    }
-                                }
-                                int rowVal = sampleGem[randomGem].RowValue;
-                                int colVal = sampleGem[randomGem].ColumeValue;
-                                if (sampleGem[randomGem].transform.position.y > 16)
-                                    blockManager.ChangeGemTile(sampleGem[randomGem], gemIndex, rowVal, colVal);
-                            }
-                            else
-                            {
-                                List<BlockTile> sampleBlocks = BlockSampleSpace(blockList, max, min);
-                                BlockTypeChange(true, num, item, sampleBlocks, gemIndex - 1);
+                //        if (isAsist)
+                //        {
+                //            if (sampleSpecialObj.Count > 0)
+                //            {
+                //                int randomGem = Random.Range(0, sampleSpecialObj.Count);
+                //                int maxitter = 50;
+                //                while (maxitter > 0)
+                //                {
+                //                    if (sampleSpecialObj.Count > randomGem && sampleSpecialObj[randomGem] != null)
+                //                    {
+                //                        break;
+                //                    }
+                //                    else
+                //                    {
+                //                        maxitter--;
+                //                        randomGem = Random.Range(0, sampleSpecialObj.Count);
+                //                    }
+                //                }
+                //                int rowVal = sampleSpecialObj[randomGem].RowValue;
+                //                int colVal = sampleSpecialObj[randomGem].ColumeValue;
+                //                if (sampleSpecialObj[randomGem].transform.position.y > 16)
+                //                    blockManager.ChangeGemTile(sampleSpecialObj[randomGem], gemIndex, rowVal, colVal);
+                //            }
+                //            else
+                //            {
+                //                List<BlockTile> sampleBlocks = BlockSampleSpace(blockList, max, min);
+                //                BlockTypeChange(true, num, item, sampleBlocks, gemIndex - 1);
 
-                            }
-                        }
-                        max = min;
-                        min -= num;
+                //            }
+                //        }
+                //        max = min;
+                //        min -= num;
 
-                    }
+                //    }
 
-                }
+                //}
             }
         }
         prevValue = row;
     }
 
-    private void BlockTypeChange(bool isGem,int num, TargetData item, List<BlockTile> sampleBlocks, int gemindex)
+    private void BlockTypeChange(int num, TargetData item, List<BlockTile> sampleBlocks)
     {
         int randomBlock = (Random.Range(0, num) * 9) + Random.Range(0, 9);
         int maxitter = 50;
@@ -333,26 +333,15 @@ public class GameAIManager : MonoBehaviour
                 randomBlock = (Random.Range(0, num) * 9) + Random.Range(0, 9);
             }
         }
-        if (!isGem)
+        int blockIndex = (int)item.normalBlockType;
+        if (blockIndex >= 5)
         {
-            int blockIndex = (int)item.normalBlockType;
-            if (blockIndex >= 5)
-            {
-                blockIndex = sampleBlocks[randomBlock].ColorCode;
-            }
-            int abilityIndex = (int)item.blockType;
+            blockIndex = sampleBlocks[randomBlock].ColorCode;
+        }
+        int abilityIndex = (int)item.blockType;
 
-            if (sampleBlocks[randomBlock].transform.position.y > 17)
-                blockManager.ChangeBlockType(sampleBlocks[randomBlock], blockIndex, abilityIndex, true);
-        }
-        else
-        {
-            int rowVal = sampleBlocks[randomBlock].RowValue;
-            int colVal = sampleBlocks[randomBlock].ColumnValue;
-            Vector2 pos = sampleBlocks[randomBlock].transform.position;
-            Destroy(sampleBlocks[randomBlock].gameObject);
-            boardManager.InstaGem(pos, gemindex, rowVal, colVal);
-        }
+        if (sampleBlocks[randomBlock].transform.position.y > 17)
+            blockManager.ChangeBlockType(sampleBlocks[randomBlock], blockIndex, abilityIndex, true);
     }
 
     private List<BlockTile> BlockSampleSpace(List<BlockTile> blocks, int max, int min)
@@ -369,20 +358,7 @@ public class GameAIManager : MonoBehaviour
         return sample;
     }
 
-    private List<GemTile> GemSampleSpace(List<GemTile> gemList, int max, int min)
-    {
-        List<GemTile> sample = new List<GemTile>();
-        for (int i = gemList.Count - 1; i > 0; i--)
-        {
-            int rowval = gemList[i].RowValue;
-            if (rowval <= max && rowval > min)
-            {
-                sample.Add(gemList[i]);
-            }
-        }
-        return sample;
-    }
-
+    
     public void CheckForBombAIAsist(List<BlockTile> sampleBlocks)
     {
         if (isBombAiAsists && !hasBombAsisted)

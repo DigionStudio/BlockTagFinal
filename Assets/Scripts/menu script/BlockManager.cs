@@ -1,5 +1,18 @@
+using JetBrains.Annotations;
 using System;
 using UnityEngine;
+
+
+[Serializable]
+public class Special_Object
+{
+    public Special_Object_Type Special_Object_Type;
+    public String discription;
+    public String uiShowDis;
+    public Sprite iconSprite;
+    public int hitPoint;
+    public float endTime;
+}
 
 [Serializable]
 public class ObsDesAnimSprite
@@ -22,7 +35,7 @@ public class BlockManager : MonoBehaviour
     public GameDataManager gameDataManager;
     [SerializeField] private BlockTile blockprefab;
     [SerializeField] private GameObject coinObject;
-    [SerializeField] private GemTile gemTile;
+    [SerializeField] private SpecialObject specialObjTile;
 
 
     [SerializeField] private BlockTileData[] blockTileDatas;
@@ -37,7 +50,7 @@ public class BlockManager : MonoBehaviour
     [SerializeField] private Sprite[] ObsTargetSprite;
     [SerializeField] private ObsDesAnimSprite[] obsDesAnimSprites;
 
-    [SerializeField] private Sprite[] gemTypeSprite;
+    [SerializeField] private Special_Object[] specialObjTypeData;
     [SerializeField] private Sprite[] gemTypeTargetSprite;
 
 
@@ -209,20 +222,32 @@ public class BlockManager : MonoBehaviour
         return sprite;
     }
 
-    public GemTile InstantiateGemTile(Vector2 pos, Transform parent, int gemindex, int height, int width)
+    public SpecialObject InstantiateSpObjectTile(Vector2 pos, Transform parent, int specialobjindex)
     {
-        Gem_Type gemtype = (Gem_Type)(gemindex + 1);
-        
-        GemTile tile = Instantiate(gemTile, parent);
-        tile.SetUp(gemTypeSprite[gemindex], gemtype, height, width);
+        Special_Object_Type specialobjtype = (Special_Object_Type)(specialobjindex + 1);
+
+        SpecialObject tile = Instantiate(specialObjTile, parent);
+        tile.SetUp(specialObjTypeData[specialobjindex].iconSprite, specialobjtype, specialObjTypeData[specialobjindex].hitPoint);
         tile.transform.position = pos;
         return tile;
     }
-    public void ChangeGemTile(GemTile gemTile, int gemindex, int rowValue, int colValue)
+    public void ChangeGemTile(SpecialObject specialObj, int specialobjindex, int rowValue, int colValue)
     {
-        Gem_Type gemtype = (Gem_Type)(gemindex);
-        gemTile.SetUp(gemTypeSprite[gemindex - 1], gemtype, rowValue, colValue);
-        print(gemindex);
+        Special_Object_Type specialobjtype = (Special_Object_Type)(specialobjindex);
+        specialObj.SetUp(specialObjTypeData[specialobjindex - 1].iconSprite, specialobjtype, specialObjTypeData[specialobjindex - 1].hitPoint);
+        print(specialobjindex);
+    }
+
+    public Special_Object GetSpecialObject(int index)
+    {
+        if(specialObjTypeData.Length > index)
+        {
+            return specialObjTypeData[index];
+        }
+        else
+        {
+            return null;
+        }
     }
 
 

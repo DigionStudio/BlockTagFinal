@@ -22,7 +22,7 @@ public class TargetShow : MonoBehaviour
         Sprite iconSprite;
         abilityIcon.enabled = false;
 
-        if (data.gemType == Gem_Type.none)
+        if (data.specialObject == Special_Object_Type.none)
         {
             
 
@@ -70,7 +70,7 @@ public class TargetShow : MonoBehaviour
         }
         else
         {
-            iconSprite = blockManager.GemTypeSprite((int)data.gemType - 1);
+            iconSprite = blockManager.GemTypeSprite((int)data.specialObject - 1);
         }
 
 

@@ -46,6 +46,7 @@ public class BgTile : MonoBehaviour
     private int colliderRadius;
     private readonly float shieldTime = 7;
     [SerializeField] private LayerMask layerMask;
+    private BoardManager boardManager;
     private void OnEnable()
     {
         OnDamageTaken += DamageTaken;
@@ -247,7 +248,6 @@ public class BgTile : MonoBehaviour
 
     private void DestroyBgTile()
     {
-        print("adfsdf");
         specialObsObject.SetActive(false);
         currentHitpoint = 0;
         isDestroyed = true;
@@ -259,8 +259,20 @@ public class BgTile : MonoBehaviour
         {
             CancelInvoke(nameof(ShieldActive));
         }
-        
-        DestroyEvent(1);
+        if (boardManager == null)
+            boardManager = BoardManager.Instance;
+
+
+
+        if(boardManager.gameDataManager.GameTypeCode == 0)
+        {
+            boardManager.ObsDesCount(totalHitpoint);
+        }
+        else
+        {
+            DestroyEvent(1);
+        }
+
         Invoke(nameof(BgBlockDes), 1f);
     }
 
@@ -270,15 +282,15 @@ public class BgTile : MonoBehaviour
         animObj.SetActive(false);
         BlockerStatus(false);
     }
-
+    
 
     private void DestroyEvent(int num)
     {
         if (!isEventInvoked)
         {
-            if (BoardManager.Instance.gameDataManager.GameTypeCode == num && (int)blockType > 6)
+            if (boardManager.gameDataManager.GameTypeCode == num && (int)blockType > 6)
             {
-                GameManager.BlockDes.Invoke(blockType, BlockType.None, Gem_Type.none, transform.position);
+                GameManager.BlockDes.Invoke(blockType, BlockType.None, Special_Object_Type.none, transform.position);
                 isEventInvoked = true;
             }
         }

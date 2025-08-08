@@ -54,6 +54,7 @@ public class LevelDataHolder
     public int voiceStatus;
     public int previousLevel;
     public int wheelCount;
+    public int giftBonusCode;
     public int appBundleCode;
 }
 
@@ -97,6 +98,7 @@ public class GameDataManager : MonoBehaviour
     public GiftData[] giftData;
     public bool isGifted;
     public int GameTypeCode { get { return gameTypeCode; } set { gameTypeCode = value; } }
+    public LevelData classicModelevelData;
     public LevelData levelData;
 
 
@@ -205,6 +207,22 @@ public class GameDataManager : MonoBehaviour
                 levelDataHolder.abilityCountData.Add(dt);
             }
 
+            int num = 0;
+            foreach (var item in levelDataHolder.LevelStarData)
+            {
+                if (!item.isUnlock)
+                {
+                    break;
+                }
+                else
+                {
+                    num += item.StarCount;
+                }
+            }
+            if(levelDataHolder.totalStar < num)
+            {
+                levelDataHolder.totalStar = num;
+            }
         }
     }
 
@@ -650,6 +668,9 @@ public class GameDataManager : MonoBehaviour
         else if (index == 17)
         {
             value = levelDataHolder.lastUpdatedStarScore;
+        }else if (index == 18)
+        {
+            value = levelDataHolder.giftBonusCode;
         }
         return value;
     }
@@ -730,6 +751,9 @@ public class GameDataManager : MonoBehaviour
         else if (index == 17)
         {
             levelDataHolder.lastUpdatedStarScore = value;
+        }else if (index == 18)
+        {
+            levelDataHolder.giftBonusCode = value;
         }
     }
 

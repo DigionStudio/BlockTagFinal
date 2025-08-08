@@ -174,7 +174,7 @@ public class LevelEditManager : MonoBehaviour
             thisLevelDataInfo.targetData[index].blockType = (BlockType)value;
         }else if (targetindex == 2)
         {
-            thisLevelDataInfo.targetData[index].gemType = (Gem_Type)value;
+            thisLevelDataInfo.targetData[index].specialObject = (Special_Object_Type)value;
         }
         else
         {
@@ -308,7 +308,7 @@ public class LevelEditManager : MonoBehaviour
                 TargetData targetdata = new TargetData();
                 targetdata.normalBlockType = data.levelData.targetData[i].normalBlockType;
                 targetdata.blockType = data.levelData.targetData[i].blockType;
-                targetdata.gemType = data.levelData.targetData[i].gemType;
+                targetdata.specialObject = data.levelData.targetData[i].specialObject;
                 targetdata.count = data.levelData.targetData[i].count;
                 info.targetData[i] = targetdata;
 

@@ -40,7 +40,7 @@ public class LevelTargetShow : MonoBehaviour
         List<Dropdown.OptionData> gemtype = new List<Dropdown.OptionData>();
         for (int i = 0; i < 6; i++)
         {
-            string type = ((Gem_Type)i).ToString();
+            string type = ((Special_Object_Type)i).ToString();
             Dropdown.OptionData data = new Dropdown.OptionData();
             data.text = type;
             gemtype.Add(data);
@@ -61,7 +61,7 @@ public class LevelTargetShow : MonoBehaviour
         {
             normalBlock.value = (int)thisLevelDataInfo.targetData[targetindex].normalBlockType;
             blockType.value = (int)thisLevelDataInfo.targetData[targetindex].blockType;
-            gemType.value = (int)thisLevelDataInfo.targetData[targetindex].gemType;
+            gemType.value = (int)thisLevelDataInfo.targetData[targetindex].specialObject;
             valueCount.text = thisLevelDataInfo.targetData[targetindex].count.ToString();
         }
     }

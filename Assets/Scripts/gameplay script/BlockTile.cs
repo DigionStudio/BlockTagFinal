@@ -14,6 +14,7 @@ public class BlockTile : MonoBehaviour
     [SerializeField] private GameObject blockerObj;
     [SerializeField] private GameObject highlighterObj;
     [SerializeField] private GameObject modEffect;
+    [SerializeField] private AudioSource realignSfx;
 
     public int RowValue { get { return rowValue; } }
     public int ColumnValue { get { return columnValue; } }
@@ -164,7 +165,7 @@ public class BlockTile : MonoBehaviour
                     boardManager.Area_Crush(rowValue, columnValue);
                 }
             }
-            GameManager.BlockDes.Invoke(thisTileData.block, thisBlockType, Gem_Type.none, transform.position);
+            GameManager.BlockDes.Invoke(thisTileData.block, thisBlockType, Special_Object_Type.none, transform.position);
             Invoke(nameof(DisableObj), 1f);
         }
     }
@@ -270,11 +271,12 @@ public class BlockTile : MonoBehaviour
 
 
 
-    public void Re_Oreder(Vector2 pos, int row, int col)
+    public void Re_Oreder(Vector2 pos, int row, int col, bool isMagnet = false)
     {
         transform.position = pos;
         rowValue = row;
         columnValue = col;
-
+        if(!isMagnet)
+            realignSfx.Play();
     }
 }

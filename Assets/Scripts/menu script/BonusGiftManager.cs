@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,14 +25,25 @@ public class BonusGiftManager : MonoBehaviour
     private static bool isWelcomeBonus = false;
     private static bool isWelcomeBackBonus;
     private GameDataManager gameDataManager;
-    public static void OnWelcomeData(bool isBack)
+    public void OnWelcomeData()
     {
-        isWelcomeBonus = true;
-        isWelcomeBackBonus = isBack;
+        if(gameDataManager == null)
+            gameDataManager = BlockManager.Instance.gameDataManager;
+
+        int code = gameDataManager.GetSaveValues(18);
+        if(code > 0)
+        {
+            if(code == 2)
+                isWelcomeBonus = true;
+            else
+                isWelcomeBackBonus = true;
+        }
+
     }
     private void Start()
     {
-        gameDataManager = BlockManager.Instance.gameDataManager;
+        if (gameDataManager == null)
+            gameDataManager = BlockManager.Instance.gameDataManager;
         confettiObj.SetActive(false);
         claimButton.onClick.AddListener(ClaimBonus);
         foreach (var item in panelTween)
@@ -41,6 +53,7 @@ public class BonusGiftManager : MonoBehaviour
     }
     public bool CheckForBonus()
     {
+        OnWelcomeData();
         bool status = false;
         if (isWelcomeBonus)
         {
@@ -151,8 +164,9 @@ public class BonusGiftManager : MonoBehaviour
 
         giftPanelBg.DOFade(0f, 0.5f).OnComplete(() =>
         {
-            MenuManager.Instance.MenuShow();
             ResetGiftPanel();
+            gameDataManager.SetSaveValues(18, 0);
+            MenuManager.Instance.MenuShow();
         });
         foreach (var item in panelTween)
         {

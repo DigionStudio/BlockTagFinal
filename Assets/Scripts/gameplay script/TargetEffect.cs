@@ -51,9 +51,9 @@ public class TargetEffect : MonoBehaviour
         effect.transform.position = pos;
         Vector3 pos21 = targetrect[targetCode].TransformPoint(targetrect[targetCode].rect.center);
         pos21.z = 0;
-        effect.SetUp(pos, pos21, type, abilityType, Gem_Type.none);
+        effect.SetUp(pos, pos21, type, abilityType, Special_Object_Type.none);
     }
-    public void SetUpGemTarget(Vector3 pos, Gem_Type gemType, int targetCode)
+    public void SetUpGemTarget(Vector3 pos, Special_Object_Type gemType, int targetCode)
     {
         TargetEffectShow effect = Instantiate(effectObject);
         effect.transform.position = pos;
