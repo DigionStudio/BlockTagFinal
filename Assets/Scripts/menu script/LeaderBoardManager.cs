@@ -17,6 +17,7 @@ public class IconsReference
 public class LeaderboardButtons
 {
     public Button useButton;
+    public RectTransform buttonRect;
     public Image buttonImage;
     public Text buttontext;
 }
@@ -40,6 +41,8 @@ public class LeaderBoardManager : MonoBehaviour
     private bool hasCurrentPlayerInstantiated;
     private LeaderboardShow thisPlayerShow;
 
+    public GameObject leadingObj;
+    public Transform loadingBar;
 
     public InitializeUnityServices InitializeUnityServices;
     private GameDataManager gameDataManager;
@@ -70,6 +73,7 @@ public class LeaderBoardManager : MonoBehaviour
         {
             status = true;
         }
+        ShowLoading(false);
         ApplicationStatus(status);
     }
 
@@ -138,13 +142,16 @@ public class LeaderBoardManager : MonoBehaviour
     {
         Color col = SelectedColor;
         Color textCol = Color.white;
-        int size = 60;
+        float sizeY = 95;
+        int size = 65;
         if (status)
         {
             col = DisableColor;
             textCol = Color.gray;
             size = 50;
+            sizeY = 80;
         }
+        currentButton.buttonRect.sizeDelta = new Vector2(0, sizeY);
         //currentButton.useButton.interactable = status;
         currentButton.buttontext.color = textCol;
         currentButton.buttontext.fontSize = size;
@@ -153,6 +160,7 @@ public class LeaderBoardManager : MonoBehaviour
 
     public void ShowLeaderBoard(int index = -1)
     {
+        ShowLoading(true);
         if (index >= 0 && index != currentIndex)
         {
             currentScrollRect.verticalNormalizedPosition = 1f;
@@ -160,7 +168,10 @@ public class LeaderBoardManager : MonoBehaviour
             ResetLeaderBoard();
             currentIndex = index;
             if (LeaderboardCategory.ContainsKey(currentIndex) && LeaderboardCategory[currentIndex].Count > 0)
+            {
+                ShowLoading(false);
                 ShowAllTotalScoreLeader();
+            }
         }
         else
         {
@@ -271,6 +282,19 @@ public class LeaderBoardManager : MonoBehaviour
         if (InitializeUnityServices.isInisialize)
         {
             InitializeUnityServices.UpdatePlayerName(name);
+        }
+    }
+
+    private void ShowLoading(bool status)
+    {
+        leadingObj.SetActive(status);
+    }
+    Vector3 rotationSpeed = new Vector3(0, 0, -150); // degrees per second
+    private void Update()
+    {
+        if (leadingObj.activeInHierarchy)
+        {
+            loadingBar.Rotate(rotationSpeed * Time.deltaTime);
         }
     }
     private void OnDisable()

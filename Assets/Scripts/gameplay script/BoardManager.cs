@@ -50,7 +50,7 @@ public class BoardManager : MonoBehaviour
     private float posY = 6;
     private float currentWidth = 0;
     private bool isTurn;
-    private int totalCount = 4;
+    private int totalCount = 3;
     private int currentCount;
     private Vector2 dashMovePos;
     private Tween dashTween;
@@ -705,20 +705,22 @@ public class BoardManager : MonoBehaviour
         if (count == 0)
         {
             num = 10f;
-            UpMoveSpeed(0.03f);
+            UpMoveSpeed();
         }
         else
         {
             if (count > 0 && count <= 7)
             {
-                if (count > 0 && count <= 2)
+                if (count > 0 && count <= 4)
                 {
-                    num = 6f;
-                    UpMoveSpeed(0.01f);
-                }
-                else if (count > 2 && count <= 4)
-                {
-                    num = 4f;
+                    if (count > 0 && count <= 2)
+                    {
+                        num = 6f;
+                    }
+                    else
+                    {
+                        num = 4f;
+                    }
                 }
                 else
                 {
@@ -728,34 +730,29 @@ public class BoardManager : MonoBehaviour
                 {
                     num = 0;
                 }
-                currentCount = 0;
             }
             else
             {
-                if (currentCount < totalCount)
-                {
-
-                    currentCount++;
-                }
-                else
-                {
-                    currentCount = 0;
-                    UpMoveSpeed(0.05f);
-                    
-                }
-
+                currentCount = 0;
             }
         }
         DashMove(num);
     }
 
-    private void UpMoveSpeed(float time)
+    private void UpMoveSpeed()
     {
         if (gameTypeCode == 0)
         {
-            currentCount = 0;
-            if (moveSpeed < 1)
-                moveSpeed += time;
+            if (currentCount < totalCount)
+            {
+                currentCount++;
+            }
+            else
+            {
+                currentCount = 0;
+                if (moveSpeed < 1)
+                    moveSpeed += 0.02f;
+            }
         }
     }
 
@@ -1612,8 +1609,6 @@ public class BoardManager : MonoBehaviour
         RaycastHit2D hit = Physics2D.CircleCast(pos, 1f, Vector2.zero);
         if (hit.collider != null)
         {
-            print("3");
-
             if (hit.collider.gameObject.CompareTag("Tile") || hit.collider.gameObject.CompareTag("Disturb") || hit.collider.gameObject.CompareTag("Special_Object"))
             {
                 isInsta = false;

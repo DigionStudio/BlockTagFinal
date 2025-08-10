@@ -48,9 +48,9 @@ public class GameManager : MonoBehaviour
     private int currentHitPoint;
 
 
-    private float adInterval;
-    private float timeSinceLastAd;
-    private bool isAdsShow;
+    private float specialObjectTime;
+    private float timePlayed;
+    private bool isSpObjectInsta;
 
     private bool isGamedataUpdated;
 
@@ -75,8 +75,8 @@ public class GameManager : MonoBehaviour
         OnMoveTaken += MoveCount;
         OnCoinUpdate += CoinShow;
         gameTypeCode = gameDataManager.GameTypeCode;
-        adInterval = UnityEngine.Random.Range(60, 90);
-        isAdsShow = !gameDataManager.HasDisableAds;
+        specialObjectTime = UnityEngine.Random.Range(30, 50);
+        isSpObjectInsta = false;
         GameStart();
     }
 
@@ -626,14 +626,17 @@ public class GameManager : MonoBehaviour
                 moveCountDiff = UnityEngine.Random.Range(3, 7);
             }
             CheckGameConnectivity();
-            if (isSpecialObject)
-                boardManager.InstaSpecialObject();
-            else
+            if (isSpObjectInsta)
             {
-                int rand = UnityEngine.Random.Range(0, 5);
-                if (rand == 2)
+                if (isSpecialObject)
+                    boardManager.InstaSpecialObject();
+                else
                 {
-                    isSpecialObject = true;
+                    int rand = UnityEngine.Random.Range(0, 5);
+                    if (rand == 2)
+                    {
+                        isSpecialObject = true;
+                    }
                 }
             }
         }
@@ -756,36 +759,32 @@ public class GameManager : MonoBehaviour
     }
 
 
-    
 
 
-    //private void Update()
-    //{
-    //    if(gameTypeCode == 0 && gameStatus < 0)
-    //    {
-    //        AdsShowTimer();
-    //    }
-    //}
 
-    private void AdsShowTimer()
+    private void Update()
     {
-        if (boardManager.isGameStarted && isAdsShow)
+        if (gameTypeCode == 0 && gameStatus < 0 && !isSpObjectInsta)
         {
-            timeSinceLastAd += Time.deltaTime;
+            GamePlayTime();
+        }
+    }
 
-            if (timeSinceLastAd >= adInterval)
+    private void GamePlayTime()
+    {
+        if (boardManager.isGameStarted)
+        {
+            timePlayed += Time.deltaTime;
+
+            if (timePlayed >= specialObjectTime)
             {
-                ShowAd();
-                timeSinceLastAd = 0f; // Reset the timer after showing the ad
-                adInterval = UnityEngine.Random.Range(60, 90);
+                timePlayed = 0f;
+                isSpObjectInsta = true;
             }
         }
     }
 
-    private void ShowAd()
-    {
-        //gameAdsManager.ShowOnGameAds();
-    }
+    
 
     public void CheckGameConnectivity()
     {

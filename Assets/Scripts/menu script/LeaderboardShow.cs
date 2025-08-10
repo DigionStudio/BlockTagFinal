@@ -63,12 +63,23 @@ public class LeaderboardShow : MonoBehaviour
         serialObj[rankIndex].rankText.text = rank;
         string trimmedName = player.Name.Split('#')[0];
         nameText.text = trimmedName;
-        scoreText.text = player.scoreValue.ToString();
+        scoreText.text = ScoreCheck(player.scoreValue);
         if(medal != null)
             medalImage.sprite = medal;
         if(icon != null)
             iconImage.sprite = icon;
         currentPlayerShow.gameObject.SetActive(iscurrentPlayer);
+    }
+
+    private string ScoreCheck(double num)
+    {
+        string score = num.ToString();
+        if(num >= 1000000)
+        {
+            double val = num / 1000;
+            score = val.ToString() + "K";
+        }
+        return score;
     }
 
     public void ResetBgColor()
