@@ -64,10 +64,6 @@ public class SpecialObject : MonoBehaviour
         else if (string.Equals(tag, "Disturb"))
         {
             DestroySpecialObject(false);
-        }else if (string.Equals(tag, "Tile"))
-        {
-            DestroySpecialObject(false);
-            ActiveSpecialObject();
         }
     }
     public void DestroySpecialObject(bool isDes = false)
@@ -109,11 +105,12 @@ public class SpecialObject : MonoBehaviour
         return isDes;
     }
 
-    private void ActiveSpecialObject()
+    public void ActiveSpecialObject()
     {
         if (!isActivated)
         {
             isActivated = true;
+            DestroySpecialObject(false);
             boardManager.CheckForSpecialObject(SpObjectType, transform.position);
         }
     }

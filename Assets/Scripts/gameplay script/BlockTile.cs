@@ -232,26 +232,33 @@ public class BlockTile : MonoBehaviour
         {
             BoardManager.Instance.GameEnd(1);
         }
-        if (collision.gameObject.CompareTag("Destroy") && thisSprite.gameObject.activeInHierarchy)
+        else if (collision.gameObject.CompareTag("Destroy") && thisSprite.gameObject.activeInHierarchy)
         {
             GameOverSplash(true);
-        }
-
-        if (collision.gameObject.CompareTag("Destruction") && thisSprite.gameObject.activeInHierarchy)
+        }else if (collision.gameObject.CompareTag("Destruction") && thisSprite.gameObject.activeInHierarchy)
         {
             DestroyObject();
         }
-        if (collision.gameObject.CompareTag("Disturb") && thisSprite.gameObject.activeInHierarchy)
+        else if (collision.gameObject.CompareTag("Special_Object") && thisSprite.gameObject.activeInHierarchy)
         {
-            if (!highlighterObj.activeInHierarchy)
+            SpecialObject specialObject = collision.gameObject.GetComponent<SpecialObject>();
+            if(specialObject != null)
+                specialObject.ActiveSpecialObject();
+        }
+        else
+        {
+            if (collision.gameObject.CompareTag("Disturb") && thisSprite.gameObject.activeInHierarchy)
             {
-                highlighterObj.transform.localScale = Vector3.zero;
-                highlighterObj.SetActive(true);
-                highlighterObj.transform.DOScale(Vector2.one * 1.1f, 0.7f).OnComplete(() =>
+                if (!highlighterObj.activeInHierarchy)
                 {
-                    Invoke(nameof(HighlighterDisable), 1f);
+                    highlighterObj.transform.localScale = Vector3.zero;
+                    highlighterObj.SetActive(true);
+                    highlighterObj.transform.DOScale(Vector2.one * 1.1f, 0.7f).OnComplete(() =>
+                    {
+                        Invoke(nameof(HighlighterDisable), 1f);
 
-                });
+                    });
+                }
             }
         }
     }
