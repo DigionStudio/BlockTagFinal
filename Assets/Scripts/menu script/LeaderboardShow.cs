@@ -28,7 +28,7 @@ public class LeaderboardShow : MonoBehaviour
     [SerializeField] private IconsReference scoreIcons;
     private int playerRank = -1;
 
-    public void SetUp(PlayerGlobalData player, int iconCode, bool iscurrentPlayer, int colCode = -1)
+    public void SetUp(PlayerGlobalData player, int iconCode, bool iscurrentPlayer,bool isLeaderboard, int colCode = -1)
     {
         playerRank = player.Rank;
         string rank = (playerRank + 1).ToString();
@@ -44,7 +44,8 @@ public class LeaderboardShow : MonoBehaviour
         if (playerRank <= 2)
         {
             rankIndex = 0;
-            serialObj[rankIndex].rankText.enabled = false;
+            if(isLeaderboard)
+                serialObj[rankIndex].rankText.enabled = false;
             if (colCode < 0)
                 col = colorCode[playerRank];
             medal = rankIcons.iconSprite[playerRank];

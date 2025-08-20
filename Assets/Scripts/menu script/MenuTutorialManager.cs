@@ -481,6 +481,7 @@ public class MenuTutorialManager : MonoBehaviour
         string totalStar = gameDataManager.GetSaveValues(17).ToString();
         string maxHit = gameDataManager.GetSaveValues(6).ToString();
         nameInput.text = name;
+        nameInput.placeholder.GetComponent<Text>().text = name;
         int currentScore = gameDataManager.GetSaveValues(2);
         string score = currentScore.ToString();
         if(lastScore > 4999)

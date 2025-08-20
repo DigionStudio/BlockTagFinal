@@ -352,9 +352,10 @@ public class GameManager : MonoBehaviour
         if (targetData.Length > 0)
             Array.Clear(targetData, 0, targetData.Length);
     }
-    public void UpdatePointToLeaderboard()
+    public void UpdatePointToLeaderboard(bool isGamewin)
     {
-        AdsLeaderboardManager.Instance.UpdateScore(currentPoint);
+        if ((isGamewin && gameTypeCode == 1 && HasFirstPlay()) || gameTypeCode == 0)
+            AdsLeaderboardManager.Instance.UpdateScore(currentPoint);
     }
 
     public void GameEndValues()

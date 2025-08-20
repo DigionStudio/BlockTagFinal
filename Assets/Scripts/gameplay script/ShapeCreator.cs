@@ -21,6 +21,8 @@ public class ShapeCreator : MonoBehaviour
     private bool isNormalAbilityTile;
     private int maxRand = 7;
 
+    private TutorialManager tutorialManager;
+
     public bool CheckSelected(int index)
     {
         bool status = false;
@@ -106,6 +108,7 @@ public class ShapeCreator : MonoBehaviour
     private void Start()
     {
         //MaskSetUp();
+        tutorialManager = TutorialManager.Instance;
         ShapeSelectReset();
     }
     
@@ -150,7 +153,7 @@ public class ShapeCreator : MonoBehaviour
         }
         else
         {
-            if (!TutorialManager.Instance.isTutorial)
+            if (!tutorialManager.isTutorial)
             {
                 shapeCodes.Add(12);
                 shapeCodes.Add(13);
@@ -170,7 +173,7 @@ public class ShapeCreator : MonoBehaviour
     public void SetUp()
     {
         showObject.SetActive(true);
-        bool status = TutorialManager.Instance.isTutorial;
+        bool status = tutorialManager.isTutorial;
         for (int i = 0; i < shapePos.Length; i++)
         {
             MakeCrushTile(i, status);
@@ -204,7 +207,7 @@ public class ShapeCreator : MonoBehaviour
     private bool CheckAbility(int index)
     {
         bool isAbility = false;
-        if(TutorialManager.Instance.isTutorial && (index == 11 || index == 12 ||  index == 13 || index == 1 || index == 0)) 
+        if(tutorialManager.isTutorial && (index == 11 || index == 12 ||  index == 13 || index == 1 || index == 0)) 
         {
             isAbility = true;
         }
@@ -350,6 +353,8 @@ public class ShapeCreator : MonoBehaviour
             {
                 num = CrushTileType(shapecode);
             }
+            tutorialManager.SetUpAbilityDetailTutorial(tileIndex, shapecode, num, shapePos[tileIndex].position);
+
             tilecreator.SetUp_Shape(shapecode, tileIndex, num, isModBomb);
             tilecreator.SetPosistion(pos);
             tilecreator.InstaSize(isModBomb);
@@ -383,16 +388,17 @@ public class ShapeCreator : MonoBehaviour
         if(currrentCrushTile != null)
         {
             currrentCrushTile.RotateObj();
-            TutorialManager.Instance.ButtonPressStart(2);
-            TutorialManager.Instance.RotateTile();
+            tutorialManager.ButtonPressStart(2);
+            tutorialManager.RotateTile();
         }
     }
 
     public void ResetCrushTiles()
     {
+        tutorialManager.DisableAbilityShow();
         GameAIManager.Instance.ReSetModBomb();
         GameReset(true);
-        TutorialManager.Instance.EndTutorial();
+        tutorialManager.EndTutorial();
     }
     public void GameReset(bool isSetUp)
     {

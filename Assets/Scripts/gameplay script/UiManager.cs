@@ -95,7 +95,7 @@ public class UiManager : MonoBehaviour
     private int totalStarValue;
 
     private bool isTimer;
-    private int currentScoreInt;
+    private int currentScoreInt = 1234;
     private int prevScoreInt;
 
 
@@ -742,6 +742,8 @@ public class UiManager : MonoBehaviour
     private void GameEndPanelSetUp()
     {
         gameOverPanel.gameObject.SetActive(true);
+        TutorialManager.Instance.DisableAbilityShow();
+        abilityManager.TuteDisable();
         ChangePanelPos(false, panelTween, true, 0.3f);
         bool isNewHIgh = ChekforNewHighScore();
         if (isNewHIgh)
@@ -1085,7 +1087,7 @@ public class UiManager : MonoBehaviour
         {
             
             rankStatusText.text = "+" + diff + " Rank Up";
-            rankShow[1].leaderboardShow.SetUp(data, 1, true, 1);
+            rankShow[1].leaderboardShow.SetUp(data, 1, true,false, 1);
             yield return new WaitForSeconds(0.5f);
             rankShow[1].rankRect.gameObject.SetActive(true);
             rankShow[0].rankRect.DOAnchorPosY(-170f, 0.5f);
@@ -1103,7 +1105,7 @@ public class UiManager : MonoBehaviour
         {
             rankStatusText.text = "Kept The Rank";
             rankShow[0].rankRect.gameObject.SetActive(true);
-            rankShow[0].leaderboardShow.SetUp(data, 1, true);
+            rankShow[0].leaderboardShow.SetUp(data, 1, true, false);
             TweenPanel(true, gameOverButtonPanelTween, 0.5f);
             yield return new WaitForSeconds(2f);
             rankStatusText.gameObject.SetActive(false);
@@ -1126,7 +1128,7 @@ public class UiManager : MonoBehaviour
             rankDataCurrent = dt;
             rankStatusText.gameObject.SetActive(false);
             rankShow[0].rankRect.gameObject.SetActive(true);
-            rankShow[0].leaderboardShow.SetUp(rankDataCurrent, 1, true);
+            rankShow[0].leaderboardShow.SetUp(rankDataCurrent, 1, true, false);
             rankShow[0].leaderboardShow.UIElementVisibility(1, 0.5f);
         }
         else
@@ -1145,7 +1147,7 @@ public class UiManager : MonoBehaviour
             scoreValue = 0000
         };
         rankShow[0].rankRect.gameObject.SetActive(true);
-        rankShow[0].leaderboardShow.SetUp(data, 1, true);
+        rankShow[0].leaderboardShow.SetUp(data, 1, true, false);
         rankShow[0].leaderboardShow.UIElementVisibility(1, 0.5f);
         TweenPanel(true, gameOverButtonPanelTween, 0.5f);
     }
@@ -1234,11 +1236,11 @@ public class UiManager : MonoBehaviour
             }
             else
             {
-                int rand = UnityEngine.Random.Range(0, 4);
-                AbilityData abData = abilityManager.abilityData[rand];
-                giftContent[i].image.sprite = abData.iconSprite;
+                int rand1 = UnityEngine.Random.Range(0, 4);
+                AbilityData abData1 = abilityManager.abilityData[rand1];
+                giftContent[i].image.sprite = abData1.iconSprite;
                 giftContent[i].valueText.text = "+1";
-                giftContent[i].nameText.text = abData.name;
+                giftContent[i].nameText.text = abData1.name;
             }
         }
     }

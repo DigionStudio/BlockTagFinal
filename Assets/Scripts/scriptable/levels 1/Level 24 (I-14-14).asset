@@ -10,48 +10,52 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 18 (N3-11-11) I-12
+  m_Name: Level 24 (I-14-14)
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.302
+    moveSpeed: 0.273
     isScoreTarget: 0
     isBombAbility: 0
     isTagAbility: 0
     shapeCodes: []
     targetData:
-    - normalBlockType: 2
-      blockType: 0
-      gemType: 0
-      count: 11
+    - normalBlockType: 8
+      blockType: 6
+      specialObject: 0
+      count: 14
     bgTileData:
-    - positionIndex: 0
+    - positionIndex: 11
       tileType: 8
-    - positionIndex: 1
+    - positionIndex: 21
       tileType: 8
-    - positionIndex: 9
+    - positionIndex: 31
       tileType: 8
-    - positionIndex: 2
+    - positionIndex: 20
       tileType: 8
-    - positionIndex: 18
+    - positionIndex: 30
       tileType: 8
-    - positionIndex: 10
+    - positionIndex: 40
       tileType: 8
-    - positionIndex: 16
+    - positionIndex: 32
       tileType: 8
-    - positionIndex: 8
+    - positionIndex: 23
+      tileType: 8
+    - positionIndex: 15
+      tileType: 8
+    - positionIndex: 24
       tileType: 8
     - positionIndex: 7
       tileType: 8
-    - positionIndex: 17
+    - positionIndex: 16
       tileType: 8
-    - positionIndex: 26
+    - positionIndex: 1
       tileType: 8
-    - positionIndex: 6
+    - positionIndex: 10
       tileType: 8
-    gemTileData: []
-    moveCount: 11
-    totalStarValue: 1000
+    specialObjectTileData: []
+    moveCount: 14
+    totalStarValue: 1200
     reFreshCount: 0
-    ability1Value: 3
-    ability2Value: 3
-    levelNumber: 17
+    ability1Value: 4
+    ability2Value: 4
+    levelNumber: 23

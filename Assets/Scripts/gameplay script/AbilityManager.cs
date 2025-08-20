@@ -80,13 +80,12 @@ public class AbilityManager : MonoBehaviour
     }
     void Start()
     {
-        //PlayerPrefs.SetInt(AbilityTutorialPref, 0);
         unLockCode = PlayerPrefs.GetInt(UnlockCode);
         unLockCode -= 1;
         tuteVal = PlayerPrefs.GetInt(AbilityTutorialPref, 0);
         HasAbilityObject();
 
-        if (tuteVal >= 0 && tuteVal < 3)
+        if (tuteVal == 0)
         {
             isAbilityTutorial = true;
 
@@ -146,6 +145,8 @@ public class AbilityManager : MonoBehaviour
 
     private void AbilityShowUIStatus(bool status)
     {
+        if(!status)
+            TuteDisable();
         int index = (int)curentSelectedAbilityType - 1;
         if (index >= 0 && index < abilityShowUI.Length)
         {
@@ -180,13 +181,13 @@ public class AbilityManager : MonoBehaviour
                 {
                     Vector2 pos = abilityShowUI[2].transform.position;
                     currentAbilityObject.SetUp(pos);
-                    CheckForAbilityTutorial();
+                    CheckForAbilityTutorial(VariableTypeCode.Hammer);
                 }
                 else if (curentSelectedAbilityType == VariableTypeCode.Bomb)
                 {
                     Vector2 pos = abilityShowUI[1].transform.position;
                     currentAbilityObject.SetUp(pos);
-                    CheckForAbilityTutorial();
+                    CheckForAbilityTutorial(VariableTypeCode.Bomb);
                 }
                 else
                 {
@@ -216,24 +217,24 @@ public class AbilityManager : MonoBehaviour
         }
     }
 
-    private void TuteDisable()
+    public void TuteDisable()
     {
         if (isAbilityTutorial)
         {
             isAbilityTutorial = false;
             TutorialManager.Instance.AbilityTutorial(false, Vector2.zero);
-            tuteVal++;
-            PlayerPrefs.SetInt(AbilityTutorialPref, tuteVal);
+            
         }
     }
 
-    private void CheckForAbilityTutorial()
+    private void CheckForAbilityTutorial(VariableTypeCode code)
     {
         if (isAbilityTutorial)
         {
+            tuteVal = (int)code;
+            PlayerPrefs.SetInt(AbilityTutorialPref, tuteVal);
             Vector2 pos = boardManager.AbilityTutorialPos();
             TutorialManager.Instance.AbilityTutorial(isAbilityTutorial, pos);
-            Invoke(nameof(TuteDisable), 7f);
         }
         
     }

@@ -72,7 +72,121 @@ public class MenuLevelData : MonoBehaviour
     //    //    float posy = bgImages[i - 1].anchoredPosition.y + 1601;
     //    //    bgImages[i].anchoredPosition = new Vector2(0, posy);
     //    //}
+    //    CheckForLevelTargets();
     //}
+
+    //private void CheckForLevelTargets()
+    //{
+    //    foreach (var item in levelDataInfos)
+    //    {
+    //        string currentName = item.name;
+    //        if (item != null)
+    //        {
+    //            string name = "Level "+ (item.levelData.levelNumber + 1).ToString() + " ";
+    //            if (item.levelData.isScoreTarget)
+    //            {
+    //                name +=  "(S-" + item.levelData.totalStarValue.ToString() + "-" + item.levelData.moveCount.ToString() + ")";
+    //            }
+    //            else
+    //            {
+    //                name += TargetCode(item.levelData);
+    //            }
+
+    //            if(name != currentName)
+    //            {
+    //                print("Missmatched " + item.levelData.levelNumber);
+    //            }else
+    //                print("cName " + currentName + " / " + "vName " + name);
+    //        }
+    //    }
+    //}
+    //private string TargetCode(LevelData levelData)
+    //{
+    //    string code = "";
+    //    string codefirst = "(";
+    //    string codelast = ")";
+    //    string middle = "";
+    //    int count = levelData.targetData.Length;
+    //    if (levelData != null && count > 0)
+    //    {
+    //        bool issingle = true;
+    //        if (count > 1)
+    //            issingle = false;
+    //        for (int i = 0; i < count; i++)
+    //        {
+                
+    //            middle += (TargetElementCode(i, levelData, issingle));
+    //        }
+    //        code = codefirst + middle + "-" + levelData.moveCount.ToString() + codelast;
+
+    //    }
+    //    return code;
+    //}
+    //private string TargetElementCode(int index, LevelData levelData, bool issingle)
+    //{
+    //    string code = string.Empty;
+    //    TargetData data = levelData.targetData[index];
+
+    //    int blockType = (int)data.normalBlockType;
+    //    string blocktype = data.normalBlockType.ToString();
+    //    int abilityType = (int)data.blockType;
+    //    string abilitytype = data.blockType.ToString();
+
+
+    //    if (blockType >= 0 && blockType < 5)
+    //    {
+    //        if (abilityType != 6)
+    //        {
+    //            code += "N";
+    //        }
+    //        code += blocktype[6];
+    //    }
+    //    else
+    //    {
+    //        if (blockType == 6)
+    //        {
+    //            code += "IN";
+    //        }
+    //        else if ((blockType >= 7 && blockType < 9) || blockType == 11)
+    //        {
+    //            code += blocktype[0];
+    //        }
+    //        else if (blockType == 9)
+    //        {
+    //            code += "RK";
+    //        }
+    //        else if (blockType == 10)
+    //        {
+    //            code += "WA";
+    //        }
+    //        else if(abilityType == 0)
+    //        {
+    //            code += "N";
+    //        }
+    //    }
+
+    //    if ((abilityType >= 1 && abilityType < 3) || abilityType == 4)
+    //    {
+    //        code += abilitytype[0];
+    //    }
+    //    else if (abilityType == 3)
+    //    {
+    //        code += "RC";
+    //    }
+    //    else if (abilityType == 5)
+    //    {
+    //        code += "CR";
+    //    }
+
+    //    code += "-" + data.count.ToString();
+
+    //    if (issingle)
+    //    {
+    //        return code;
+    //    }else
+    //        return "(" + code + ")";
+    //}
+
 
     private void ChangeLevelBgImages()
     {

@@ -156,7 +156,8 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
     {
         print("Ads Initialized");
         isAdsInitialized = true;
-        MenuManager.Instance.LoadingComplete();
+        if(MenuManager.Instance != null)
+            MenuManager.Instance.LoadingComplete();
         CacheInterstitial();
         CacheRewarded();
     }

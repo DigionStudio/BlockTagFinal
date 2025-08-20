@@ -886,6 +886,7 @@ public class CrushTileCreator : MonoBehaviour, IPointerDownHandler, IPointerUpHa
             }
             FollowCursor.OnMousePressed.Invoke(true);
             boardManager.ChangeMoveStatus(false);
+            TutorialManager.Instance.DisableAbilityShow();
         }
     }
     private void MouseUp()

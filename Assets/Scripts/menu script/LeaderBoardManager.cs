@@ -213,7 +213,7 @@ public class LeaderBoardManager : MonoBehaviour
             scoreValue = player.Score,
 
         };
-        show.SetUp(data, index, CheckCurrentPlayer(player.PlayerId));
+        show.SetUp(data, index, CheckCurrentPlayer(player.PlayerId), true);
     }
 
     private bool CheckCurrentPlayer(string id)

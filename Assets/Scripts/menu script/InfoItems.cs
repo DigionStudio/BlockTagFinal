@@ -16,6 +16,7 @@ public class InfoItems : MonoBehaviour
 
 
 
+    [SerializeField] private ParticleSystem butAbilityEfect;
     [SerializeField] private GameObject unlimitedObj;
     [SerializeField] private Text timeText;
 
@@ -39,6 +40,11 @@ public class InfoItems : MonoBehaviour
         {
             lockObj.SetActive(status);
         }
+    }
+    public void BuyedAbility()
+    {
+        if(butAbilityEfect != null)
+            butAbilityEfect.Play();
     }
 
     public void DetailsLockStatus(bool status, int level)

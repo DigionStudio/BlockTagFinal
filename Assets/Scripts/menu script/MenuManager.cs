@@ -1339,7 +1339,7 @@ public class MenuManager : MonoBehaviour
             }
             else
             {
-                InfoAbilityDataUpdate();
+                InfoAbilityDataUpdate(false);
             }
             infoPanelBg.gameObject.SetActive(true);
             infoPanelTween.panel.DOAnchorPosY(infoPanelTween.posFinalFloat, 0.3f);
@@ -1427,7 +1427,7 @@ public class MenuManager : MonoBehaviour
     private void BuyInfoAbility()
     {
         
-        if (infoAbilityIndex >=0 && infoAbilityIndex != 1 && infoAbilityIndex < abilityData.Length - 1)
+        if (infoAbilityIndex >=0 && infoAbilityIndex != 4 && infoAbilityIndex < abilityData.Length - 1)
         {
             int price = abilityData[infoAbilityIndex].value;
             int coins = gameDataManager.GetSaveValues(0);
@@ -1436,7 +1436,7 @@ public class MenuManager : MonoBehaviour
                 gameDataManager.CoinValueChange(price, false);
                 gameDataManager.GameAbilitySave(infoAbilityIndex, true, abilityData[infoAbilityIndex].count);
             }
-            InfoAbilityDataUpdate();
+            InfoAbilityDataUpdate(true, infoAbilityIndex);
             InfoDetailsPanel(infoAbilityIndex, true);
         }
     }
@@ -1458,29 +1458,44 @@ public class MenuManager : MonoBehaviour
                 }
             }
         }
-        InfoAbilityDataUpdate();
+        InfoAbilityDataUpdate(false);
     }
-    private void InfoAbilityDataUpdate()
+    private void InfoAbilityDataUpdate(bool isBuy, int index = -1)
     {
-        for (int i = 0; i < abilityInfo.Length; i++)
+        if (index >= 0 && isBuy)
         {
-            if (i < abilityData.Length && abilityData[i] != null)
+            UpdateAbilityInfoData(index);
+            if (index < abilityData.Length && abilityData[index] != null)
             {
-                bool status = false;
-                int num = 0;
-                if (abilityData[i].thisType != VariableTypeCode.None)
-                {
-                    status = CheckAbilityLock(abilityData[i].unLockvalue);
-                    num = gameDataManager.GameAbilitySave((int)abilityData[i].thisType - 1, true, 0);
-                }
-                bool ishide = false;
-                if(abilityData[i].thisType == VariableTypeCode.Ability_1)
-                {
-                    ishide = true;
-                }
-                abilityInfo[i].SetUpItemDataForStartUp(abilityData[i].iconSprite, num, "", "", i, true, true, ishide);
-                abilityInfo[i].LockStatus(status);
+                abilityInfo[index].BuyedAbility();
             }
+        }
+        else
+        {
+            for (int i = 0; i < abilityInfo.Length; i++)
+            {
+                UpdateAbilityInfoData(i);
+            }
+        }
+    }
+    private void UpdateAbilityInfoData(int i)
+    {
+        if (i < abilityData.Length && abilityData[i] != null)
+        {
+            bool status = false;
+            int num = 0;
+            if (abilityData[i].thisType != VariableTypeCode.None)
+            {
+                status = CheckAbilityLock(abilityData[i].unLockvalue);
+                num = gameDataManager.GameAbilitySave((int)abilityData[i].thisType - 1, true, 0);
+            }
+            bool ishide = false;
+            if (abilityData[i].thisType == VariableTypeCode.Ability_1)
+            {
+                ishide = true;
+            }
+            abilityInfo[i].SetUpItemDataForStartUp(abilityData[i].iconSprite, num, "", "", i, true, true, ishide);
+            abilityInfo[i].LockStatus(status);
         }
     }
     private bool CheckAbilityLock(int num)

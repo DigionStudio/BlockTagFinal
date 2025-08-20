@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -28,10 +29,16 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject tutorialCutoffMain;
 
     [SerializeField] private GameObject[] tutorialTextObj;
+    [SerializeField] private RectTransform abilityTuteDetailHolder;
+    [SerializeField] private Text abilityTuteDetailText;
+    [SerializeField] private RectTransform abilityTuteDetailPointer;
+
+    
 
     private BoardManager boardManager;
     private ShapeCreator shapeCreator;
     private GameDataManager gameDataManager;
+    private AbilityManager abilityManager;
     public bool isTutorial;
     Vector3 startPosition;
     Vector3 endPosition;
@@ -41,6 +48,7 @@ public class TutorialManager : MonoBehaviour
     private bool isLastStep;
     private int lastStepCount = 1;
     public bool DragTweenStatus { get; set; }
+
 
     private void Awake()
     {
@@ -55,6 +63,7 @@ public class TutorialManager : MonoBehaviour
         boardManager = BoardManager.Instance;
         gameDataManager = boardManager.gameDataManager;
         shapeCreator = ShapeCreator.Instance;
+        abilityManager = AbilityManager.Instance;
         DisableTutorial();
     }
     private void DisableTutorial()
@@ -398,7 +407,6 @@ public class TutorialManager : MonoBehaviour
 
     public void AbilityTutorial(bool status, Vector2 pos)
     {
-        print(status);
         if (status)
         {
             cursorIcon.gameObject.SetActive(true);
@@ -423,4 +431,79 @@ public class TutorialManager : MonoBehaviour
             Button[num].interactable = true;
         }
     }
+
+    private bool isAbilityShow;
+    private Coroutine disableAbilityCoroutine;
+
+    public void SetUpAbilityDetailTutorial(int index, int shapeCode, int num, Vector2 pos)
+    {
+        if (gameDataManager.previousLevel < 20)
+        {
+            string details = string.Empty;
+
+            if ((shapeCode == 12 || shapeCode == 13) && num > 0)
+            {
+                if (num == 1)
+                    details = abilityManager.abilityData[0].working;
+                else if (num == 2)
+                    details = abilityManager.abilityData[6].working;
+                else if (num == 3)
+                    details = abilityManager.abilityData[1].working;
+                else
+                    details = abilityManager.abilityData[7].working;
+            }
+
+            if (!string.IsNullOrEmpty(details))
+            {
+                // Cancel previous coroutine if running
+                if (disableAbilityCoroutine != null)
+                    StopCoroutine(disableAbilityCoroutine);
+
+                isAbilityShow = true;
+                abilityTuteDetailHolder.gameObject.SetActive(true);
+                abilityTuteDetailText.text = details;
+
+                Vector2 screenPoint2 = new Vector2(pos.x, pos.y + 6f);
+                if (pos.x < 4)
+                    screenPoint2.x = 5;
+                else if (pos.x > 15)
+                    screenPoint2.x = 15;
+
+                abilityTuteDetailHolder.position = screenPoint2;
+
+                Vector2 screenPoint = new Vector2(0, -136);
+                if (index == 0)
+                    screenPoint.x = -145f;
+                else if (index == 3)
+                    screenPoint.x = 145f;
+
+                abilityTuteDetailPointer.anchoredPosition = screenPoint;
+
+                // Start new timer
+                disableAbilityCoroutine = StartCoroutine(DisableAbilityShowCO());
+            }
+        }
+    }
+
+    IEnumerator DisableAbilityShowCO()
+    {
+        yield return new WaitForSeconds(5f);
+        DisableAbilityShow();
+    }
+
+    public void DisableAbilityShow()
+    {
+        if (disableAbilityCoroutine != null)
+        {
+            StopCoroutine(disableAbilityCoroutine);
+            disableAbilityCoroutine = null;
+        }
+
+        if (isAbilityShow)
+        {
+            isAbilityShow = false;
+            abilityTuteDetailHolder.gameObject.SetActive(false);
+        }
+    }
+
 }

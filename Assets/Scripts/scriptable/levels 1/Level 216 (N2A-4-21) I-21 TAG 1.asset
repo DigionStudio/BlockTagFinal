@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 216 (N2A-6-21) I-21 TAG 1
+  m_Name: Level 216 (N2A-4-21) I-21 TAG 1
   m_EditorClassIdentifier: 
   levelData:
     moveSpeed: 0.47
@@ -21,8 +21,8 @@ MonoBehaviour:
     targetData:
     - normalBlockType: 1
       blockType: 4
-      gemType: 0
-      count: 6
+      specialObject: 0
+      count: 4
     bgTileData:
     - positionIndex: 10
       tileType: 8
@@ -66,7 +66,7 @@ MonoBehaviour:
       tileType: 8
     - positionIndex: 17
       tileType: 8
-    gemTileData: []
+    specialObjectTileData: []
     moveCount: 21
     totalStarValue: 2300
     reFreshCount: 0

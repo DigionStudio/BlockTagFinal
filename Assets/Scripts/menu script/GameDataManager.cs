@@ -92,7 +92,7 @@ public class GameDataManager : MonoBehaviour
 
     private PlayerGlobalData playerGlobalData;
     private string savePathJson;
-    private int gameTypeCode = 0;
+    private int gameTypeCode = 1;
     private int totalCoin;
     private int totalLife;
     public GiftData[] giftData;

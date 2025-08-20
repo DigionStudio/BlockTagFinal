@@ -76,7 +76,7 @@ public class BoardManager : MonoBehaviour
     private int abilityDiff1 = 5;
     private int abilityDiff2 = 5;
     private bool isMoving;
-    private float moveSpeed = 0.2f;
+    private float moveSpeed = 0.25f;
     private bool isFreezeMove;
     public bool HasFreezed { get { return isFreezeMove; } }
     private float totalFreezeTime = 20f;
@@ -391,8 +391,7 @@ public class BoardManager : MonoBehaviour
             Invoke(nameof(GameEnded), 3f);
 
         }
-        if((isGamewin && gameTypeCode == 1) || gameTypeCode == 0)
-            gameManager.UpdatePointToLeaderboard();
+        gameManager.UpdatePointToLeaderboard(isGamewin);
         InvokeRepeating(nameof(GameEndBlockDes), 0, 0.05f);
     }
     void GameEndBlockDes()
@@ -709,7 +708,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            if (count > 0 && count <= 7)
+            if (count > 0 && count <= 8)
             {
                 if (count > 0 && count <= 4)
                 {
@@ -721,6 +720,7 @@ public class BoardManager : MonoBehaviour
                     {
                         num = 4f;
                     }
+                    UpMoveSpeed();
                 }
                 else
                 {
@@ -751,7 +751,7 @@ public class BoardManager : MonoBehaviour
             {
                 currentCount = 0;
                 if (moveSpeed < 1)
-                    moveSpeed += 0.02f;
+                    moveSpeed += 0.07f;
             }
         }
     }
@@ -1173,10 +1173,10 @@ public class BoardManager : MonoBehaviour
                 }
             }
             bool effet = false;
-            if(num >= 20)
+            if(num >= 30)
             {
                 effet = true;
-                if(num >= 40)
+                if(num >= 55)
                 {
                     showTextIndex = 5;
                 }

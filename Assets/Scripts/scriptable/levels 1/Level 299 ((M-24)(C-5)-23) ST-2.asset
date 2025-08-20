@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 299 ((M-24)(C-5)-23)
+  m_Name: Level 299 ((M-24)(C-5)-23) ST-2
   m_EditorClassIdentifier: 
   levelData:
     moveSpeed: 0.4
