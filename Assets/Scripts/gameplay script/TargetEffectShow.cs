@@ -33,7 +33,7 @@ public class TargetEffectShow : MonoBehaviour
     private void ScaleAnim()
     {
         transform.DOScale(1.2f, 0.35f);
-        transform.DOScale(0.8f, 0.6f).SetDelay(0.3f);
+        transform.DOScale(0.9f, 0.6f).SetDelay(0.3f);
     }
 
     private void SetUpShow(Normal_Block_Type type, BlockType abilityType, Special_Object_Type gemType)

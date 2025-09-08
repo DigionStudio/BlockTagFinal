@@ -13,70 +13,81 @@ MonoBehaviour:
   m_Name: Level 516
   m_EditorClassIdentifier: 
   levelData:
+    moveSpeed: 0.46
     isScoreTarget: 0
     isBombAbility: 0
     isTagAbility: 0
     shapeCodes: []
     targetData:
-    - normalBlockType: 7
+    - normalBlockType: 8
       blockType: 6
-      gemType: 0
-      count: 24
+      specialObject: 0
+      count: 28
+    - normalBlockType: 2
+      blockType: 2
+      specialObject: 0
+      count: 3
     bgTileData:
-    - positionIndex: 31
-      tileType: 13
-    - positionIndex: 30
-      tileType: 7
-    - positionIndex: 21
-      tileType: 7
-    - positionIndex: 22
-      tileType: 7
-    - positionIndex: 23
-      tileType: 7
-    - positionIndex: 32
-      tileType: 7
-    - positionIndex: 41
-      tileType: 7
-    - positionIndex: 40
-      tileType: 7
-    - positionIndex: 39
-      tileType: 7
-    - positionIndex: 49
-      tileType: 7
-    - positionIndex: 33
-      tileType: 7
-    - positionIndex: 13
-      tileType: 7
-    - positionIndex: 29
-      tileType: 7
-    - positionIndex: 38
-      tileType: 7
+    - positionIndex: 67
+      tileType: 8
+    - positionIndex: 59
+      tileType: 8
+    - positionIndex: 51
+      tileType: 8
+    - positionIndex: 43
+      tileType: 8
+    - positionIndex: 60
+      tileType: 8
+    - positionIndex: 77
+      tileType: 8
+    - positionIndex: 69
+      tileType: 8
+    - positionIndex: 61
+      tileType: 8
+    - positionIndex: 53
+      tileType: 8
     - positionIndex: 48
-      tileType: 7
-    - positionIndex: 58
-      tileType: 7
-    - positionIndex: 50
-      tileType: 7
-    - positionIndex: 42
-      tileType: 7
-    - positionIndex: 34
-      tileType: 7
-    - positionIndex: 24
-      tileType: 7
-    - positionIndex: 14
-      tileType: 7
-    - positionIndex: 4
-      tileType: 7
-    - positionIndex: 12
-      tileType: 7
-    - positionIndex: 20
-      tileType: 7
-    - positionIndex: 28
-      tileType: 7
-    gemTileData: []
-    moveCount: 25
-    totalStarValue: 8000
+      tileType: 8
+    - positionIndex: 40
+      tileType: 8
+    - positionIndex: 32
+      tileType: 8
+    - positionIndex: 47
+      tileType: 8
+    - positionIndex: 39
+      tileType: 8
+    - positionIndex: 31
+      tileType: 8
+    - positionIndex: 23
+      tileType: 8
+    - positionIndex: 38
+      tileType: 8
+    - positionIndex: 30
+      tileType: 8
+    - positionIndex: 22
+      tileType: 8
+    - positionIndex: 19
+      tileType: 8
+    - positionIndex: 3
+      tileType: 8
+    - positionIndex: 11
+      tileType: 8
+    - positionIndex: 27
+      tileType: 8
+    - positionIndex: 18
+      tileType: 8
+    - positionIndex: 10
+      tileType: 8
+    - positionIndex: 2
+      tileType: 8
+    - positionIndex: 68
+      tileType: 8
+    - positionIndex: 52
+      tileType: 8
+    specialObjectTileData: []
+    moveCount: 22
+    totalStarValue: 4500
     reFreshCount: 0
-    ability1Value: 7
-    ability2Value: 5
-    levelNumber: 400
+    ability1Value: 5
+    ability2Value: 4
+    levelNumber: 515

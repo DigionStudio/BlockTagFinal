@@ -46,23 +46,17 @@ MonoBehaviour:
       tileType: 8
     - positionIndex: 16
       tileType: 8
-    - positionIndex: 25
-      tileType: 8
     - positionIndex: 8
       tileType: 8
     - positionIndex: 9
       tileType: 8
     - positionIndex: 12
       tileType: 8
-    - positionIndex: 17
-      tileType: 8
-    - positionIndex: 18
-      tileType: 8
     - positionIndex: 31
       tileType: 8
     - positionIndex: 14
       tileType: 8
-    gemTileData: []
+    specialObjectTileData: []
     moveCount: 25
     totalStarValue: 4500
     reFreshCount: 0

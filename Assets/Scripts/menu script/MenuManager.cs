@@ -164,6 +164,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Text movetext;
     [SerializeField] private Text levelText;
     [SerializeField] private Button playButton;
+    [SerializeField] private Button winButton;
     [SerializeField] private Button crossButton;
     [SerializeField] private Button levelPlayButton;
     [SerializeField] private MenuLevelData menuLevelData;
@@ -298,6 +299,10 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
+        winButton.gameObject.SetActive(false);
+#if UNITY_EDITOR
+        winButton.gameObject.SetActive(true);
+#endif
         if (gameDataManager == null)
             gameDataManager = BlockManager.Instance.gameDataManager;
         if (goalsManager == null)
@@ -332,6 +337,7 @@ public class MenuManager : MonoBehaviour
         blockIconButton.onClick.AddListener(BlockTilePanelStatus);
         blockIconCrossButton.onClick.AddListener(BlockTilePanelStatus);
         playButton.onClick.AddListener(LevelPlay);
+        winButton.onClick.AddListener(TestLevelWin);
         crossButton.onClick.AddListener(DisableLevelShow);
         levelPlayButton.onClick.AddListener(PlayLevel);
         quitButton.onClick.AddListener(QuitGame);
@@ -688,6 +694,26 @@ public class MenuManager : MonoBehaviour
         gameDataManager.CheckForFreeClaim(-1, true);
         StartLevelPlay();
 
+    }
+
+    private void TestLevelWin()
+    {
+        gameDataManager.levelData = levelData;
+        gameDataManager.currentLevel = levelData.levelNumber;
+        gameDataManager.GameTypeCode = 1;
+        gameDataManager.isMenuOpened = false;
+        Invoke(nameof(SetTestLevelWin), 0.3f);
+    }
+    private void SetTestLevelWin()
+    {
+        gameDataManager.UpdatePlayerData(levelData.levelNumber, 3, 0, 0, 1);
+        Invoke(nameof(MenuSceneLoad), 0.3f);
+
+    }
+
+    private void MenuSceneLoad()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void StartLevelPlay()

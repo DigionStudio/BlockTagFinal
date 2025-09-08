@@ -11,6 +11,12 @@ public class LevelEditManager : MonoBehaviour
 {
     public LevelDataInfo[] levelDataInfos;
     private int currentLevelIndex;
+    public TargetShow[] targetShowUI;
+    public BlockTypeData currentTileData;
+    [SerializeField] private Sprite colorBombSprite;
+    [SerializeField] private Sprite emptySprite;
+    [SerializeField] private Sprite multySprite;
+    [SerializeField] private Sprite[] ObsTargetSprite;
 
 
     public LevelData thisLevelDataInfo;
@@ -28,6 +34,7 @@ public class LevelEditManager : MonoBehaviour
     public InputField levelNumber;
     public InputField moveCount;
     public InputField totalStar;
+    public InputField speed;
     public InputField refreshCount;
     public InputField ability1;
     public InputField ability2;
@@ -51,6 +58,7 @@ public class LevelEditManager : MonoBehaviour
 
         moveCount.onValueChanged.AddListener(OnMoveCountChange);
         totalStar.onValueChanged.AddListener(OnTotalStarChange);
+        speed.onValueChanged.AddListener(OnSpeedChange);
         refreshCount.onValueChanged.AddListener(OnRefreshChange);
         ability1.onValueChanged.AddListener(OnAbility1Change);
         ability2.onValueChanged.AddListener(OnAbility2Change);
@@ -115,17 +123,76 @@ public class LevelEditManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
+            TargetShow showUI = targetShowUI[i];
             LevelTargetShow leveltargetHolder = levelTargetHolders[i];
             if (i < count)
             {
+                showUI.gameObject.SetActive(true);
                 leveltargetHolder.gameObject.SetActive(true);
                 leveltargetHolder.SetUp(i, thisLevelDataInfo, this);
+                GetTargetIcons(showUI, thisLevelDataInfo.targetData[i]);
             }
             else
             {
+                showUI.gameObject.SetActive(false);
                 leveltargetHolder.gameObject.SetActive(false);
             }
         }
+    }
+
+    private void GetTargetIcons(TargetShow showUI, TargetData data)
+    {
+        Sprite abilitySprite = emptySprite;
+        Sprite iconSprite = emptySprite;
+        bool isAbility = false;
+        if (data.specialObject == Special_Object_Type.none)
+        {
+
+
+            int blocktype = (int)data.normalBlockType;
+            int abilitytype = (int)data.blockType;
+            if (blocktype >= 0 && blocktype < 5)
+            {
+                iconSprite = currentTileData.blockTileSprite[blocktype];
+
+            }else if(blocktype == 5)
+            {
+                iconSprite = emptySprite;
+            }
+            else
+            {
+                int num = blocktype - 7;
+                iconSprite = ObsTargetSprite[num];
+            }
+
+            if (data.blockType != BlockType.Normal_Block && data.blockType != BlockType.None)
+            {
+                isAbility = true;
+                if (abilitytype > 0 && abilitytype <= 4)
+                {
+                    abilitySprite = currentTileData.abilityTileSprite[abilitytype - 1];
+                }
+                else
+                {
+                    if (abilitytype == 5)
+                    {
+                        abilitySprite = colorBombSprite;
+                    }
+                }
+            }
+            else
+            {
+                if (blocktype == 5 && data.blockType == BlockType.Normal_Block)
+                {
+                    iconSprite = multySprite;
+                }
+            }
+
+        }
+        else
+        {
+        }
+        showUI.SetUpLevelEditor(iconSprite, abilitySprite, data.count, isAbility);
     }
     private void OnLevelNumberChange(string value)
     {
@@ -214,6 +281,17 @@ public class LevelEditManager : MonoBehaviour
             if (count > 0)
             {
                 thisLevelDataInfo.reFreshCount = count;
+            }
+        }
+    }
+    private void OnSpeedChange(string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            float count = float.Parse(value);
+            if (count > 0)
+            {
+                thisLevelDataInfo.moveSpeed = count;
             }
         }
     }
@@ -348,6 +426,7 @@ public class LevelEditManager : MonoBehaviour
 
         moveCount.text = thisLevelDataInfo.moveCount.ToString();
         totalStar.text = thisLevelDataInfo.totalStarValue.ToString();
+        speed.text = thisLevelDataInfo.moveSpeed.ToString();
         refreshCount.text = thisLevelDataInfo.reFreshCount.ToString();
         ability1.text = thisLevelDataInfo.ability1Value.ToString();
         ability2.text = thisLevelDataInfo.ability2Value.ToString();

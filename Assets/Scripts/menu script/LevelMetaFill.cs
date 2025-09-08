@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [Serializable]
 public class MetaFill
 {
@@ -31,6 +32,21 @@ public class LevelMetaFill : MonoBehaviour
     public bool HasMetaFill { get; private set; }
     private int currentSlideIndex;
     private bool isSetUp = false;
+
+    //private void OnValidate()
+    //{
+    //    CheckForCount();
+    //}
+    //private void CheckForCount()
+    //{
+    //    for (int i = 0; i < levelMetaHoldes.Length; i++)
+    //    {
+    //        int levelCount = levelMetaHoldes[i].levelMax - levelMetaHoldes[i].levelMin;
+    //        MetaItem[] content = levelMetaHoldes[i].trans.GetComponentsInChildren<MetaItem>();
+    //        print("Content " + i + " :- " + levelCount + " / " + content.Length);
+    //    }
+    //}
+
     void Start()
     {
         SetUp();

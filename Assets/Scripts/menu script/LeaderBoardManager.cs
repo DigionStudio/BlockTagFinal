@@ -130,7 +130,7 @@ public class LeaderBoardManager : MonoBehaviour
 
     private void SelectButton(int index)
     {
-        if (currentButton != null)
+        if (currentButton != null && currentButton.useButton != null)
         {
             CurrentButtonStatus(true);
         }

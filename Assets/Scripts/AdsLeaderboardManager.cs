@@ -11,6 +11,7 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
     public static AdsLeaderboardManager Instance;
 
     public bool isTesting;
+    public bool isLeaderboardInitialize;
     public bool isAdsInitialized { get; set; }
     private bool IsAdReady;
     private bool isInterCalled = false;
@@ -88,12 +89,12 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
 
     public void UpdateScore(int score)
     {
-        if (isOnline)
+        if (isOnline && isLeaderboardInitialize)
             SubmitTotalScore(score);
     }
     public void SubmitDataIntoLeaderboard(int newStar, int score, bool isHigh)
     {
-        if (isOnline)
+        if (isOnline && isLeaderboardInitialize)
         {
             SubmitStarScore(newStar);
             SubmitHighestScore(score, isHigh);
@@ -375,7 +376,7 @@ public class AdsLeaderboardManager : MonoBehaviour,IUnityAdsLoadListener,IUnityA
             eventName = "Restart_Level";
             restart = true;
         }
-        if (!string.IsNullOrEmpty(eventName) && isOnline)
+        if (!string.IsNullOrEmpty(eventName) && isOnline && isLeaderboardInitialize)
         {
             UploadAnalytics(eventName, code, restart);
         }

@@ -21,7 +21,7 @@ MonoBehaviour:
     targetData:
     - normalBlockType: 8
       blockType: 6
-      gemType: 0
+      specialObject: 0
       count: 18
     bgTileData:
     - positionIndex: 10
@@ -42,25 +42,25 @@ MonoBehaviour:
       tileType: 8
     - positionIndex: 36
       tileType: 8
-    - positionIndex: 14
+    - positionIndex: 59
       tileType: 8
-    - positionIndex: 15
+    - positionIndex: 60
       tileType: 8
-    - positionIndex: 16
+    - positionIndex: 61
       tileType: 8
-    - positionIndex: 24
-      tileType: 8
-    - positionIndex: 25
-      tileType: 8
-    - positionIndex: 26
-      tileType: 8
-    - positionIndex: 34
-      tileType: 8
-    - positionIndex: 35
+    - positionIndex: 53
       tileType: 8
     - positionIndex: 44
       tileType: 8
-    gemTileData: []
+    - positionIndex: 35
+      tileType: 8
+    - positionIndex: 43
+      tileType: 8
+    - positionIndex: 52
+      tileType: 8
+    - positionIndex: 51
+      tileType: 8
+    specialObjectTileData: []
     moveCount: 19
     totalStarValue: 2000
     reFreshCount: 0

@@ -708,7 +708,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            if (count > 0 && count <= 8)
+            if (count > 0 && count <= 7)
             {
                 if (count > 0 && count <= 4)
                 {

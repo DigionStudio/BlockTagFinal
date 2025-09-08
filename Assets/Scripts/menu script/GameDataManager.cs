@@ -157,7 +157,7 @@ public class GameDataManager : MonoBehaviour
 
     private string GeneratePlayerName()
     {
-        string playername = "ID";
+        string playername = "PL";
         int num = UnityEngine.Random.Range(1000, 10000);
         playername += num.ToString();
         return playername;

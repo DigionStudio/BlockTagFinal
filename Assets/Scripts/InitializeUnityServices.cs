@@ -50,6 +50,8 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
         gameDataManager = BlockManager.Instance.gameDataManager;
         leaderBoardManager = LeaderBoardManager.Instance;
         adsLeaderboardManager = AdsLeaderboardManager.Instance;
+        adsLeaderboardManager.isLeaderboardInitialize = false;
+
         isGameStart = false;
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
@@ -110,6 +112,7 @@ public class InitializeUnityServices : MonoBehaviour, IUnityAdsInitializationLis
             if (UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn)
             {
                 isInisialize = true;
+                adsLeaderboardManager.isLeaderboardInitialize = true;
             }
             if (isInisialize)
             {

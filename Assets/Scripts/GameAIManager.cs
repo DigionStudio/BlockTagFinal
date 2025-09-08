@@ -85,7 +85,7 @@ public class GameAIManager : MonoBehaviour
         Invoke(nameof(DisableWandActive), 1f);
     }
 
-    private void DisableWandActive()
+    public void DisableWandActive()
     {
         activeEffect.SetActive(false);
         wandActiveHolder.SetActive(false);

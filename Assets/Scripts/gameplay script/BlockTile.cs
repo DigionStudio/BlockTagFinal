@@ -25,7 +25,7 @@ public class BlockTile : MonoBehaviour
     private int columnValue;
     private int colorCode;
     private Color thisColor = new Color(1, 1, 1, 1f);
-    private Color thisSelectedColor = new Color(1, 1, 1, 0.5f);
+    private Color thisSelectedColor = new Color(0.4f, 0.4f, 0.4f, 1f);
     private GameObject effectObj;
     private GameObject abilityShowObject;
     private GameObject abilityEffectObj;

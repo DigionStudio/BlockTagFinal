@@ -393,7 +393,7 @@ public class UiManager : MonoBehaviour
 
     private void Restart()
     {
-        if(!isUsergameEnd && GameTypeCode == 1)
+        if(!isUsergameEnd && GameTypeCode == 1 && gameDataManager.isBombAiAsist)
             gameDataManager.rePlayCount++;
         SceneManager.LoadScene(1);
     }
@@ -744,6 +744,7 @@ public class UiManager : MonoBehaviour
         gameOverPanel.gameObject.SetActive(true);
         TutorialManager.Instance.DisableAbilityShow();
         abilityManager.TuteDisable();
+        GameAIManager.Instance.DisableWandActive();
         ChangePanelPos(false, panelTween, true, 0.3f);
         bool isNewHIgh = ChekforNewHighScore();
         if (isNewHIgh)
@@ -820,7 +821,6 @@ public class UiManager : MonoBehaviour
         overPoints[0].SetUp(currentScoreInt);
         overPoints[1].SetUp(highScoreInt, num);
         overPoints[2].SetUp(currentHitPoint);
-        AdsLeaderboardManager.Instance.CheckAnalyticsEvent(4);
 
         if (gameDataManager.GameTypeCode == 0)
         {
@@ -830,6 +830,7 @@ public class UiManager : MonoBehaviour
         {
             TweenPanel(true, gameOverButtonPanelTween, 0.5f);
         }
+        AdsLeaderboardManager.Instance.CheckAnalyticsEvent(4);
     }
 
     private void ChangePanelPos(bool isfinalpos, PanelTween[] tweenPanel,bool isGame, float duration = 0)

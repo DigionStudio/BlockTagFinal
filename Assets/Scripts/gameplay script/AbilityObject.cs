@@ -265,11 +265,11 @@ public class AbilityObject : MonoBehaviour
     public void ShowThunder(Sprite icon)
     {
         ShowIconChange(icon);
-        animObjTrans.localScale = Vector3.one * 2.1f;
+        animObjTrans.localScale = Vector3.one * 2.7f;
         abilityEffect.transform.localScale = Vector3.one * 3f;
         transform.DOMove(new Vector3(10, 0, 0), 0.7f).OnComplete(() =>
         {
-            animObjTrans.DOScale(2.4f, 0.3f).SetDelay(1f).OnComplete(() =>
+            animObjTrans.DOScale(3f, 0.3f).SetDelay(1f).OnComplete(() =>
             {
                 animObjTrans.DOScale(0.1f, 0.3f);
                 AnimOver();

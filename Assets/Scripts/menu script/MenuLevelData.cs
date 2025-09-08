@@ -51,6 +51,68 @@ public class MenuLevelData : MonoBehaviour
 
     public Image[] bgImages;
 
+    //private float[] starValueCode = new float[7] {-1, 0, 1, 1, 1, 2, 2};
+    //private int avarageMovetoStarValue = 150;
+    //private float incrementValue = 50;
+    //public List<int> starValueList = new List<int>();
+
+
+    ////star value algorithm
+    //private void OnValidate()
+    //{
+    //    starValueList.Clear();
+    //    for (int i = 0; i < levelDataInfos.Length; i++)
+    //    {
+    //        if (!levelDataInfos[i].levelData.isScoreTarget)
+    //        {
+    //            int value = CalculateStarData(levelDataInfos[i].levelData);
+    //            starValueList.Add(value);
+    //            if (i > 15)
+    //                levelDataInfos[i].levelData.totalStarValue = starValueList[i];
+    //        }
+    //        else
+    //        {
+    //            starValueList.Add(levelDataInfos[i].levelData.totalStarValue);
+
+    //        }
+    //    }
+    //}
+
+    //private int CalculateStarData(LevelData data)
+    //{
+    //    int codeindex = UnityEngine.Random.Range(0, starValueCode.Length);
+    //    float code = starValueCode[codeindex];
+    //    if (data.ability1Value >= 5)
+    //    {
+    //        code += 0.5f;
+    //    }
+    //    if (data.ability2Value >= 5)
+    //    {
+    //        code += 0.5f;
+    //    }
+    //    if (data.isBombAbility || data.isTagAbility)
+    //    {
+    //        code += 0.5f;
+    //    }
+    //    if (data.bgTileData.Length > 0)
+    //    {
+    //        code -= 0.35f;
+    //        if (data.bgTileData.Length > 25)
+    //        {
+    //            code -= 0.35f;
+    //        }
+    //        if (code > 1 && ((data.ability2Value == 3) || (data.ability2Value <= 3 && data.ability1Value <= 5)))
+    //        {
+    //            code -= 0.5f;
+    //        }
+
+    //    }
+    //    int starValue = (avarageMovetoStarValue + (int)(incrementValue * code)) * data.moveCount;
+    //    return starValue;
+    //}
+
+
+    //// level Data update
     //private void OnValidate()
     //{
     //    ////Level Speed Data Set
@@ -66,13 +128,15 @@ public class MenuLevelData : MonoBehaviour
     //    //    }
     //    //}
 
-    //    ////Level BG images position Set
-    //    //for (int i = 1; i < bgImages.Length; i++)
-    //    //{
-    //    //    float posy = bgImages[i - 1].anchoredPosition.y + 1601;
-    //    //    bgImages[i].anchoredPosition = new Vector2(0, posy);
-    //    //}
-    //    CheckForLevelTargets();
+    //    //Level BG images position Set
+    //    for (int i = 46; i < bgImages.Length; i++)
+    //    {
+    //        RectTransform rect = bgImages[i].GetComponent<RectTransform>();
+    //        RectTransform rect1 = bgImages[i - 1].GetComponent<RectTransform>();
+    //        float posy = rect1.anchoredPosition.y + 1601;
+    //        rect.anchoredPosition = new Vector2(0, posy);
+    //    }
+    //    //CheckForLevelTargets();
     //}
 
     //private void CheckForLevelTargets()
@@ -114,7 +178,7 @@ public class MenuLevelData : MonoBehaviour
     //            issingle = false;
     //        for (int i = 0; i < count; i++)
     //        {
-                
+
     //            middle += (TargetElementCode(i, levelData, issingle));
     //        }
     //        code = codefirst + middle + "-" + levelData.moveCount.ToString() + codelast;

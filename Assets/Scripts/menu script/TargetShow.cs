@@ -11,6 +11,14 @@ public class TargetShow : MonoBehaviour
     private BlockManager blockManager;
     private Animator animator;
 
+    public void SetUpLevelEditor(Sprite iconSprite, Sprite abilitySprite, int count, bool isAbility)
+    {
+        targetIcon.sprite = iconSprite;
+        countText.text = count.ToString();
+        abilityIcon.sprite = abilitySprite;
+        abilityIcon.enabled = isAbility;
+    }
+
     public void SetUp(TargetData data)
     {
         animator = targetIcon.GetComponent<Animator>();

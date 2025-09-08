@@ -20,7 +20,7 @@ MonoBehaviour:
     shapeCodes: []
     targetData: []
     bgTileData: []
-    gemTileData: []
+    specialObjectTileData: []
     moveCount: 10
     totalStarValue: 700
     reFreshCount: 0

@@ -553,7 +553,7 @@ public class GameManager : MonoBehaviour
 
     public void GameEndMoveDecrese()
     {
-        CalculatePoints((moveCount - currentMoveCount) * 50, false);
+        CalculatePoints((moveCount - currentMoveCount) * 15, false);
         StartCoroutine(DecreseMoveEfectCo());
     }
 

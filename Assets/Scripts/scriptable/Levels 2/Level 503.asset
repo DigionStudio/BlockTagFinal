@@ -13,70 +13,97 @@ MonoBehaviour:
   m_Name: Level 503
   m_EditorClassIdentifier: 
   levelData:
+    moveSpeed: 0.5
     isScoreTarget: 0
     isBombAbility: 0
     isTagAbility: 0
     shapeCodes: []
     targetData:
-    - normalBlockType: 7
+    - normalBlockType: 11
       blockType: 6
-      gemType: 0
-      count: 24
+      specialObject: 0
+      count: 36
+    - normalBlockType: 4
+      blockType: 5
+      specialObject: 0
+      count: 3
     bgTileData:
-    - positionIndex: 31
-      tileType: 13
-    - positionIndex: 30
-      tileType: 7
-    - positionIndex: 21
-      tileType: 7
-    - positionIndex: 22
-      tileType: 7
-    - positionIndex: 23
-      tileType: 7
-    - positionIndex: 32
-      tileType: 7
-    - positionIndex: 41
-      tileType: 7
-    - positionIndex: 40
-      tileType: 7
-    - positionIndex: 39
-      tileType: 7
-    - positionIndex: 49
-      tileType: 7
-    - positionIndex: 33
-      tileType: 7
-    - positionIndex: 13
-      tileType: 7
-    - positionIndex: 29
-      tileType: 7
-    - positionIndex: 38
-      tileType: 7
-    - positionIndex: 48
-      tileType: 7
-    - positionIndex: 58
-      tileType: 7
-    - positionIndex: 50
-      tileType: 7
-    - positionIndex: 42
-      tileType: 7
-    - positionIndex: 34
-      tileType: 7
+    - positionIndex: 15
+      tileType: 11
+    - positionIndex: 25
+      tileType: 11
     - positionIndex: 24
-      tileType: 7
-    - positionIndex: 14
-      tileType: 7
-    - positionIndex: 4
-      tileType: 7
-    - positionIndex: 12
-      tileType: 7
+      tileType: 11
+    - positionIndex: 32
+      tileType: 11
+    - positionIndex: 23
+      tileType: 11
+    - positionIndex: 33
+      tileType: 11
+    - positionIndex: 31
+      tileType: 11
+    - positionIndex: 41
+      tileType: 11
+    - positionIndex: 40
+      tileType: 11
+    - positionIndex: 39
+      tileType: 11
+    - positionIndex: 38
+      tileType: 11
+    - positionIndex: 47
+      tileType: 11
+    - positionIndex: 56
+      tileType: 11
+    - positionIndex: 57
+      tileType: 11
+    - positionIndex: 58
+      tileType: 11
+    - positionIndex: 49
+      tileType: 11
+    - positionIndex: 48
+      tileType: 11
+    - positionIndex: 55
+      tileType: 11
+    - positionIndex: 65
+      tileType: 11
+    - positionIndex: 42
+      tileType: 11
+    - positionIndex: 22
+      tileType: 11
     - positionIndex: 20
-      tileType: 7
-    - positionIndex: 28
-      tileType: 7
-    gemTileData: []
-    moveCount: 25
-    totalStarValue: 8000
+      tileType: 11
+    - positionIndex: 19
+      tileType: 11
+    - positionIndex: 10
+      tileType: 11
+    - positionIndex: 11
+      tileType: 11
+    - positionIndex: 1
+      tileType: 11
+    - positionIndex: 9
+      tileType: 11
+    - positionIndex: 16
+      tileType: 11
+    - positionIndex: 7
+      tileType: 11
+    - positionIndex: 17
+      tileType: 11
+    - positionIndex: 8
+      tileType: 11
+    - positionIndex: 64
+      tileType: 11
+    - positionIndex: 63
+      tileType: 11
+    - positionIndex: 72
+      tileType: 11
+    - positionIndex: 73
+      tileType: 11
+    - positionIndex: 0
+      tileType: 11
+    specialObjectTileData: []
+    moveCount: 22
+    totalStarValue: 4000
     reFreshCount: 0
-    ability1Value: 7
+    ability1Value: 5
     ability2Value: 5
-    levelNumber: 400
+    levelNumber: 502
