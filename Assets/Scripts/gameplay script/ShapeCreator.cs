@@ -223,7 +223,7 @@ public class ShapeCreator : MonoBehaviour
             }
             else
             {
-                if (shapeIds.Contains(index))
+                if ((index == 12 && shapeIds.Contains(13)) || (index == 13 && shapeIds.Contains(13)))
                 {
                     isAbility = true;
                 }

@@ -60,8 +60,8 @@ MonoBehaviour:
       tileType: 8
     specialObjectTileData: []
     moveCount: 12
-    totalStarValue: 2600
+    totalStarValue: 3624
     reFreshCount: 0
-    ability1Value: 4
+    ability1Value: 3
     ability2Value: 5
     levelNumber: 383

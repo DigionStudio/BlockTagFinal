@@ -44,7 +44,7 @@ public class SelectTagShape : MonoBehaviour
     private bool buttonstatus2;
     private MenuManager menuManager;
     private bool isTagSelect;
-    private int totalBuyValue = 50;
+    private int totalBuyValue = 100;
     private int buyValue;
     private int buyValue2;
 
@@ -118,8 +118,6 @@ public class SelectTagShape : MonoBehaviour
 
     public void AbilityStatus(bool isBombUnlocked, bool isAbilityUnlocked, int level)
     {
-        buyValue = totalBuyValue;
-        buyValue2 = totalBuyValue;
         unlockvalueObj[0].SetActive(!isBombUnlocked);
         unlockvalueObj[1].SetActive(!isAbilityUnlocked);
         buyValue = (totalBuyValue * ((level / totalBuyValue) + 3));

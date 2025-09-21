@@ -22,7 +22,7 @@ MonoBehaviour:
     - normalBlockType: 3
       blockType: 1
       specialObject: 0
-      count: 7
+      count: 5
     - normalBlockType: 2
       blockType: 0
       specialObject: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
     bgTileData: []
     specialObjectTileData: []
     moveCount: 19
-    totalStarValue: 2000
+    totalStarValue: 4541
     reFreshCount: 0
     ability1Value: 5
     ability2Value: 3

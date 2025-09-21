@@ -30,8 +30,8 @@ MonoBehaviour:
     bgTileData: []
     specialObjectTileData: []
     moveCount: 14
-    totalStarValue: 3500
+    totalStarValue: 2416
     reFreshCount: 0
     ability1Value: 5
-    ability2Value: 4
+    ability2Value: 3
     levelNumber: 313

@@ -20,12 +20,12 @@ MonoBehaviour:
     shapeCodes: []
     targetData:
     - normalBlockType: 3
-      blockType: 1
-      gemType: 0
+      blockType: 0
+      specialObject: 0
       count: 20
     - normalBlockType: 8
       blockType: 6
-      gemType: 0
+      specialObject: 0
       count: 20
     bgTileData:
     - positionIndex: 9
@@ -68,10 +68,10 @@ MonoBehaviour:
       tileType: 8
     - positionIndex: 51
       tileType: 8
-    gemTileData: []
+    specialObjectTileData: []
     moveCount: 23
-    totalStarValue: 3500
+    totalStarValue: 2714
     reFreshCount: 0
     ability1Value: 4
-    ability2Value: 4
+    ability2Value: 3
     levelNumber: 234

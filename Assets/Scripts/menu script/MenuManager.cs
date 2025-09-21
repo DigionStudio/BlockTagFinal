@@ -735,7 +735,9 @@ public class MenuManager : MonoBehaviour
 
         AdsLeaderboardManager.Instance.CheckAnalyticsEvent(5, gameDataManager.currentLevel);
         goalsManager.isNewLevel = CheckForNewlevel(levelData.levelNumber);
-        Invoke(nameof(GameLoad), 0.3f);
+        gameDataManager.SetGiftIndexes();
+        BackButton(0.5f);
+        Invoke(nameof(GameLoad), 1f);
     }
 
     private void SetWandStatus(bool status)

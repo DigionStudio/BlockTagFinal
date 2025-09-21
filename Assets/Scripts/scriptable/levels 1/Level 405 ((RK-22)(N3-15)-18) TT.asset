@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level 405 ((RK-22)(N3-15)-18) TT
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.3
+    moveSpeed: 0.47
     isScoreTarget: 0
     isBombAbility: 0
     isTagAbility: 0
@@ -76,8 +76,8 @@ MonoBehaviour:
       tileType: 9
     specialObjectTileData: []
     moveCount: 18
-    totalStarValue: 5000
+    totalStarValue: 4356
     reFreshCount: 0
-    ability1Value: 5
-    ability2Value: 7
+    ability1Value: 3
+    ability2Value: 5
     levelNumber: 404

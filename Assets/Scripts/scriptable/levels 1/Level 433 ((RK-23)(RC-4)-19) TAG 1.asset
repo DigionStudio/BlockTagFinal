@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
+  m_Name: Level 433 ((RK-23)(RC-4)-19) TAG 1
+  m_EditorClassIdentifier: 
+  levelData:
+    moveSpeed: 0.3
+    isScoreTarget: 0
+    isBombAbility: 0
+    isTagAbility: 1
+    shapeCodes: []
+    targetData:
+    - normalBlockType: 9
+      blockType: 6
+      specialObject: 0
+      count: 23
+    - normalBlockType: 5
+      blockType: 3
+      specialObject: 0
+      count: 4
+    bgTileData:
+    - positionIndex: 20
+      tileType: 9
+    - positionIndex: 46
+      tileType: 9
+    - positionIndex: 47
+      tileType: 9
+    - positionIndex: 57
+      tileType: 9
+    - positionIndex: 21
+      tileType: 9
+    - positionIndex: 24
+      tileType: 9
+    - positionIndex: 23
+      tileType: 9
+    - positionIndex: 52
+      tileType: 9
+    - positionIndex: 59
+      tileType: 9
+    - positionIndex: 51
+      tileType: 9
+    - positionIndex: 13
+      tileType: 9
+    - positionIndex: 67
+      tileType: 9
+    - positionIndex: 58
+      tileType: 9
+    - positionIndex: 12
+      tileType: 9
+    - positionIndex: 14
+      tileType: 9
+    - positionIndex: 4
+      tileType: 9
+    - positionIndex: 56
+      tileType: 9
+    - positionIndex: 60
+      tileType: 9
+    - positionIndex: 66
+      tileType: 9
+    - positionIndex: 68
+      tileType: 9
+    - positionIndex: 76
+      tileType: 9
+    - positionIndex: 48
+      tileType: 9
+    - positionIndex: 50
+      tileType: 9
+    specialObjectTileData: []
+    moveCount: 19
+    totalStarValue: 4607
+    reFreshCount: 0
+    ability1Value: 5
+    ability2Value: 3
+    levelNumber: 432

@@ -41,7 +41,7 @@ public class LevelMetaFill : MonoBehaviour
     //{
     //    for (int i = 0; i < levelMetaHoldes.Length; i++)
     //    {
-    //        int levelCount = levelMetaHoldes[i].levelMax - levelMetaHoldes[i].levelMin;
+    //        int levelCount = (levelMetaHoldes[i].levelMax - levelMetaHoldes[i].levelMin) + 1;
     //        MetaItem[] content = levelMetaHoldes[i].trans.GetComponentsInChildren<MetaItem>();
     //        print("Content " + i + " :- " + levelCount + " / " + content.Length);
     //    }

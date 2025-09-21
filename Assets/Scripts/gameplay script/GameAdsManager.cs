@@ -65,18 +65,11 @@ public class GameAdsManager : MonoBehaviour
 
     public void Show_Reward_Ads()
     {
-        if (!isAdsDisable)
+        if (adsLeaderboardManager.HasRVReady())
         {
-            if (adsLeaderboardManager.HasRVReady())
-            {
-                code = 0;
-                uiManager.AdsGameSountSetup(true);
-                adsLeaderboardManager.ShowRewarded();
-            }
-        }
-        else
-        {
-            Reward();
+            code = 0;
+            uiManager.AdsGameSountSetup(true);
+            adsLeaderboardManager.ShowRewarded();
         }
     }
 

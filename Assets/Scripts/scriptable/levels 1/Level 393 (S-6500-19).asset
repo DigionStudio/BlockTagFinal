@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level 393 (S-6500-19)
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.3
+    moveSpeed: 0.46
     isScoreTarget: 1
     isBombAbility: 0
     isTagAbility: 0

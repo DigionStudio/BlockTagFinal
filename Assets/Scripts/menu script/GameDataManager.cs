@@ -101,7 +101,7 @@ public class GameDataManager : MonoBehaviour
     public LevelData classicModelevelData;
     public LevelData levelData;
 
-
+    private List<int> giftIndexes = new List<int>();
     public bool isplayerNameSelect;
     public bool isMenuOpened;
     public int currentLevel;
@@ -852,5 +852,49 @@ public class GameDataManager : MonoBehaviour
         playerGlobalData.Rank = rank;
         playerGlobalData.Name = name;
         playerGlobalData.scoreValue = score;
+    }
+    public void SetGiftIndexes()
+    {
+        giftIndexes.Clear();
+        giftIndexes.Add(4);
+        giftIndexes.Add(3);
+        int giftIndex = UnityEngine.Random.Range(1, 7);
+        for (int i = 0; i < 50; i++)
+        {
+            if (giftIndex == 5 || (isBombAiAsist && giftIndex == 6))
+            {
+                giftIndex = UnityEngine.Random.Range(1, 7);
+            }
+            else
+            {
+                if (giftIndex == 3)
+                {
+                    int ran = UnityEngine.Random.Range(0, 4);
+                    if (ran == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        giftIndex = UnityEngine.Random.Range(1, 7);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        giftIndexes.Add(giftIndex);
+    }
+
+    public int GetGiftIndexes(int index)
+    {
+        int num = 0;
+        if(index >= 0 && index < giftIndexes.Count)
+        {
+            num = giftIndexes[index];
+        }
+        return num;
     }
 }

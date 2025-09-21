@@ -393,7 +393,7 @@ public class UiManager : MonoBehaviour
 
     private void Restart()
     {
-        if(!isUsergameEnd && GameTypeCode == 1 && gameDataManager.isBombAiAsist)
+        if(!isUsergameEnd && GameTypeCode == 1)
             gameDataManager.rePlayCount++;
         SceneManager.LoadScene(1);
     }
@@ -1180,17 +1180,17 @@ public class UiManager : MonoBehaviour
         giftShowObj.gameObject.SetActive(true);
         int count = data.Count;
         giftData = new GiftData[count];
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < giftContent.Length; i++)
         {
-            GiftData dt = new GiftData()
+            giftContent[i].deniedImage.SetActive(false);
+            if (i < count) 
             {
-                indexCode = data[i].indexCode,
-                values = data[i].values,
-            };
-
-            if (i < giftContent.Length) {
-                giftContent[i].deniedImage.SetActive(false);
-
+                GiftData dt = new GiftData()
+                {
+                    indexCode = data[i].indexCode,
+                    values = data[i].values,
+                };
+                giftContent[i].holder.SetActive(true);
                 if (i > 0)
                 {
                     int index = (int)data[i].indexCode - 1;
@@ -1200,16 +1200,14 @@ public class UiManager : MonoBehaviour
                         giftContent[i].image.sprite = abData.iconSprite;
                         giftContent[i].valueText.text = "+" + data[i].values.ToString();
                         giftContent[i].nameText.text = abData.name;
-                        giftContent[i].holder.SetActive(true);
                     }
                 }
                 else
                 {
-                    giftContent[i].holder.SetActive(true);
                     giftContent[i].valueText.text = "+" + data[i].values.ToString();
                 }
+                giftData[i] = dt;
             }
-            giftData[i] = dt;
         }
         pointEffect.SetActive(true);
         GiftPanelOK();
@@ -1223,25 +1221,31 @@ public class UiManager : MonoBehaviour
             giftContent[i].deniedImage.SetActive(true);
             giftContent[i].holder.SetActive(true);
             giftContent[i].valueText.color = Color.red;
+            int val = gameDataManager.GetGiftIndexes(i);
             if (i == 0)
             {
-                giftContent[i].valueText.text = "+50";
+                giftContent[i].valueText.text = "+" + (val * 50).ToString();
             }
             else if(i == 1)
             {
                 AbilityData abData = abilityManager.abilityData[8];
-                int rand = UnityEngine.Random.Range(1, 5);
                 giftContent[i].image.sprite = abData.iconSprite;
-                giftContent[i].valueText.text = "+" + rand.ToString();
+                giftContent[i].valueText.text = "+" + val.ToString();
                 giftContent[i].nameText.text = abData.name;
             }
-            else
+            else if(i == 2)
             {
-                int rand1 = UnityEngine.Random.Range(0, 4);
-                AbilityData abData1 = abilityManager.abilityData[rand1];
-                giftContent[i].image.sprite = abData1.iconSprite;
-                giftContent[i].valueText.text = "+1";
-                giftContent[i].nameText.text = abData1.name;
+                if (gameDataManager.rePlayCount < 2 && val > 0)
+                {
+                    AbilityData abData1 = abilityManager.abilityData[val - 1];
+                    giftContent[i].image.sprite = abData1.iconSprite;
+                    giftContent[i].valueText.text = "+1";
+                    giftContent[i].nameText.text = abData1.name;
+                }
+                else
+                {
+                    giftContent[i].holder.SetActive(false);
+                }
             }
         }
     }

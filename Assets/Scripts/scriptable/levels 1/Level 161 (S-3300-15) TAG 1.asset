@@ -20,10 +20,10 @@ MonoBehaviour:
     shapeCodes: []
     targetData: []
     bgTileData: []
-    gemTileData: []
+    specialObjectTileData: []
     moveCount: 15
     totalStarValue: 3300
     reFreshCount: 0
-    ability1Value: 4
-    ability2Value: 4
+    ability1Value: 5
+    ability2Value: 3
     levelNumber: 160

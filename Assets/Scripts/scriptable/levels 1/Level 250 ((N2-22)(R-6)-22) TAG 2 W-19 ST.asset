@@ -21,11 +21,11 @@ MonoBehaviour:
     targetData:
     - normalBlockType: 1
       blockType: 0
-      gemType: 0
+      specialObject: 0
       count: 22
     - normalBlockType: 5
       blockType: 1
-      gemType: 0
+      specialObject: 0
       count: 6
     bgTileData:
     - positionIndex: 28
@@ -68,9 +68,9 @@ MonoBehaviour:
       tileType: 7
     - positionIndex: 22
       tileType: 15
-    gemTileData: []
+    specialObjectTileData: []
     moveCount: 22
-    totalStarValue: 3500
+    totalStarValue: 6094
     reFreshCount: 0
     ability1Value: 4
     ability2Value: 3

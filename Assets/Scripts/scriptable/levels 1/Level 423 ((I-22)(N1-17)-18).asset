@@ -28,8 +28,6 @@ MonoBehaviour:
       specialObject: 0
       count: 17
     bgTileData:
-    - positionIndex: 23
-      tileType: 8
     - positionIndex: 31
       tileType: 8
     - positionIndex: 39
@@ -38,44 +36,46 @@ MonoBehaviour:
       tileType: 8
     - positionIndex: 59
       tileType: 8
-    - positionIndex: 51
-      tileType: 8
-    - positionIndex: 43
-      tileType: 8
-    - positionIndex: 33
-      tileType: 8
-    - positionIndex: 32
-      tileType: 8
     - positionIndex: 40
       tileType: 8
     - positionIndex: 41
-      tileType: 8
-    - positionIndex: 42
       tileType: 8
     - positionIndex: 50
       tileType: 8
     - positionIndex: 30
       tileType: 8
-    - positionIndex: 22
-      tileType: 8
-    - positionIndex: 29
-      tileType: 8
-    - positionIndex: 21
-      tileType: 8
-    - positionIndex: 13
-      tileType: 8
-    - positionIndex: 20
-      tileType: 8
-    - positionIndex: 12
-      tileType: 8
     - positionIndex: 60
       tileType: 8
-    - positionIndex: 52
+    - positionIndex: 38
+      tileType: 8
+    - positionIndex: 47
+      tileType: 8
+    - positionIndex: 48
+      tileType: 8
+    - positionIndex: 57
+      tileType: 8
+    - positionIndex: 58
+      tileType: 8
+    - positionIndex: 67
+      tileType: 8
+    - positionIndex: 68
+      tileType: 8
+    - positionIndex: 77
+      tileType: 8
+    - positionIndex: 69
+      tileType: 8
+    - positionIndex: 78
+      tileType: 8
+    - positionIndex: 51
+      tileType: 8
+    - positionIndex: 61
+      tileType: 8
+    - positionIndex: 70
       tileType: 8
     specialObjectTileData: []
     moveCount: 18
-    totalStarValue: 5000
+    totalStarValue: 4086
     reFreshCount: 0
-    ability1Value: 5
+    ability1Value: 4
     ability2Value: 4
     levelNumber: 422

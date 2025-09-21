@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEditor;
 
 [Serializable]
 public class LevelUpdateData
@@ -51,7 +52,7 @@ public class MenuLevelData : MonoBehaviour
 
     public Image[] bgImages;
 
-    //private float[] starValueCode = new float[7] {-1, 0, 1, 1, 1, 2, 2};
+    //private float[] starValueCode = new float[5] { -1, 0, 1, 1, 2 };
     //private int avarageMovetoStarValue = 150;
     //private float incrementValue = 50;
     //public List<int> starValueList = new List<int>();
@@ -67,8 +68,11 @@ public class MenuLevelData : MonoBehaviour
     //        {
     //            int value = CalculateStarData(levelDataInfos[i].levelData);
     //            starValueList.Add(value);
-    //            if (i > 15)
-    //                levelDataInfos[i].levelData.totalStarValue = starValueList[i];
+    //            if (i > 60)
+    //            {
+    //                levelDataInfos[i].levelData.totalStarValue = value;
+    //                EditorUtility.SetDirty(levelDataInfos[i]);
+    //            }
     //        }
     //        else
     //        {
@@ -82,28 +86,26 @@ public class MenuLevelData : MonoBehaviour
     //{
     //    int codeindex = UnityEngine.Random.Range(0, starValueCode.Length);
     //    float code = starValueCode[codeindex];
-    //    if (data.ability1Value >= 5)
-    //    {
-    //        code += 0.5f;
-    //    }
-    //    if (data.ability2Value >= 5)
-    //    {
-    //        code += 0.5f;
-    //    }
+
+    //    float mul = (float)data.ability1Value / 10;
+    //    float mul2 = (float)data.ability2Value / 10;
+    //    code += (mul + mul2);
+
     //    if (data.isBombAbility || data.isTagAbility)
     //    {
     //        code += 0.5f;
     //    }
+
     //    if (data.bgTileData.Length > 0)
     //    {
     //        code -= 0.35f;
     //        if (data.bgTileData.Length > 25)
     //        {
-    //            code -= 0.35f;
+    //            code -= 0.4f;
     //        }
-    //        if (code > 1 && ((data.ability2Value == 3) || (data.ability2Value <= 3 && data.ability1Value <= 5)))
+    //        if (code > 1 && (data.ability2Value <= 3 && data.ability1Value <= 4))
     //        {
-    //            code -= 0.5f;
+    //            code -= 0.3f;
     //        }
 
     //    }

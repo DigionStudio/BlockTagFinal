@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private TargetData[] targetData;
     private BgTileData[] bgTileData;
     private SpecialObjectTileData[] specialObjectTileDatas;
+    private int initialMoveCount;
     private int moveCount;
     private int currentMoveCount;
     public bool isSpecialObject;
@@ -59,7 +60,6 @@ public class GameManager : MonoBehaviour
     private GameDataManager gameDataManager;
     private ShapeCreator shapeCreator;
 
-    
     private GameAdsManager gameAdsManager;
     void Start()
     {
@@ -199,6 +199,7 @@ public class GameManager : MonoBehaviour
         }
         
         moveCount = levelData.moveCount;
+        initialMoveCount = moveCount;
         currentMoveCount = 0;
         TutorialManager.Instance.IntroPanel();
         uiManager.StartGame(gameTypeCode, levelData);
@@ -209,7 +210,7 @@ public class GameManager : MonoBehaviour
     }
     public void MoveCountsetUp()
     {
-        currentMoveCount = moveCount - 5;
+        currentMoveCount = moveCount - 3;
         uiManager.MoveCount(moveCount - currentMoveCount);
     }
     private void StartBoardSetUp()
@@ -276,66 +277,46 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
-            int cointCount = 4 - num;
-
-            GiftData dt = new GiftData()
+            for (int i = 0; i < 3; i++)
             {
-                indexCode = VariableTypeCode.Coin,
-                values = cointCount * 50,
-            };
-            data.Add(dt);
-
-            int wheelCount = 3 - num;
-            if(wheelCount == 0)
-            {
-                wheelCount = 1;
-            }
-            GiftData dt2 = new GiftData()
-            {
-                indexCode = VariableTypeCode.Lucky_Wheel,
-                values = wheelCount,
-            };
-            data.Add(dt2);
-
-
-            if (gameDataManager.rePlayCount <= 0 && starCount == 3 && currentMoveCount <= per * 3)
-            {
-                // ability gift
-                int giftIndex = UnityEngine.Random.Range(1, 7);
-                for (int i = 0; i < 15; i++)
+                int val = gameDataManager.GetGiftIndexes(i);
+                if(i == 0)
                 {
-                    if (giftIndex == 5 || (gameDataManager.isBombAiAsist && giftIndex == 6))
+                    int cointCount = val - num;
+                    GiftData dt = new GiftData()
                     {
-                        giftIndex = UnityEngine.Random.Range(1, 7);
-                    }
-                    else
-                    {
-                        if (giftIndex == 3)
-                        {
-                            int ran = UnityEngine.Random.Range(0, 4);
-                            if (ran == 1)
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                giftIndex = UnityEngine.Random.Range(1, 7);
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                if (giftIndex > 0)
-                {
-                    GiftData dt3 = new GiftData()
-                    {
-                        indexCode = (VariableTypeCode)giftIndex,
-                        values = 1,
+                        indexCode = VariableTypeCode.Coin,
+                        values = cointCount * 50,
                     };
-                    data.Add(dt3);
+                    data.Add(dt);
+                }else if (i == 1)
+                {
+                    int wheelCount = val - num;
+                    if (wheelCount == 0)
+                    {
+                        wheelCount = 1;
+                    }
+                    GiftData dt2 = new GiftData()
+                    {
+                        indexCode = VariableTypeCode.Lucky_Wheel,
+                        values = wheelCount,
+                    };
+                    data.Add(dt2);
+                }else if (i == 2)
+                {
+                    if (gameDataManager.rePlayCount < 2 && starCount == 3 && currentMoveCount <= per * 3)
+                    {
+                        // ability gift
+                        if (val > 0)
+                        {
+                            GiftData dt3 = new GiftData()
+                            {
+                                indexCode = (VariableTypeCode)val,
+                                values = 1,
+                            };
+                            data.Add(dt3);
+                        }
+                    }
                 }
             }
             uiManager.GiftAbilityPanel(data);
@@ -553,7 +534,10 @@ public class GameManager : MonoBehaviour
 
     public void GameEndMoveDecrese()
     {
-        CalculatePoints((moveCount - currentMoveCount) * 15, false);
+        if (initialMoveCount <= moveCount)
+        {
+            CalculatePoints((moveCount - currentMoveCount) * 15, false);
+        }
         StartCoroutine(DecreseMoveEfectCo());
     }
 
@@ -808,4 +792,7 @@ public class GameManager : MonoBehaviour
     {
         CheckGameConnectivity();
     }
+
+
+    
 }

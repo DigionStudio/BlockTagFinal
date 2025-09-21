@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level 401 ((N1RC-4)(N5-16)-17) WL-17
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.3
+    moveSpeed: 0.44
     isScoreTarget: 0
     isBombAbility: 0
     isTagAbility: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
       tileType: 10
     specialObjectTileData: []
     moveCount: 17
-    totalStarValue: 4500
+    totalStarValue: 3774
     reFreshCount: 0
     ability1Value: 4
     ability2Value: 4

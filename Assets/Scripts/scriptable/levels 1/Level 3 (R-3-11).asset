@@ -26,7 +26,7 @@ MonoBehaviour:
     bgTileData: []
     specialObjectTileData: []
     moveCount: 11
-    totalStarValue: 700
+    totalStarValue: 1551
     reFreshCount: 0
     ability1Value: 5
     ability2Value: 3

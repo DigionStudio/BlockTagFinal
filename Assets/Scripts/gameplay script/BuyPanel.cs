@@ -1,6 +1,20 @@
 using DG.Tweening;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+
+[Serializable]
+public class BuyMoveData
+{
+    public int buyValue;
+    public int buyCount;
+    public Button buyButton;
+    public Text buyButtonText;
+    public Text showText;
+    public GameObject dataHolder;
+    public GameObject effectHolder;
+}
 
 public class BuyPanel : MonoBehaviour
 {
@@ -15,8 +29,8 @@ public class BuyPanel : MonoBehaviour
 
     [SerializeField] private GameObject movePanel;
     [SerializeField] private Button crossButton;
-    [SerializeField] private Button[] buyButtons = new Button[3];
-    [SerializeField] private int[] moveBuyValue = new int[3];
+
+    [SerializeField] private BuyMoveData[] buyButtonsData = new BuyMoveData[3];
 
     [SerializeField] private GameObject abilityPanel;
     [SerializeField] private Image abilityIcon;
@@ -70,9 +84,17 @@ public class BuyPanel : MonoBehaviour
         holderRect.DOAnchorPosY(1600, 0f);
         uiManager = FindObjectOfType<UiManager>();
         crossButton.onClick.AddListener(BuyCross);
-        buyButtons[0].onClick.AddListener(BuyMove1);
-        buyButtons[1].onClick.AddListener(BuyMove2);
-        buyButtons[2].onClick.AddListener(BuyMove3);
+
+        for (int i = 0; i < buyButtonsData.Length; i++)
+        {
+            buyButtonsData[i].buyButtonText.text = buyButtonsData[i].buyValue.ToString();
+            buyButtonsData[i].showText.text = "+" + buyButtonsData[i].buyCount.ToString() + "  Moves";
+            buyButtonsData[i].dataHolder.SetActive(true);
+            buyButtonsData[i].effectHolder.SetActive(false);
+        }
+        buyButtonsData[0].buyButton.onClick.AddListener(BuyMove1);
+        buyButtonsData[1].buyButton.onClick.AddListener(BuyMove2);
+        buyButtonsData[2].buyButton.onClick.AddListener(BuyMove3);
 
 
         abilityBuyButton.onClick.AddListener(BuyAbility);
@@ -89,11 +111,12 @@ public class BuyPanel : MonoBehaviour
     {
         clickSound.Play();
         MovePanelActive(isActive);
+        ResetMoveBuyHolder(true);
     }
     public void GameEndMoveBuy(bool isActive)
     {
         int coin = gameDataManager.GetSaveValues(0);
-        if (CheckBuyButton(coin, moveBuyValue[0]))
+        if (CheckBuyButton(coin, buyButtonsData[0].buyValue))
         {
             MovePanelActive(isActive);
         }
@@ -111,9 +134,9 @@ public class BuyPanel : MonoBehaviour
     private void CheckMoveButtons()
     {
         int coin = gameDataManager.GetSaveValues(0);
-        for (int i = 0; i < buyButtons.Length; i++)
+        for (int i = 0; i < buyButtonsData.Length; i++)
         {
-            buyButtons[i].interactable = CheckBuyButton(coin, moveBuyValue[i]);
+            buyButtonsData[i].buyButton.interactable = CheckBuyButton(coin, buyButtonsData[i].buyValue);
         }
     }
 
@@ -166,8 +189,7 @@ public class BuyPanel : MonoBehaviour
         {
             panel.SetActive(isActive);
             buyPanel.SetActive(isActive);
-
-
+            ResetMoveBuyHolder(true);
         });
     }
 
@@ -306,25 +328,26 @@ public class BuyPanel : MonoBehaviour
 
     private void BuyMove1()
     {
-        MoveTaken(5, moveBuyValue[0]);
+        MoveTaken(0);
     }
 
     private void BuyMove2()
     {
-        MoveTaken(10, moveBuyValue[1]);
+        MoveTaken(1);
 
     }
 
     private void BuyMove3()
     {
-        MoveTaken(15, moveBuyValue[2]);
+        MoveTaken(2);
 
     }
 
-    private void MoveTaken(int num, int coin)
+    private void MoveTaken(int index)
     {
+        StartCoroutine(ShowMoveBuyEffectCO(index));
         clickSound.Play();
-        BoardManager.Instance.AddMoves(num, coin);
+        BoardManager.Instance.AddMoves(buyButtonsData[index].buyCount, buyButtonsData[index].buyValue);
         CheckMoveButtons();
     }
 
@@ -344,6 +367,29 @@ public class BuyPanel : MonoBehaviour
         AbilityManager.Instance.AbilityUpdate(currentType, true, abilityCount);
         BuyCross();
 
+    }
+    IEnumerator ShowMoveBuyEffectCO(int num)
+    {
+        ResetMoveBuyHolder(false, num);
+        yield return new WaitForSeconds(2);
+        ResetMoveBuyHolder(true, num);
+
+    }
+    private void ResetMoveBuyHolder(bool status, int num = -1)
+    {
+        if(num >= 0)
+        {
+            buyButtonsData[num].dataHolder.SetActive(status);
+            buyButtonsData[num].effectHolder.SetActive(!status);
+        }
+        else
+        {
+            for (int i = 0; i < buyButtonsData.Length; i++)
+            {
+                buyButtonsData[i].dataHolder.SetActive(status);
+                buyButtonsData[i].effectHolder.SetActive(!status);
+            }
+        }
     }
 
     //public GameObject lifeEffectHolder;

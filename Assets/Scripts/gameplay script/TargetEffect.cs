@@ -146,7 +146,7 @@ public class TargetEffect : MonoBehaviour
         Vector3 pos41 = coinrect[0].TransformPoint(coinrect[0].rect.center);
         pos3life = pos;
         pos4life = pos41;
-        InvokeRepeating(nameof(InstaLifeReward), 0, 0.05f);
+        InvokeRepeating(nameof(InstaLifeReward), 0, 0.08f);
     }
 
     private void InstaLifeReward()
@@ -155,7 +155,7 @@ public class TargetEffect : MonoBehaviour
         {
             lifeCount++;
             PointShow effect = Instantiate(pointShow);
-            Vector3 randomPoint = GenerateRandomPoint(pos3life, 0.3f);
+            Vector3 randomPoint = GenerateRandomPoint(pos3life, 0.4f);
             effect.transform.position = randomPoint;
             if (totalLifeCount == 1)
                 effect.transform.position = pos3life;

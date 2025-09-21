@@ -47,6 +47,7 @@ public class TutorialManager : MonoBehaviour
     private int prefNum;
     private bool isLastStep;
     private int lastStepCount = 1;
+    private int abilityTuteCount;
     public bool DragTweenStatus { get; set; }
 
 
@@ -60,6 +61,7 @@ public class TutorialManager : MonoBehaviour
     }
     void Start()
     {
+        abilityTuteCount = 5;
         boardManager = BoardManager.Instance;
         gameDataManager = boardManager.gameDataManager;
         shapeCreator = ShapeCreator.Instance;
@@ -437,7 +439,7 @@ public class TutorialManager : MonoBehaviour
 
     public void SetUpAbilityDetailTutorial(int index, int shapeCode, int num, Vector2 pos)
     {
-        if (gameDataManager.previousLevel < 20)
+        if (gameDataManager.previousLevel < 20 && abilityTuteCount > 0)
         {
             string details = string.Empty;
 
@@ -478,6 +480,7 @@ public class TutorialManager : MonoBehaviour
                     screenPoint.x = 145f;
 
                 abilityTuteDetailPointer.anchoredPosition = screenPoint;
+                abilityTuteCount -= 1;
 
                 // Start new timer
                 disableAbilityCoroutine = StartCoroutine(DisableAbilityShowCO());

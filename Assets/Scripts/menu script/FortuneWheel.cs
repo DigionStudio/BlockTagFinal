@@ -225,12 +225,6 @@ public class FortuneWheel : MonoBehaviour
     private void TurnWheel()
     {
         _currentLerpRotationTime = 0f;
-
-        
-
-        //int cumulativeProbability = Sectors.Sum(sector => sector.Probability);
-
-        // Random final sector accordingly to probability
         int randomFinalAngle = sectorsAngles[0];
         _finalSector = Sectors[0];
         int sectorIndex = FinalSector();
@@ -270,7 +264,7 @@ public class FortuneWheel : MonoBehaviour
             {
                 for (int i = 0; i < 100; i++)
                 {
-                    if (_finalSector.variableType != VariableTypeCode.Coin || _finalSector.RewardValue > 5)
+                    if ((_finalSector.variableType == VariableTypeCode.Coin && _finalSector.RewardValue > 5) || (_finalSector.variableType != VariableTypeCode.Coin && _finalSector.RewardValue > 3))
                     {
                         sectorIndex = FinalSector();
                         randomFinalAngle = sectorsAngles[sectorIndex];
@@ -416,7 +410,7 @@ public class FortuneWheel : MonoBehaviour
         {
             bonusGiftManager.GiftPanelForMetaFill(true);
             _finalTransform.gameObject.SetActive(true);
-            float time = 4f;
+            float time = 2f;
             if(_finalSector.variableType == VariableTypeCode.Coin)
             {
                 int count = _finalSector.RewardValue * 5;
@@ -425,15 +419,20 @@ public class FortuneWheel : MonoBehaviour
                     count = count / 2;
                 }
                 targetEffect.FreeRewardEffectCoins(_finalTransform.position, count, 0.5f);
-                time = 2;
             }
             else if (_finalSector.variableType == VariableTypeCode.Lucky_Wheel)
             {
                 Sprite sp = _finalSector.iconSprite;
                 targetEffect.WheelAbility(sp, _finalTransform.position, wheelIconTrans.position, _finalSector.RewardValue);
             }
+            else if (_finalSector.variableType == VariableTypeCode.Life)
+            {
+                Sprite sp = _finalSector.iconSprite;
+                targetEffect.FreeRewardEffectLifes(_finalTransform.position, _finalSector.RewardValue);
+            }
             else
             {
+                time = 4f;
                 int index = (int)_finalSector.variableType;
                 if(index > 0 && index < 7)
                 {

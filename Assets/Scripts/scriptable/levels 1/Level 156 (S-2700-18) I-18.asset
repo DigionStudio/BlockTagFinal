@@ -56,10 +56,10 @@ MonoBehaviour:
       tileType: 8
     - positionIndex: 33
       tileType: 8
-    gemTileData: []
+    specialObjectTileData: []
     moveCount: 18
     totalStarValue: 2700
     reFreshCount: 0
-    ability1Value: 5
-    ability2Value: 4
+    ability1Value: 3
+    ability2Value: 3
     levelNumber: 155

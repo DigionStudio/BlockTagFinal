@@ -24,6 +24,6 @@ MonoBehaviour:
     moveCount: 18
     totalStarValue: 6200
     reFreshCount: 0
-    ability1Value: 5
+    ability1Value: 4
     ability2Value: 4
     levelNumber: 348
