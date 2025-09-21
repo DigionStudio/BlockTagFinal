@@ -146,7 +146,7 @@ public class TargetEffect : MonoBehaviour
         Vector3 pos41 = coinrect[0].TransformPoint(coinrect[0].rect.center);
         pos3life = pos;
         pos4life = pos41;
-        InvokeRepeating(nameof(InstaLifeReward), 0, 0.08f);
+        InvokeRepeating(nameof(InstaLifeReward), 0, 0.05f);
     }
 
     private void InstaLifeReward()
