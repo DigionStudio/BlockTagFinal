@@ -286,6 +286,8 @@ public class MenuManager : MonoBehaviour
     public bool isTutorialActive;
     private bool isInitial;
 
+    private GameObject bubbleEffectRootObj;
+    private Camera mainCamera;
     private void Awake()
     {
         if (Instance == null)
@@ -294,6 +296,34 @@ public class MenuManager : MonoBehaviour
         }
         isInitial = true;
         isBgMusicPlayed = false;
+        mainCamera = Camera.main;
+        SetUpCameraSize();
+    }
+    private void SetUpCameraSize()
+    {
+        float num = CameraResolutionRatio();
+        float cameraSize = 24.5f;
+        if (num == 2f)
+        {
+            cameraSize = 25.5f;
+        }
+        else if (num > 2 && num < 2.1)
+        {
+            cameraSize = 26f;
+
+        }
+        else if (num >= 2.1 && num < 2.3f)
+        {
+            cameraSize = 26.5f;
+        }
+        mainCamera.orthographicSize = cameraSize;
+    }
+
+    private float CameraResolutionRatio()
+    {
+        float ratio = (float)Screen.height / (float)Screen.width;
+        float roundedNumber = Mathf.Round(ratio * 100f) / 100f;
+        return roundedNumber;
     }
 
 
@@ -351,10 +381,10 @@ public class MenuManager : MonoBehaviour
         freeCoinButton.onClick.AddListener(FreeCoin);
         coinButtonImage = freeCoinButton.GetComponent<RectTransform>();
         freeLifeButton.onClick.AddListener(FreeLife);
-        
+
         wheelPanelButton.onClick.AddListener(FortuneWheelPanelStatus);
-        
-        
+
+
         wheelPanelCrossButton.onClick.AddListener(FortuneWheelPanelStatus);
         videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, videoFileName);
 
@@ -372,6 +402,8 @@ public class MenuManager : MonoBehaviour
 
         currentBlockIndex = gameDataManager.GetSaveValues(4);
         BlockTileSetUp();
+
+        StartCoroutine(LoadSceneAdditiveAsync(2));
         isabilitytag = false;
         isbombtag = false;
 
@@ -424,10 +456,10 @@ public class MenuManager : MonoBehaviour
     {
         LevelButtonShowAnim(false);
         isMenuOpen = false;
-        if(loadTween != null)
+        if (loadTween != null)
             loadTween.Kill();
         loadTween = loadingBar.DOFillAmount(1f, time2).OnComplete(() =>
-        { 
+        {
             if (!isTute)
             {
                 Invoke(nameof(GameLoadingComplete), 0.5f);
@@ -471,9 +503,19 @@ public class MenuManager : MonoBehaviour
         Application.Quit();
     }
 
+    private void LoadBubbleFadeScene()
+    {
+        if (bubbleEffectRootObj != null)
+        {
+            bubbleEffectRootObj.SetActive(true);
+        }
+        Invoke(nameof(GameLoad), 1f);
+    }
+
     private void GameLoad()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.UnloadSceneAsync(0);
+        SceneManager.LoadScene(1, LoadSceneMode.Additive);
     }
     private void MenuPlay()
     {
@@ -508,7 +550,7 @@ public class MenuManager : MonoBehaviour
         {
             gameDataManager.GiftValueClaim();
         }
-        Invoke(nameof(GameLoad), 0.1f);
+        LoadBubbleFadeScene();
     }
 
     private void LevelShow()
@@ -643,9 +685,9 @@ public class MenuManager : MonoBehaviour
     private void LevelLoad(bool isLevelShow)
     {
         levelPanel.SetActive(isLevelShow);
-        if(isLevelShow)
+        if (isLevelShow)
         {
-            if(string.IsNullOrEmpty(videoPath))
+            if (string.IsNullOrEmpty(videoPath))
                 videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, videoFileName);
 
 
@@ -672,12 +714,12 @@ public class MenuManager : MonoBehaviour
                     time = 0.3f;
                 }
                 TweenPanel(panel.panel, posy, time);
-                
+
             }
         }
     }
 
-    private void TweenPanel(RectTransform panel,float posY, float duration)
+    private void TweenPanel(RectTransform panel, float posY, float duration)
     {
         isEscapeActive = true;
         panel.DOAnchorPosY(posY, duration).SetEase(Ease.OutQuad).OnComplete(() =>
@@ -737,7 +779,7 @@ public class MenuManager : MonoBehaviour
         goalsManager.isNewLevel = CheckForNewlevel(levelData.levelNumber);
         gameDataManager.SetGiftIndexes();
         BackButton(0.5f);
-        Invoke(nameof(GameLoad), 1f);
+        LoadBubbleFadeScene();
     }
 
     private void SetWandStatus(bool status)
@@ -778,7 +820,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            levelShowPanel.panel.DOAnchorPosY(levelShowPanel.posFinalFloat, 0.3f);
+            levelShowPanel.panel.DOAnchorPosY(levelShowPanel.posFinalFloat, 0.3f).SetEase(Ease.OutQuart);
             levelShowBg.gameObject.SetActive(true);
             fade = 0.85f;
         }
@@ -896,7 +938,7 @@ public class MenuManager : MonoBehaviour
         {
             starObject[i].SetActive(false);
         }
-        Level_Star_Data data = gameDataManager.LevelStarData(levelData.levelNumber); 
+        Level_Star_Data data = gameDataManager.LevelStarData(levelData.levelNumber);
 
         for (int i = 0; i < data.StarCount; i++)
         {
@@ -958,7 +1000,8 @@ public class MenuManager : MonoBehaviour
         {
             if (gameBombAbility.status)
                 ismatch1 = true;
-        }else if (levelData.isBombAbility)
+        }
+        else if (levelData.isBombAbility)
         {
             ismatch1 = true;
         }
@@ -1064,7 +1107,7 @@ public class MenuManager : MonoBehaviour
 
     private void InvokeCoinEffects()
     {
-        if(coinEffectValues.Count > 0)
+        if (coinEffectValues.Count > 0)
         {
             AddCoin(coinEffectValues[0].value, coinEffectValues[0].status);
             coinEffectValues.RemoveAt(0);
@@ -1097,7 +1140,7 @@ public class MenuManager : MonoBehaviour
 
     public void SetBlockTypeImage(Sprite blockSprite)
     {
-        if(blockSprite != null)
+        if (blockSprite != null)
             blockShowImage.sprite = blockSprite;
         if (levelData != null && levelData.totalStarValue > 0)
             SetUpLevelShow(levelData);
@@ -1133,19 +1176,19 @@ public class MenuManager : MonoBehaviour
 
         }
         blockTypePanel.DOFade(fade, 0.3f).OnComplete(() =>
-        { 
+        {
             isBlockPanelActive = !isBlockPanelActive;
             blockTypePanel.gameObject.SetActive(isBlockPanelActive);
 
         });
-        
+
     }
 
     private void BlockTileSetUp()
     {
         if (isBlockTileSetUp) return;
         isBlockTileSetUp = true;
-        int num = gameDataManager.GetSaveDataListlength(1); 
+        int num = gameDataManager.GetSaveDataListlength(1);
         BlockManager.Instance.SelectBlockIcon(currentBlockIndex);
         CheckForOnceUsedmatch();
         for (int i = 0; i < num; i++)
@@ -1166,7 +1209,7 @@ public class MenuManager : MonoBehaviour
 
         float sizeY = ((float)num / 2 + 1) * 455;
         tileshowHolder.sizeDelta = new Vector2(965, sizeY);
-        
+
     }
 
     private bool HasFreeBlockUsed(int value)
@@ -1174,7 +1217,8 @@ public class MenuManager : MonoBehaviour
         bool isFree = true;
         System.DateTime dateTime = DateTime.Now;
         int result = int.Parse(dateTime.ToString("yyyyMMdd"));
-        if (value > 0) {
+        if (value > 0)
+        {
             if (value != result)
             {
                 isFree = false;
@@ -1189,9 +1233,9 @@ public class MenuManager : MonoBehaviour
         System.DateTime dateTime = DateTime.Now;
         int result = int.Parse(dateTime.ToString("yyyyMMdd"));
         bool isMatch = gameDataManager.CheckForBlockIconOnceUsed(result);
-        if(!isMatch)
+        if (!isMatch)
         {
-            if (!gameDataManager.GetSaveBlockIconData(currentBlockIndex).isBuyed) 
+            if (!gameDataManager.GetSaveBlockIconData(currentBlockIndex).isBuyed)
             {
                 currentBlockIndex = 0;
                 BlockManager.Instance.SelectBlockIcon(currentBlockIndex);
@@ -1219,7 +1263,7 @@ public class MenuManager : MonoBehaviour
             fade = 0.8f;
         }
         leaderBoardBG.DOFade(fade, 0.3f).OnComplete(() =>
-        { 
+        {
             isLeaderboardShowActive = !isLeaderboardShowActive;
             leaderBoardBG.gameObject.SetActive(isLeaderboardShowActive);
             UpdateLeaderboard();
@@ -1247,7 +1291,7 @@ public class MenuManager : MonoBehaviour
         else
         {
             goalPanelBg.gameObject.SetActive(true);
-            goalPanelTween.panel.DOAnchorPosY(goalPanelTween.posFinalFloat, 0.3f);
+            goalPanelTween.panel.DOAnchorPosY(goalPanelTween.posFinalFloat, 0.3f).SetEase(Ease.OutQuart);
             fade = 0.8f;
             DailyFreeReward(gameDataManager.HasNewDay);
         }
@@ -1309,7 +1353,7 @@ public class MenuManager : MonoBehaviour
         {
             fortuneWheel.SetUpFortuneWheel();
             wheelPanelBg.gameObject.SetActive(true);
-            wheelPanelTween.panel.DOAnchorPosY(wheelPanelTween.posFinalFloat, 0.3f);
+            wheelPanelTween.panel.DOAnchorPosY(wheelPanelTween.posFinalFloat, 0.3f).SetEase(Ease.OutQuart);
             fade = 0.9f;
         }
         wheelPanelBg.DOFade(fade, 0.3f).OnComplete(() =>
@@ -1343,7 +1387,7 @@ public class MenuManager : MonoBehaviour
             buyPanelTween.panel.DOAnchorPosY(buyPanelTween.posFinalFloat, 0.3f);
         }
         buyPanelBg.DOFade(fade, 0.3f).OnComplete(() =>
-        { 
+        {
             isBuyPanelActive = !isBuyPanelActive;
             buyPanelBg.gameObject.SetActive(isBuyPanelActive);
 
@@ -1370,7 +1414,7 @@ public class MenuManager : MonoBehaviour
                 InfoAbilityDataUpdate(false);
             }
             infoPanelBg.gameObject.SetActive(true);
-            infoPanelTween.panel.DOAnchorPosY(infoPanelTween.posFinalFloat, 0.3f);
+            infoPanelTween.panel.DOAnchorPosY(infoPanelTween.posFinalFloat, 0.3f).SetEase(Ease.OutQuart);
             fade = 0.6f;
 
         }
@@ -1398,7 +1442,7 @@ public class MenuManager : MonoBehaviour
             else
             {
                 infoDetailsPanelBg.gameObject.SetActive(true);
-                infoDetailsPanelTween.panel.DOAnchorPosY(infoDetailsPanelTween.posFinalFloat, 0.3f);
+                infoDetailsPanelTween.panel.DOAnchorPosY(infoDetailsPanelTween.posFinalFloat, 0.3f).SetEase(Ease.OutQuart);
                 fade = 0.9f;
             }
             infoDetailsPanelBg.DOFade(fade, 0.3f).OnComplete(() =>
@@ -1425,10 +1469,10 @@ public class MenuManager : MonoBehaviour
                 }
                 bool status = CheckAbilityLock(abilityData[index].unLockvalue);
                 detailsInfo.DetailsLockStatus(status, abilityData[index].unLockvalue);
-                detailsInfo.SetUpInfoItemData(abilityData[index].iconSprite,num, abilityData[index].count, abilityData[index].name, abilityData[index].working, index, true);
+                detailsInfo.SetUpInfoItemData(abilityData[index].iconSprite, num, abilityData[index].count, abilityData[index].name, abilityData[index].working, index, true);
                 int price = abilityData[index].value;
                 int coins = gameDataManager.GetSaveValues(0);
-                if(price != 0 && coins >= price)
+                if (price != 0 && coins >= price)
                 {
                     infoBuyButton.interactable = true;
                 }
@@ -1454,8 +1498,8 @@ public class MenuManager : MonoBehaviour
 
     private void BuyInfoAbility()
     {
-        
-        if (infoAbilityIndex >=0 && infoAbilityIndex != 4 && infoAbilityIndex < abilityData.Length - 1)
+
+        if (infoAbilityIndex >= 0 && infoAbilityIndex != 4 && infoAbilityIndex < abilityData.Length - 1)
         {
             int price = abilityData[infoAbilityIndex].value;
             int coins = gameDataManager.GetSaveValues(0);
@@ -1580,7 +1624,7 @@ public class MenuManager : MonoBehaviour
 
     private void CheckForUnlimitedInfoDetails()
     {
-        if(infoAbilityIndex >= 0 && infoAbilityIndex < 4)
+        if (infoAbilityIndex >= 0 && infoAbilityIndex < 4)
         {
             string today = DateTime.Now.Date.ToString();
             int timeInSec = gameDataManager.CheckForAnilityStatus(infoAbilityIndex, today);
@@ -1604,7 +1648,7 @@ public class MenuManager : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            string today  = DateTime.Now.Date.ToString();
+            string today = DateTime.Now.Date.ToString();
             int timeInSec = gameDataManager.CheckForAnilityStatus(i, today);
             if (timeInSec > 0)
             {
@@ -1701,7 +1745,7 @@ public class MenuManager : MonoBehaviour
                 LevelButtonShowAnim(true);
             }
         }
-        
+
     }
 
     private void BackButton(float time)
@@ -1738,13 +1782,13 @@ public class MenuManager : MonoBehaviour
             isInfoPanelActive = false;
             EscapeActive(infoPanelBg, infoPanelTween.panel, infoPanelTween.posInitialFloat, time);
         }
-            
+
     }
 
-    private void EscapeActive(Image bgImage ,RectTransform panel, float posY, float duration)
+    private void EscapeActive(Image bgImage, RectTransform panel, float posY, float duration)
     {
         TweenPanel(panel, posY, duration);
-        if(bgImage != null)
+        if (bgImage != null)
         {
             bgImage.DOFade(0, duration).OnComplete(() =>
             {
@@ -1758,7 +1802,7 @@ public class MenuManager : MonoBehaviour
     {
         bool isAds = menuAdsManager.Load_Reward_Ads();
         bool isActive = goalsManager.CheckForGoalsFreeClaim(2);
-        if(isAds && isActive)
+        if (isAds && isActive)
             freeRewardHolder.SetActive(true);
         else
             freeRewardHolder.SetActive(false);
@@ -1796,7 +1840,7 @@ public class MenuManager : MonoBehaviour
     public bool CheckForFortune()
     {
         bool isAds = menuAdsManager.Load_Reward_Ads();
-        if(isAds && menuAdsManager.isRewardShowing)
+        if (isAds && menuAdsManager.isRewardShowing)
             isAds = false;
         return isAds;
     }
@@ -1845,7 +1889,8 @@ public class MenuManager : MonoBehaviour
         if (isNewDay)
         {
             freeRewardHolder.SetActive(false);
-        }else
+        }
+        else
             CheckClaimButtons();
         freeButton.gameObject.SetActive(isNewDay);
     }
@@ -1870,22 +1915,17 @@ public class MenuManager : MonoBehaviour
         {
             giftHolder.gameObject.SetActive(true);
             bool status = Has_Life_Coin(data);
-            Vector3 coinPos = new Vector3(0.6f, 1, 0);
-            Vector3 lifepos = new Vector3(1f, 1, 0);
-            Vector3 wheelpos = new Vector3(0f, -0.5f, 0);
+            Vector3 coinPos = new Vector3(15f, -5f, 0);
+            Vector3 lifepos = new Vector3(5f, -5f, 0);
+            Vector3 wheelpos = new Vector3(10f, -12f, 0);
 
             if (!status)
             {
-                coinPos = new Vector3(0, 1f, 0);
-                lifepos = new Vector3(0f, 1f, 0);
+                coinPos = new Vector3(10f, -5f, 0);
+                lifepos = new Vector3(10f, -5f, 0);
 
             }
-            else
-            {
-                coinPos = new Vector3(0.7f, 0, 0);
-                lifepos = new Vector3(-0.7f, 0, 0);
-            }
-            float Xpos = -1;
+            float Xpos = 8;
             bool isRandom = false;
             if (data.Length > 3)
             {
@@ -1903,14 +1943,15 @@ public class MenuManager : MonoBehaviour
                         {
                             coinCount = 30;
                         }
-                        targetEffect.FreeRewardEffectCoins(coinPos, coinCount, 0.5f);
+                        targetEffect.FreeRewardEffectCoins(coinPos, coinCount, 3.5f);
 
                     }
                     else if (data[i].indexCode == VariableTypeCode.Life)
                     {
                         int lifeCount = data[i].values;
                         targetEffect.FreeRewardEffectLifes(lifepos, lifeCount);
-                    }else if (data[i].indexCode == VariableTypeCode.Lucky_Wheel)
+                    }
+                    else if (data[i].indexCode == VariableTypeCode.Lucky_Wheel)
                     {
                         int wheelCount = data[i].values;
                         targetEffect.FreeRewardEffectWheel(wheelpos, wheelCount);
@@ -1919,7 +1960,7 @@ public class MenuManager : MonoBehaviour
                     {
                         if (!isRandom)
                         {
-                            Xpos = 0;
+                            Xpos = 10;
                         }
 
                         int index = (int)data[i].indexCode - 1;
@@ -1931,7 +1972,7 @@ public class MenuManager : MonoBehaviour
                         }
                         if (isRandom)
                         {
-                            Xpos++;
+                            Xpos += 2;
                         }
                     }
                     yield return new WaitForSeconds(0.1f);
@@ -1939,7 +1980,7 @@ public class MenuManager : MonoBehaviour
 
                 }
             }
-            
+
             gameDataManager.GiftValueClaim();
             Invoke(nameof(DisableGiftholder), time);
         }
@@ -1970,7 +2011,7 @@ public class MenuManager : MonoBehaviour
             }
         }
 
-        if(isCoin && isLife)
+        if (isCoin && isLife)
         {
             isStatus = true;
         }
@@ -1982,11 +2023,11 @@ public class MenuManager : MonoBehaviour
         giftHolder.gameObject.SetActive(false);
         gameDataManager.isGifted = false;
         isEscapeStatus = false;
-        if(isblockShowTutActive)
+        if (isblockShowTutActive)
             MenuTutorialManager.Instance.BlockTutActive(blockIconButton.transform.position);
         else
         {
-            if(gameDataManager.currentLevel > 1 && isMenuPlay && isInitial)
+            if (gameDataManager.currentLevel > 1 && isMenuPlay && isInitial)
             {
                 isInitial = false;
                 LevelShowPopUp();
@@ -2094,7 +2135,8 @@ public class MenuManager : MonoBehaviour
             {
                 GoalPanelPopUp();
                 Invoke(nameof(GoalsPanelStatus), 0.5f);
-            }else if(wheelCount > 0)
+            }
+            else if (wheelCount > 0)
             {
                 FortunePanelPopUp();
                 Invoke(nameof(FortuneWheelPanelStatus), 0.5f);
@@ -2102,4 +2144,45 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+
+    IEnumerator LoadSceneAdditiveAsync(int sceneindex)
+    {
+        Scene loadedScene = SceneManager.GetSceneByBuildIndex(sceneindex);
+        if (!loadedScene.IsValid())
+        {
+            // Start loading the scene additively
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneindex, LoadSceneMode.Additive);
+
+            // Don’t let the scene activate until we’re ready (optional)
+            asyncLoad.allowSceneActivation = true;
+
+            // Wait until the scene is fully loaded
+            while (!asyncLoad.isDone)
+            {
+                // You can show a loading bar here with asyncLoad.progress (0–0.9)
+                yield return null;
+            }
+
+            // Once loaded, get the scene reference
+            loadedScene = SceneManager.GetSceneByBuildIndex(sceneindex);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        if (loadedScene.IsValid())
+        {
+            // Disable specific object by name
+            foreach (GameObject root in loadedScene.GetRootGameObjects())
+            {
+                if (root != null && root.CompareTag("GameController"))
+                {
+                    bubbleEffectRootObj = root;
+                    bubbleEffectRootObj.SetActive(false);
+                    yield break;
+                }
+            }
+        }
+
+    }
 }

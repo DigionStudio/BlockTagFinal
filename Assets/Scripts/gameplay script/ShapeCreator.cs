@@ -338,6 +338,7 @@ public class ShapeCreator : MonoBehaviour
         if (isSetUp)
         {
             CrushTileCreator tilecreator = Instantiate(tileCreator, transform.position, Quaternion.identity);
+            tilecreator.transform.parent = this.transform;
             crushTiles[tileIndex] = tilecreator;
             Vector2 pos = shapePos[tileIndex].position;
             int num;

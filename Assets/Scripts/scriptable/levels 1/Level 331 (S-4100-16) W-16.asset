@@ -10,46 +10,52 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 320 (S-5500-17) W-13 TAG 2
+  m_Name: Level 331 (S-4100-16) W-16
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.4
+    moveSpeed: 0.47
     isScoreTarget: 1
     isBombAbility: 0
-    isTagAbility: 1
+    isTagAbility: 0
     shapeCodes: []
     targetData: []
     bgTileData:
-    - positionIndex: 0
+    - positionIndex: 4
       tileType: 7
-    - positionIndex: 10
+    - positionIndex: 12
       tileType: 7
     - positionIndex: 20
       tileType: 7
-    - positionIndex: 30
+    - positionIndex: 28
       tileType: 7
-    - positionIndex: 40
+    - positionIndex: 14
       tileType: 7
-    - positionIndex: 39
+    - positionIndex: 24
       tileType: 7
-    - positionIndex: 9
+    - positionIndex: 34
       tileType: 7
-    - positionIndex: 19
+    - positionIndex: 33
+      tileType: 7
+    - positionIndex: 23
+      tileType: 7
+    - positionIndex: 13
+      tileType: 7
+    - positionIndex: 21
       tileType: 7
     - positionIndex: 29
       tileType: 7
-    - positionIndex: 18
+    - positionIndex: 43
       tileType: 7
-    - positionIndex: 28
+    - positionIndex: 44
       tileType: 7
-    - positionIndex: 38
+    - positionIndex: 37
       tileType: 7
-    - positionIndex: 48
+    - positionIndex: 36
       tileType: 7
     specialObjectTileData: []
-    moveCount: 17
-    totalStarValue: 5500
+    moveCount: 16
+    totalStarValue: 4100
     reFreshCount: 0
     ability1Value: 5
     ability2Value: 3
-    levelNumber: 319
+    levelNumber: 330

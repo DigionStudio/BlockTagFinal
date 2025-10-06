@@ -14,7 +14,7 @@ public class FortuneWheelSector : System.Object
     public Sprite iconSprite;
 
     [Tooltip("Value of reward")]
-    [RangeAttribute(0, 20)]
+    [RangeAttribute(0, 50)]
     public int RewardValue = 0;
 
 
@@ -35,7 +35,6 @@ public class FortuneWheel : MonoBehaviour
 
 
     private bool isSpinActive;
-    private int rewardCode = 0;
     public Text totalWheelCountText;
     public Transform wheelIconTrans;
     public GameObject wheelPopUp;                 // Pop-up with wasted fortune Wheel amount
@@ -51,8 +50,6 @@ public class FortuneWheel : MonoBehaviour
 
     public FreeWheelRewards[] sectorShowUI;
 
-    private List<int> FreeWheelIndex = new List<int>();
-
 
     private float _finalAngle;                  // The final angle is needed to calculate the reward
     private float _startAngle;                  // The first time start angle equals 0 but the next time it equals the last final angle
@@ -60,9 +57,13 @@ public class FortuneWheel : MonoBehaviour
     private int[] sectorsAngles;
 
     private FortuneWheelSector[] Sectors;
-    private List<int> sectorIndex = new List<int>();
     private FortuneWheelSector _finalSector;
+    private int _lastSectorIndex = -1;
     private int wheelCount;
+    private int spinCost = 5;
+
+
+
     private MenuManager menuManager;
     private GameDataManager gameDataManager;
     private BonusGiftManager bonusGiftManager;
@@ -81,8 +82,6 @@ public class FortuneWheel : MonoBehaviour
         _finalTransform.gameObject.SetActive(false);
         adsLeaderboardManager.GratifyRewards.AddListener(Reward);
         adsLeaderboardManager.RewardAdsLoaded.AddListener(RewardButton);
-
-        
         SetUp();
     }
     public void SetUpFortuneWheel()
@@ -100,70 +99,21 @@ public class FortuneWheel : MonoBehaviour
 
     private void SetUp()
     {
-        FreeWheelIndex.Clear();
-        sectorIndex.Clear();
         int length = sectorShowUI.Length;
         Sectors = new FortuneWheelSector[length];
+        sectorsAngles = new int[length];
         for (int i = 0; i < length; i++)
         {
             Sectors[i] = allSector[i];
-        }
-        int rand = 0;
-        foreach (var sector in Sectors) 
-        {
+            var sector = Sectors[i];
             bool isCoin = false;
             if (sector.variableType == VariableTypeCode.Coin)
             {
                 isCoin = true;
             }
-            sectorShowUI[rand].SetUpReward(sector.RewardValue, sector.iconSprite, isCoin);
-            rand++;
+            sectorShowUI[i].SetUpReward(sector.RewardValue, sector.iconSprite, isCoin);
+            sectorsAngles[i] = -360 / Sectors.Length * (i+1);
         }
-        sectorsAngles = new int[Sectors.Length];
-        // Fill the necessary angles (for example if we want to have 12 sectors we need to fill the angles with 30 degrees step)
-        // It's recommended to use the EVEN sectors count (2, 4, 6, 8, 10, 12, etc)
-        for (int i = 1; i <= Sectors.Length; i++)
-        {
-            sectorsAngles[i - 1] = -360 / Sectors.Length * i;
-        }
-    }
-
-    private bool CheckForShowUI(VariableTypeCode type, int code)// 0=green, 1=yellow, 2=blue, 3=red
-    {
-        bool status = true;
-        if (code == 1)
-        {
-            if (type == VariableTypeCode.Coin)
-            {
-                status = false;
-            }
-            else if (type == VariableTypeCode.Hammer)
-            {
-                status = false;
-            }
-            else if (type == VariableTypeCode.Magic_Wand)
-            {
-                status = false;
-            }
-        }
-        else if (code == 2)
-        {
-            if (type == VariableTypeCode.Thunder)
-            {
-                status = false;
-            }
-            else if (type == VariableTypeCode.Freeze)
-            {
-                status = false;
-            }
-        }else if(code == 3)
-        {
-            if (type == VariableTypeCode.Bomb)
-            {
-                status = false;
-            }
-        }
-        return status;
     }
 
     private void WheelTurnByWheelCoin()
@@ -182,7 +132,6 @@ public class FortuneWheel : MonoBehaviour
 
     private void RewardAds()
     {
-        rewardCode = 3;
         bool status = menuManager.FortuneFreeSpin();
         if(status)
         {
@@ -216,73 +165,26 @@ public class FortuneWheel : MonoBehaviour
 
     private void Reward()
     {
-        if(rewardCode == 3)
-        {
-            TurnWheel();
-        }
+        TurnWheel();
     }
 
     private void TurnWheel()
     {
         _currentLerpRotationTime = 0f;
+
         int randomFinalAngle = sectorsAngles[0];
         _finalSector = Sectors[0];
+
+
         int sectorIndex = FinalSector();
-        randomFinalAngle = sectorsAngles[sectorIndex];
-        if (sectorIndex < Sectors.Length - 1)
-        {
-            _finalSector = Sectors[sectorIndex + 1];
+        print("Si " +  sectorIndex);
+        _finalSector = Sectors[sectorIndex];
 
+        if (sectorIndex > 0)
+        {
+            randomFinalAngle = sectorsAngles[sectorIndex - 1];
         }
 
-        if (rewardCode == 3)
-        {
-            int num = UnityEngine.Random.Range(0, 3);
-            for (int i = 0; i < 100; i++)
-            {
-                if ((_finalSector.variableType == VariableTypeCode.Coin && _finalSector.RewardValue < 10) || (_finalSector.variableType != VariableTypeCode.Coin && _finalSector.RewardValue >= 3 && num != 1))
-                {
-                    sectorIndex = FinalSector();
-                    randomFinalAngle = sectorsAngles[sectorIndex];
-                    if (sectorIndex < Sectors.Length - 1)
-                    {
-                        _finalSector = Sectors[sectorIndex + 1];
-
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-        }
-        else
-        {
-            int rand = UnityEngine.Random.Range(0, 5);
-            if (rand != 1)
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    if ((_finalSector.variableType == VariableTypeCode.Coin && _finalSector.RewardValue > 5) || (_finalSector.variableType != VariableTypeCode.Coin && _finalSector.RewardValue > 3))
-                    {
-                        sectorIndex = FinalSector();
-                        randomFinalAngle = sectorsAngles[sectorIndex];
-                        if (sectorIndex < Sectors.Length - 1)
-                        {
-                            _finalSector = Sectors[sectorIndex + 1];
-
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-
-        rewardCode = 0;
 
         int fullTurnovers = 5;
 
@@ -303,21 +205,69 @@ public class FortuneWheel : MonoBehaviour
     }
     private int FinalSector()
     {
-        double rndNumber = UnityEngine.Random.Range(1, Sectors.Sum(sector => sector.Probability));
-        int num = 0;
-        int cumulativeProbability = 0;
+        int rewardLevel = UnityEngine.Random.Range(0, 5);
 
-        for (int i = 0; i < Sectors.Length; i++)
+        for (int i = 0; i < 50; i++)
         {
-            cumulativeProbability += Sectors[i].Probability;
-
-            if (rndNumber <= cumulativeProbability)
+            if(rewardLevel == 3 && !adsLeaderboardManager.HasOnline)
             {
-                // Choose final sector
-                num = i;
+                rewardLevel = UnityEngine.Random.Range(0, 5);
+            }
+            else
+            {
                 break;
             }
         }
+        print("RL " + rewardLevel);
+
+
+
+
+        List<int> rewardList = new List<int>();
+        if(rewardLevel == 3)
+        {
+            for (int i = 0; i < Sectors.Length; i++)
+            {
+                if(Sectors[i].variableType == VariableTypeCode.Thunder || (Sectors[i].RewardValue >= 3 && Sectors[i].variableType != VariableTypeCode.Coin) || (Sectors[i].variableType == VariableTypeCode.Coin && Sectors[i].RewardValue > 15))
+                {
+                    rewardList.Add(i);
+                }
+            }
+        }else if(rewardLevel >= 1 && rewardLevel < 3)
+        {
+            for (int i = 0; i < Sectors.Length; i++)
+            {
+                if ((Sectors[i].RewardValue == 1 && Sectors[i].variableType != VariableTypeCode.Coin && Sectors[i].variableType != VariableTypeCode.Thunder) || (Sectors[i].variableType == VariableTypeCode.Coin && Sectors[i].RewardValue > 10 && Sectors[i].RewardValue <= 15))
+                {
+                    rewardList.Add(i);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < Sectors.Length; i++)
+            {
+                if ((Sectors[i].variableType == VariableTypeCode.Coin && Sectors[i].RewardValue >= 1 && Sectors[i].RewardValue <= 10))
+                {
+                    rewardList.Add(i);
+                }
+            }
+        }
+
+        int index = UnityEngine.Random.Range(0, rewardList.Count);
+        for (int i = 0; i < 50; i++)
+        {
+            if(_lastSectorIndex >= 0 && _lastSectorIndex == index)
+            {
+                index = UnityEngine.Random.Range(0, rewardList.Count);
+            }
+            else
+            {
+                _lastSectorIndex = index;
+                break;
+            }
+        }
+        int num = rewardList[index];
         return num;
     }
     private void HideCoinsDelta()
@@ -327,9 +277,9 @@ public class FortuneWheel : MonoBehaviour
 
     private void CheckAndDecrease()
     {
-        if (wheelCount > 0)
+        if (wheelCount >= spinCost)
         {
-            wheelCount--;
+            wheelCount -= spinCost;
         }
         else
         {
@@ -341,7 +291,7 @@ public class FortuneWheel : MonoBehaviour
 
     private void SpinStatus()
     {
-        if (wheelCount > 0)
+        if (wheelCount >= spinCost)
         {
             isSpinActive = true;
             ChangeSpinButton("Spin", buttonSprite[0], 0);
@@ -418,7 +368,7 @@ public class FortuneWheel : MonoBehaviour
                 {
                     count = count / 2;
                 }
-                targetEffect.FreeRewardEffectCoins(_finalTransform.position, count, 0.5f);
+                targetEffect.FreeRewardEffectCoins(_finalTransform.position, count, 4f);
             }
             else if (_finalSector.variableType == VariableTypeCode.Lucky_Wheel)
             {

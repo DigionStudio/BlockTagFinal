@@ -218,6 +218,7 @@ public class GameManager : MonoBehaviour
         HighPoint();
         AddMoves(0, 0);
         boardManager.BoardPosStart();
+        uiManager.GetBubbleEffectScene();
         totalCoin = gameDataManager.GetSaveValues(0);
         uiManager.CoinTextSetup(gameTypeCode, totalCoin);
 
@@ -268,7 +269,7 @@ public class GameManager : MonoBehaviour
             int num = 3;
             if (gameDataManager.rePlayCount <= 0 && starCount == 3) {
 
-                for (int i = 3; i >= 0; i--)
+                for (int i = 3; i > 0; i--)
                 {
                     if (currentMoveCount >= i * per)
                     {

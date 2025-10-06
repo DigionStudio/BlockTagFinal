@@ -111,7 +111,7 @@ public class TargetEffect : MonoBehaviour
 
 
 
-    public void FreeRewardEffectCoins(Vector2 pos, int num, float rad = 0.2f)
+    public void FreeRewardEffectCoins(Vector2 pos, int num, float rad = 1.3f)
     {
         coinsCount = 0;
         totalCoinCount = num;
@@ -155,7 +155,7 @@ public class TargetEffect : MonoBehaviour
         {
             lifeCount++;
             PointShow effect = Instantiate(pointShow);
-            Vector3 randomPoint = GenerateRandomPoint(pos3life, 0.4f);
+            Vector3 randomPoint = GenerateRandomPoint(pos3life, 2.5f);
             effect.transform.position = randomPoint;
             if (totalLifeCount == 1)
                 effect.transform.position = pos3life;
@@ -184,7 +184,7 @@ public class TargetEffect : MonoBehaviour
         {
             wheelCount++;
             PointShow effect = Instantiate(pointShow);
-            Vector3 randomPoint = GenerateRandomPoint(pos3wheel, 0.5f);
+            Vector3 randomPoint = GenerateRandomPoint(pos3wheel, 2f);
             effect.transform.position = randomPoint;
             if (totalWheelCount == 1)
                 effect.transform.position = pos3wheel;
@@ -212,9 +212,9 @@ public class TargetEffect : MonoBehaviour
 
     public void InstaAbilitygiftShow(Sprite icon,float xPos, float count)
     {
-        Vector3 cen = new Vector3(xPos, -1.5f, 0);
-        Vector2 random = GenerateRandomPoint(cen, 0.05f * count);
-        Vector2 posI = new Vector3(random.x, -2, 0);
+        Vector3 cen = new Vector3(xPos, -19f, 0);
+        Vector2 random = GenerateRandomPoint(cen, 0.1f * count);
+        Vector2 posI = new Vector3(random.x, -19, 0);
         AbilityShow effect = AbilityShowObj(posI);
         Vector3 posF = finalrect.TransformPoint(finalrect.rect.center);
         effect.MoveInAbilityEffect(posF, icon);

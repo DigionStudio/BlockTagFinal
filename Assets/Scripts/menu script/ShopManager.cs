@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public enum ShopItemCode
 {
+    None,
     no_Ads,
     Coin,
     Life,
@@ -14,7 +15,7 @@ public enum ShopItemCode
     D_Bomb,
     Hammer,
     Thunder,
-    Destruction
+    Wand
 }
 
 
@@ -25,6 +26,8 @@ public class ShopData
 {
     public ShopItemCode shopItemCode;
     public int count;
+    public Sprite iconImage;
+    public Color colCode;
 }
 
 
@@ -32,6 +35,7 @@ public class ShopData
 [Serializable]
 public class ShopItemData
 {
+    public string itemName;
     public string itemCodeID;
     public ShopData[] shopData;
 
@@ -39,7 +43,6 @@ public class ShopItemData
 
 public class ShopManager : MonoBehaviour
 {
-    public ShopItemData noAdsData;
     public ShopItemData[] shopItemAllData;
 
 
@@ -48,7 +51,7 @@ public class ShopManager : MonoBehaviour
     public GameObject shopItemHolder;
     public GameObject offlineHolder;
 
-    private bool isInitialize;
+    private bool isInitialize = true;
     //private IStoreController storeController;
     private GameDataManager gameDataManager;
 
@@ -61,7 +64,6 @@ public class ShopManager : MonoBehaviour
         gameDataManager = BlockManager.Instance.gameDataManager;
         
 
-        noAdsItem.SetUp(this, noAdsData);
         for (int i = 0; i < shopItemAllData.Length; i++)
         {
             if (shopItems[i] != null)
@@ -129,25 +131,25 @@ public class ShopManager : MonoBehaviour
 
     private void CheckButItem(string productID)
     {
-        if (string.Equals(noAdsData.itemCodeID, productID))
-        {
-            if (noAdsData.shopData.Length > 0)
-                ItemBuyed(noAdsData.shopData[0]);
-        }
-        else
-        {
-            foreach (var item in shopItemAllData)
-            {
-                if (string.Equals(item.itemCodeID, productID))
-                {
-                    foreach(var item2 in item.shopData)
-                    {
-                        ItemBuyed(item2);
-                    }
-                    break;
-                }
-            }
-        }
+        //if (string.Equals(noAdsData.itemCodeID, productID))
+        //{
+        //    if (noAdsData.shopData.Length > 0)
+        //        ItemBuyed(noAdsData.shopData[0]);
+        //}
+        //else
+        //{
+        //    foreach (var item in shopItemAllData)
+        //    {
+        //        if (string.Equals(item.itemCodeID, productID))
+        //        {
+        //            foreach(var item2 in item.shopData)
+        //            {
+        //                ItemBuyed(item2);
+        //            }
+        //            break;
+        //        }
+        //    }
+        //}
     }
 
 
@@ -189,7 +191,7 @@ public class ShopManager : MonoBehaviour
             {
                 gameDataManager.AbilityCountValue(4, shopdata.count);
             }
-            else if (shopdata.shopItemCode == ShopItemCode.Destruction)
+            else if (shopdata.shopItemCode == ShopItemCode.Wand)
             {
                 gameDataManager.AbilityCountValue(4, shopdata.count);
             }

@@ -60,7 +60,6 @@ public class DailyGoalsManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        //PlayerPrefs.SetString(dailyDate, "");
     }
     private void Start()
     {
@@ -70,6 +69,7 @@ public class DailyGoalsManager : MonoBehaviour
     public void Initialize()
     {
         gameDataManager = BlockManager.Instance.gameDataManager;
+        //PlayerPrefs.SetString(gameDataManager.DailyGoalsPref, "");
         string dateData = PlayerPrefs.GetString(gameDataManager.DailyGoalsPref, "");
         DateTime today = DateTime.Now.Date;
         if (!string.IsNullOrEmpty(dateData))

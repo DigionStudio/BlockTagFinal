@@ -10,54 +10,56 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 361 (S-4500-15)
+  m_Name: Level 327 (S-5700-17) W-18
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.35
+    moveSpeed: 0.46
     isScoreTarget: 1
     isBombAbility: 0
     isTagAbility: 0
     shapeCodes: []
     targetData: []
     bgTileData:
-    - positionIndex: 27
+    - positionIndex: 9
       tileType: 7
     - positionIndex: 19
       tileType: 7
-    - positionIndex: 11
+    - positionIndex: 29
       tileType: 7
-    - positionIndex: 3
-      tileType: 7
-    - positionIndex: 36
+    - positionIndex: 18
       tileType: 7
     - positionIndex: 28
       tileType: 7
-    - positionIndex: 20
+    - positionIndex: 38
       tileType: 7
-    - positionIndex: 12
+    - positionIndex: 27
       tileType: 7
-    - positionIndex: 5
+    - positionIndex: 37
       tileType: 7
-    - positionIndex: 15
+    - positionIndex: 47
+      tileType: 7
+    - positionIndex: 17
       tileType: 7
     - positionIndex: 25
       tileType: 7
-    - positionIndex: 35
+    - positionIndex: 33
       tileType: 7
-    - positionIndex: 44
+    - positionIndex: 42
       tileType: 7
     - positionIndex: 34
       tileType: 7
-    - positionIndex: 14
+    - positionIndex: 26
       tileType: 7
-    - positionIndex: 24
+    - positionIndex: 35
       tileType: 7
-    - positionIndex: 4
+    - positionIndex: 43
+      tileType: 7
+    - positionIndex: 51
       tileType: 7
     specialObjectTileData: []
-    moveCount: 15
-    totalStarValue: 4500
+    moveCount: 17
+    totalStarValue: 5700
     reFreshCount: 0
-    ability1Value: 5
-    ability2Value: 4
-    levelNumber: 360
+    ability1Value: 4
+    ability2Value: 5
+    levelNumber: 326

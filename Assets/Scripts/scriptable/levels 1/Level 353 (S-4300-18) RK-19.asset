@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 353 (S-5700-18) RK-19
+  m_Name: Level 353 (S-4300-18) RK-19
   m_EditorClassIdentifier: 
   levelData:
     moveSpeed: 0.41
@@ -60,7 +60,7 @@ MonoBehaviour:
       tileType: 9
     specialObjectTileData: []
     moveCount: 19
-    totalStarValue: 4700
+    totalStarValue: 4300
     reFreshCount: 0
     ability1Value: 5
     ability2Value: 3

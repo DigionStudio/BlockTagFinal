@@ -236,7 +236,7 @@ public class LevelMetaFill : MonoBehaviour
                         icon = BlockManager.Instance.GemTypeSprite(colorCode);
                     }
                     ColorBombEffect effect = Instantiate(fillEffectPrefab, transform);
-                    effect.transform.position = GenerateRandomPoint(originTrans.position, 0.4f);
+                    effect.transform.position = GenerateRandomPoint(originTrans.position, 2f);
                     effect.SetUp(icon, trans);
                     effectlist.Add(effect);
                     yield return new WaitForSeconds(0.05f);

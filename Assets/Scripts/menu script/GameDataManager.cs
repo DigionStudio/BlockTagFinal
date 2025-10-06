@@ -857,7 +857,7 @@ public class GameDataManager : MonoBehaviour
     {
         giftIndexes.Clear();
         giftIndexes.Add(4);
-        giftIndexes.Add(3);
+        giftIndexes.Add(5);
         int giftIndex = UnityEngine.Random.Range(1, 7);
         for (int i = 0; i < 50; i++)
         {

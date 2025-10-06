@@ -18,11 +18,7 @@ public class AbilityShow : MonoBehaviour
         pointB.z = 0f;
         ShowIconChange(icon);
         animObjTrans.localScale = Vector3.zero;
-        animObjTrans.DOScale(0.4f, 0.5f).OnComplete(() =>
-        {
-            float num = transform.position.x / 3;
-            pointB += Vector3.right * num;
-        });
+        animObjTrans.DOScale(0.4f, 0.5f);
         Invoke(nameof(Move_Straght), 2f);
 
     }

@@ -59,7 +59,6 @@ public class PanelTween
 
 public class UiManager : MonoBehaviour
 {
-    [SerializeField] private Image startFadeImage;
     [SerializeField] private Button refreshButton;
     [SerializeField] private GameObject disableRefreshButton;
     [SerializeField] private Image disableRefreshButtonFill;
@@ -200,10 +199,10 @@ public class UiManager : MonoBehaviour
     private GameAdsManager gameAdsManager;
     private bool isNoAds;
     private bool isUsergameEnd;
+    private GameObject bubbleEffectRootObj;
+    private int currentSceneIndex, nextSceneIndex;
     void Start()
     {
-        startFadeImage.DOFade(1, 0f);
-        startFadeImage.DOFade(0, 1f);
         currentHitPoint = 0;
         isUsergameEnd = false;
         gameManager = FindObjectOfType<GameManager>();
@@ -378,8 +377,8 @@ public class UiManager : MonoBehaviour
     private void RestartGame()
     {
         DisableSettings();
-        Invoke(nameof(Restart), 0.3f);
         isUsergameEnd = true;
+        Invoke(nameof(Restart), 0.3f);
         //if (!isNoAds)
         //{
         //    isUsergameEnd = true;
@@ -393,9 +392,14 @@ public class UiManager : MonoBehaviour
 
     private void Restart()
     {
-        if(!isUsergameEnd && GameTypeCode == 1)
+        if (!isUsergameEnd && GameTypeCode == 1)
+        {
             gameDataManager.rePlayCount++;
-        SceneManager.LoadScene(1);
+            GameAIManager.Instance.AiAsistsForObs_ScoreTargets(gameDataManager.rePlayCount, gameDataManager.levelData);
+        }
+        nextSceneIndex = 1;
+        currentSceneIndex = 1;
+        MainMenuSceneChange();
     }
 
     private void MainMenu()
@@ -410,7 +414,11 @@ public class UiManager : MonoBehaviour
     private void ToMainMenu()
     {
         if (GameTypeCode == 1)
-            SceneManager.LoadScene(0);
+        {
+            nextSceneIndex = 0;
+            currentSceneIndex = 1;
+            MainMenuSceneChange();
+        }
         else
         {
             Quit();
@@ -1034,7 +1042,25 @@ public class UiManager : MonoBehaviour
     {
         gameManager.GameEndValues();
         gameDataManager.isMenuOpened = true;
-        SceneManager.LoadScene(0);
+        nextSceneIndex = 0;
+        currentSceneIndex = 1;
+        MainMenuSceneChange();
+
+
+    }
+    private void MainMenuSceneChange()
+    {
+        if (bubbleEffectRootObj != null)
+        {
+            bubbleEffectRootObj.SetActive(true);
+        }
+        Invoke(nameof(ChangeToMainScene), 1f);
+    }
+
+    private void ChangeToMainScene()
+    {
+        SceneManager.UnloadSceneAsync(currentSceneIndex);
+        SceneManager.LoadScene(nextSceneIndex, LoadSceneMode.Additive);
     }
 
 
@@ -1360,6 +1386,31 @@ public class UiManager : MonoBehaviour
         disableRotateButton.SetActive(false);
         rotateButton.enabled = true;
     }
+
+    public void GetBubbleEffectScene()
+    {
+        Invoke(nameof(GetBubbleSceneObject), 1f);
+    }
+    private void GetBubbleSceneObject()
+    {
+        Scene loadedScene = SceneManager.GetSceneByBuildIndex(2);
+
+        if (loadedScene.IsValid())
+        {
+            // Disable specific object by name
+            foreach (GameObject root in loadedScene.GetRootGameObjects())
+            {
+                if (root != null && root.CompareTag("GameController"))
+                {
+                    bubbleEffectRootObj = root;
+                    bubbleEffectRootObj.SetActive(false);
+                    break;
+                }
+            }
+        }
+    }
+
+
 
     private void OnDisable()
     {

@@ -444,4 +444,68 @@ public class GameAIManager : MonoBehaviour
         isAIEffectActive = false;
     }
 
+
+    public void AiAsistsForObs_ScoreTargets(int replayCount, LevelData data)
+    {
+        if (CheckForObs_Score())
+        {
+            int ability1diff = data.ability1Value;
+            int ability2diff = data.ability2Value;
+            if (replayCount > 0)
+            {
+                int val = replayCount % 2;
+                if (val == 0)
+                {
+                    int random = Random.Range(0, 3);
+                    if (random == 1 && ability2diff < 5)
+                    {
+                        ability2diff++;
+                    }
+                    else
+                    {
+                        if (ability1diff < 6)
+                        {
+                            ability1diff++;
+                        }
+                        else
+                        {
+                            if(ability2diff < 5)
+                            {
+                                ability2diff++;
+                            }
+                        }
+                    }
+                    gameDataManager.levelData.ability1Value = ability1diff;
+                    gameDataManager.levelData.ability2Value = ability2diff;
+                }
+            }
+        }
+    }
+
+    private bool CheckForObs_Score()
+    {
+        bool isScore_Obs = false;
+        if (targetData.Length > 0 && !gameDataManager.levelData.isScoreTarget)
+        {
+            foreach (var item in targetData)
+            {
+                if (item.specialObject == Special_Object_Type.none)
+                {
+                    int value = (int)item.normalBlockType;
+                    if (value > 6)
+                    {
+                        isScore_Obs = true;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            isScore_Obs = true;
+        }
+        return isScore_Obs;
+
+    }
+
 }

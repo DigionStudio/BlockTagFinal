@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 561cc8072909bdc4397c63725bb23bcb, type: 3}
-  m_Name: Level 367 (S-6000-20)
+  m_Name: Level 378 (S-6150-21)
   m_EditorClassIdentifier: 
   levelData:
-    moveSpeed: 0.39
+    moveSpeed: 0.45
     isScoreTarget: 1
     isBombAbility: 0
     isTagAbility: 0
@@ -21,9 +21,9 @@ MonoBehaviour:
     targetData: []
     bgTileData: []
     specialObjectTileData: []
-    moveCount: 20
-    totalStarValue: 6000
+    moveCount: 21
+    totalStarValue: 6150
     reFreshCount: 0
     ability1Value: 5
-    ability2Value: 4
-    levelNumber: 366
+    ability2Value: 5
+    levelNumber: 377

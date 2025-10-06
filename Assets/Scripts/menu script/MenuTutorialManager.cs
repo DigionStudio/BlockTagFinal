@@ -458,7 +458,7 @@ public class MenuTutorialManager : MonoBehaviour
         }
         else
         {
-            settingShowPanel.panel.DOAnchorPosY(settingShowPanel.posFinalFloat, 0.3f);
+            settingShowPanel.panel.DOAnchorPosY(settingShowPanel.posFinalFloat, 0.3f).SetEase(Ease.OutQuart);
             SetUpProfile();
             settingShowBg.gameObject.SetActive(true);
             changeButton.interactable = false;
