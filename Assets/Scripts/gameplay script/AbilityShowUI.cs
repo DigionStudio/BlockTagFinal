@@ -166,7 +166,6 @@ public class AbilityShowUI : MonoBehaviour
 
     public void UnableToUse()
     {
-        print("sdfsdfsdf");
         string info = "Currently Unable TO Use";
         AbilityInfo(info);
     }

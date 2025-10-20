@@ -615,7 +615,7 @@ public class MenuLevelData : MonoBehaviour
 
     private IEnumerator DelayForMetaFill()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(1f);
         int maxitter = 100;
         while (true)
         {
